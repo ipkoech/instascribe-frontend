@@ -1,0 +1,76 @@
+
+<div class="table-container">
+  <table mat-table [dataSource]="files" class="files-table">
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let file">
+        <mat-checkbox></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>File name</th>
+      <td mat-cell *matCellDef="let file">
+        <div class="file-name-cell">
+          <mat-icon>{{getFileIcon(file.type)}}</mat-icon>
+          {{file.name}}
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Uploaded By Column -->
+    <ng-container matColumnDef="uploadedBy">
+      <th mat-header-cell *matHeaderCellDef>Uploaded by</th>
+      <td mat-cell *matCellDef="let file">
+        {{file.uploadedBy.name}}
+      </td>
+    </ng-container>
+
+    <!-- Last Modified Column -->
+    <ng-container matColumnDef="lastModified">
+      <th mat-header-cell *matHeaderCellDef>Last modified</th>
+      <td mat-cell *matCellDef="let file">
+        {{file.lastModified | date}}
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let file">
+        <button mat-icon-button [matMenuTriggerFor]="fileMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- File Actions Menu -->
+  <mat-menu #fileMenu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>edit</mat-icon>
+      <span>Rename</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>open_in_new</mat-icon>
+      <span>Open in browser</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>cloud_download</mat-icon>
+      <span>Available offline</span>
+    </button>
+    <button mat-menu-item class="delete-option">
+      <mat-icon>delete</mat-icon>
+      <span>Delete file</span>
+    </button>
+  </mat-menu>
+
+
+</div>

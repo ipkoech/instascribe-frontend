@@ -1,0 +1,40 @@
+<div class="sidebar-container">
+  <div class="sidebar-header">
+    <div class="brand">
+      <mat-icon>chat</mat-icon>
+      <span>InstaAI</span>
+    </div>
+    <button mat-flat-button color="primary" class="new-chat-btn" (click)="createConversation()">
+      <mat-icon>add</mat-icon>
+      New Chat
+    </button>
+  </div>
+
+  <div class="search-box">
+    <mat-icon>search</mat-icon>
+    <input type="text" placeholder="Search" class="search-input">
+  </div>
+
+  <div class="chat-list">
+    <!-- <div class="list-section" *ngFor="let section of sections">
+      <div class="section-header">{{ section.title }}</div>
+
+    </div> -->
+    <div class="section-items">
+      <a *ngFor="let item of conversations?.data" [routerLink]="item.id" class="chat-item"
+        [class.active]="!item.archived">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <span class="item-title">{{ item.id }}</span>
+      </a>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <button mat-icon-button class="close-sidenav">
+      <mat-icon>dock_to_left</mat-icon>
+    </button>
+    <button mat-button class="settings-btn">
+      <mat-icon>settings</mat-icon>
+      Settings
+    </button>
+  </div>
+</div>

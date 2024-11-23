@@ -1,0 +1,45 @@
+import { Injectable } from '@angular/core';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SnackBarService {
+  constructor(private snackBar: MatSnackBar) {}
+
+  success(message: string, duration: number = 3000, horizontalPosition: MatSnackBarHorizontalPosition = 'end', verticalPosition: MatSnackBarVerticalPosition = 'top'): void {
+    this.snackBar.open(message, 'Close', {
+      duration,
+      panelClass: ['success-snackbar'],
+      horizontalPosition,
+      verticalPosition
+    });
+  }
+
+  error(message: string, duration: number = 5000, horizontalPosition: MatSnackBarHorizontalPosition = 'end', verticalPosition: MatSnackBarVerticalPosition = 'top'): void {
+    this.snackBar.open(message, 'Close', {
+      duration,
+      panelClass: ['error-snackbar'],
+      horizontalPosition,
+      verticalPosition
+    });
+  }
+
+  info(message: string, duration: number = 3000, horizontalPosition: MatSnackBarHorizontalPosition = 'end', verticalPosition: MatSnackBarVerticalPosition = 'top'): void {
+    this.snackBar.open(message, 'Close', {
+      duration,
+      panelClass: ['info-snackbar'],
+      horizontalPosition,
+      verticalPosition
+    });
+  }
+
+  warning(message: string, duration: number = 3000, horizontalPosition: MatSnackBarHorizontalPosition = 'end', verticalPosition: MatSnackBarVerticalPosition = 'top'): void {
+    this.snackBar.open(message, 'Close', {
+      duration,
+      panelClass: ['warning-snackbar'],
+      horizontalPosition,
+      verticalPosition
+    });
+  }
+}

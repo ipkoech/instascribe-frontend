@@ -1,0 +1,57 @@
+<div class="profile-container" *ngIf="user">
+  <div class="profile-header">
+    <div class="profile-info">
+      <div class="avatar-container">
+        <div class="avatar-wrapper">
+          <img [src]="user.profile_image_url || 'assets/profile-avatar.jpg'" [alt]="user.f_name + ' ' + user.l_name"
+            class="profile-avatar">
+          <input type="file" #fileInput (change)="uploadProfileImage($event)" accept="image/*" style="display: none">
+          <button mat-mini-fab class="edit-avatar-button" color="primary" (click)="fileInput.click()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <div class="avatar-overlay"></div>
+        </div>
+      </div>
+      <div class="user-info">
+        <h2>{{user.f_name | titlecase}} {{user.l_name | titlecase}}</h2>
+        <p class="role">{{user?.roles?.[0]?.name | uppercase}}</p>
+        <p class="location">{{user.last_sign_in_at | date:'mediumDate'}}</p>
+      </div>
+    </div>
+    <button mat-stroked-button class="edit-button">
+      Edit <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+
+  <div class="profile-section">
+    <div class="section-header">
+      <h3>Personal Information</h3>
+      <button mat-stroked-button class="edit-button">
+        Edit <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <label>First Name</label>
+        <p>{{user.f_name}}</p>
+      </div>
+      <div class="info-item">
+        <label>Last Name</label>
+        <p>{{user.l_name}}</p>
+      </div>
+      <div class="info-item">
+        <label>Email address</label>
+        <p>{{user.email}}</p>
+      </div>
+      <div class="info-item">
+        <label>Status</label>
+        <p>{{user.status|titlecase}}</p>
+      </div>
+      <div class="info-item full-width">
+        <label>Bio</label>
+        <p>{{user.bio?user.bio:"NA"}}</p>
+      </div>
+    </div>
+  </div>
+</div>

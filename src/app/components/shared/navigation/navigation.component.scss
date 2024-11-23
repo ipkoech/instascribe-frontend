@@ -1,0 +1,25 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidenav-container {
+  flex: 1;
+  height: calc(100vh - 64px); // Subtract the height of app-bar
+}
+
+.sidenav {
+  width: 300px;
+  background: #f8f9fa;
+  padding-inline-start: 10px;
+  border-radius: 0 !important;
+  background: white;
+}
+
+.sidenav-content {
+  padding: 2rem;
+  height: 100%;
+  overflow-y: auto;
+}

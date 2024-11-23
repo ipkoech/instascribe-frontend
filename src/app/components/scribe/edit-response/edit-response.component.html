@@ -1,0 +1,40 @@
+<div class="editor-container">
+  <div #editorElement class="monaco-editor"></div>
+  <div class="button-container">
+    <button mat-icon-button (click)="cancel()" matTooltip="Cancel and close">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button mat-icon-button (click)="saveChanges()" matTooltip="Save changes">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button (click)="saveChangesAsDraft()" matTooltip="Save as a Draft">
+      <mat-icon>rate_review</mat-icon>
+    </button>
+    <button mat-icon-button (click)="copyEditorContent()" matTooltip="Copy to clipboard">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </div>
+</div>
+
+<ng-template #saveDraftDialog>
+  <div class="save-draft-dialog">
+    <h2 mat-dialog-title>Save Draft</h2>
+    <mat-dialog-content>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Draft Title</mat-label>
+        <input matInput [formControl]="draftTitleControl" placeholder="Enter a title for your draft">
+        <mat-error *ngIf="draftTitleControl.hasError('required')">
+          Title is required
+        </mat-error>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="draftTitleControl.value"
+              [disabled]="!draftTitleControl.valid"
+              color="primary">
+        Save Draft
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

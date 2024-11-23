@@ -1,1 +1,196 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+// Plus imports for other components in your app.
+@use "./app/app.component.scss" as app;
+
+@include mat.core();
+
+$primary: mat.$cyan-palette;
+$tertiary: mat.$yellow-palette;
+
+// Create light and dark themes
+$light-theme: mat.define-theme((color: (theme-type: light,
+        primary: $primary,
+        tertiary: $tertiary,
+      ),
+      typography: (brand-family: "Raleway",
+      ),
+      density: (scale: -1,
+      ),
+    ));
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+        primary: $primary,
+        tertiary: $tertiary,
+      ),
+      typography: (brand-family: "Raleway",
+      ),
+      density: (scale: -1,
+      ),
+    ));
+
+:root {
+  @include mat.core-theme($light-theme);
+  @include mat.all-component-themes($light-theme);
+  @include mat.typography-hierarchy($light-theme, $back-compat: false);
+  @include mat.color-variants-backwards-compatibility($light-theme);
+}
+
+@mixin apply-theme($theme) {
+  @include mat.all-component-colors($theme);
+  @include mat.color-variants-backwards-compatibility($theme);
+}
+
+.dark-mode {
+  @include apply-theme($dark-theme);
+}
+
+// Base styles for body and HTML elements
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: #fcfdf6;
+  color: #1a1c18;
+  font-family: Raleway, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.dark-mode {
+  background-color: #1a1c18;
+  color: #fcfdf6;
+}
+
+// Styles for anchor tags
+a {
+  // color: mat.get-color-from-palette($tertiary, 500);
+  text-decoration: none;
+}
+
+// Custom scrollbar styles
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #333;
+}
+
+// Override default styles for Material Design components
+.mat-mdc-text-field-wrapper,
+.mat-mdc-form-field-focus-overlay {
+  background: inherit !important;
+}
+
+.mat-elevation-z0 {
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12) !important;
+}
+
+.animated-button {
+  position: relative;
+  animation-name: button-animation;
+  animation-duration: 1s;
+}
+
+@keyframes button-animation {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+.lg-avatar {
+  height: 120px;
+  width: 120px;
+  border-radius: 100%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.md-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.sm-avatar {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.rounded-0 {
+  border-radius: 0 !important;
+}
+
+overflow-hidden {
+  overflow: hidden;
+}
+
+.custom-dialog {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+}
+
+/* Snackbar styles */
+.success-snackbar {
+  background: #4caf50 !important;
+  color: white;
+}
+
+.error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+.mat-mdc-snack-bar-action {
+  color: white !important;
+}
+
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: #4caf50;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  &.error-snackbar {
+    --mdc-snackbar-container-color: #f44336;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+
+  }
+
+  &.warning-snackbar {
+    --mdc-snackbar-container-color: #ff9800;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  &.info-snackbar {
+    --mdc-snackbar-container-color: #2196f3;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+}

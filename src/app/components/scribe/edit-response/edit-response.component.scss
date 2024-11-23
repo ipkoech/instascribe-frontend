@@ -1,0 +1,58 @@
+// :host {
+//   display: block;
+//   width: 100%;
+// }
+
+// .edit-response-container {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+//   gap: 1rem;
+// }
+
+// .button-container {
+//   display: flex;
+//   align-items: center;
+//   gap: 4px;
+// }
+
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.monaco-editor {
+  flex-grow: 1;
+  min-height: 400px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: #252526;
+  border-top: 1px solid #3c3c3c;
+}
+
+.button-container button {
+  color: #cccccc;
+}
+
+.button-container button:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.save-draft-dialog {
+  min-width: 300px;
+}
+
+.full-width {
+  width: 100%;
+}

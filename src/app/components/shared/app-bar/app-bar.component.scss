@@ -1,0 +1,44 @@
+mat-toolbar {
+  background: white;
+}
+
+.toolbar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.search-bar input {
+  border: none;
+  background: none;
+  margin-left: 0.5rem;
+  outline: none;
+  width: 100%;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.logo-container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+}

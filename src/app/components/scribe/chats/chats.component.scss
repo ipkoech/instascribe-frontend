@@ -1,0 +1,19 @@
+
+.chat-container {
+  height: calc(100vh - 84px);
+}
+
+.chat-sidenav {
+  width: 300px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.edit-sidenav {
+  width: 400px;
+}
+
+.chat-content {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,53 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <mat-icon class="login-icon">login</mat-icon>
+      <h1>Sign in with email</h1>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-field">
+        <mat-icon class="field-icon">mail</mat-icon>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Email"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+      </div>
+
+      <div class="form-field">
+        <mat-icon class="field-icon">lock</mat-icon>
+        <input
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          placeholder="Password"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <mat-icon
+          class="visibility-icon"
+          (click)="hidePassword = !hidePassword">
+          {{hidePassword ? 'visibility_off' : 'visibility'}}
+        </mat-icon>
+      </div>
+
+      <a routerLink="/auth/forgot-password" class="forgot-password">
+        Forgot password?
+      </a>
+
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="loginForm.invalid">
+        Sign in
+      </button>
+
+      <div class="social-login">
+        <p>Or sign in with</p>
+        <div class="social-buttons">
+          <button type="button" class="social-button google">
+            <img src="assets/google-48.svg" alt="Google">
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

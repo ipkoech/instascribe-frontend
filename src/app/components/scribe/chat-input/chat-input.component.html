@@ -1,0 +1,21 @@
+<form class="input-container" [formGroup]="chatForm">
+  <div class="input-wrapper">
+    <button mat-icon-button class="attach-button">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+
+    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+      formControlName="user_input" (keydown.enter)="handleKeyDown($event)" placeholder="Ask a follow up..."
+      class="input-field">
+    </textarea>
+
+    <button mat-icon-button class="send-button" [class.active]="chatForm.get('user_input')?.value"
+      [disabled]="!chatForm.get('user_input')?.value" (click)="onSend()">
+      <mat-icon>north</mat-icon>
+    </button>
+  </div>
+
+  <div class="disclaimer" *ngIf="disclaimer">
+    {{ disclaimer }}
+  </div>
+</form>

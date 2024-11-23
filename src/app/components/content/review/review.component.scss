@@ -1,0 +1,54 @@
+.drafts-container {
+  padding: 20px;
+
+  .mat-table {
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    .mat-header-cell {
+      font-weight: 600;
+      color: #333;
+      background: #f5f5f5;
+    }
+
+    .mat-cell {
+      padding: 12px 8px;
+    }
+  }
+
+  .mat-chip {
+    &.approved {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    &.pending {
+      background-color: #ff9800;
+      color: white;
+    }
+
+    &.rejected {
+      background-color: #f44336;
+      color: white;
+    }
+  }
+
+  .mat-paginator {
+    margin-top: 20px;
+    border-radius: 4px;
+  }
+
+  .actions-cell {
+    width: 100px;
+    text-align: right;
+  }
+
+  .collaborators-cell {
+    .mat-chip-list {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+  }
+}

@@ -1,0 +1,154 @@
+.user-management {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #666;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.company-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #6B7280;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-field {
+  width: 240px;
+  margin-bottom: -1.25em;
+}
+
+.filter-button {
+  height: 40px;
+}
+
+.filter-button mat-icon {
+  margin-right: 8px;
+}
+
+.add-user-button {
+  height: 40px;
+}
+
+.add-user-button mat-icon {
+  margin-right: 8px;
+}
+
+.user-count {
+  background: #F3F4F6;
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #6B7280;
+  margin-left: 8px;
+}
+
+.table-container {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+}
+
+.users-table {
+  width: 100%;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.user-email {
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.access-chips {
+  display: flex;
+  gap: 8px;
+}
+
+::ng-deep .mat-mdc-chip.admin {
+  background: #ECFDF5 !important;
+  color: #065F46 !important;
+}
+
+::ng-deep .mat-mdc-chip.data-import {
+  background: #EFF6FF !important;
+  color: #1E40AF !important;
+}
+
+::ng-deep .mat-mdc-chip.data-export {
+  background: #FEF3F2 !important;
+  color: #B42318 !important;
+}
+
+::ng-deep .mat-mdc-row:hover {
+  background: #F9FAFB;
+}
+
+::ng-deep .mat-mdc-header-row {
+  background: #F9FAFB;
+}
+
+::ng-deep .mat-mdc-header-cell {
+  color: #6B7280;
+  font-weight: 500;
+}

@@ -1,0 +1,36 @@
+<div class="files-container">
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <div class="action-item" (click)="fileInput.click()">
+      <mat-icon>description</mat-icon>
+      <span>New document</span>
+      <mat-icon class="add-icon">add</mat-icon>
+      <input type="file" #fileInput (change)="uploadFile($event, 'document')"
+      accept=".pdf,.doc,.docx,.txt,.xls,.xlsx" style="display: none">
+
+
+    </div>
+    <div class="action-item">
+      <mat-icon>podcasts</mat-icon>
+      <span>New Podcast</span>
+      <mat-icon class="add-icon">add</mat-icon>
+    </div>
+    <div class="action-item">
+      <mat-icon>subscriptions</mat-icon>
+      <span>New Audio/Video</span>
+      <mat-icon class="add-icon">add</mat-icon>
+    </div>
+  </div>
+  <!-- All Files Section -->
+  <div class="section">
+    <nav mat-stretch-tabs="false" mat-tab-nav-bar [tabPanel]="filesPanel">
+      <a mat-tab-link *ngFor="let tab of tabs" [routerLink]="tab.route" [active]="activeLink === tab.route"
+        (click)="activeLink = tab.route">
+        {{ tab.label }}
+      </a>
+    </nav>
+    <mat-tab-nav-panel #filesPanel>
+      <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
+  </div>
+</div>
