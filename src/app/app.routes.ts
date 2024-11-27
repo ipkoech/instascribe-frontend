@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
-import { SettingsComponent } from './components/preferences/settings/settings.component';
 import { CurrentUserProfileComponent } from './components/preferences/current-user-profile/current-user-profile.component';
 import { NotificationAlertDetailComponent } from './components/preferences/notification-alert-detail/notification-alert-detail.component';
 import { NotificationAlertsComponent } from './components/preferences/notification-alerts/notification-alerts.component';
 import { ProfileOverviewComponent } from './components/preferences/profile-overview/profile-overview.component';
 import { alertResolver } from './core/services/alert.service';
+import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
 
 export const routes: Routes = [
   {
@@ -73,6 +73,7 @@ export const routes: Routes = [
           },
         ],
       },
+      { path: 'notifications', component: NotificationsComponent },
     ],
   },
 ];

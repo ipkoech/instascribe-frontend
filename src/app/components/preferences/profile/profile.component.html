@@ -9,7 +9,7 @@
           style="margin-inline-start: auto"
           aria-label="Notification status"
         >
-          <mat-chip-option
+          <!-- <mat-chip-option
             color="accent"
             [selectable]="(theme.getTheme() | async) === 'dark'"
             [value]="'light'"
@@ -22,7 +22,7 @@
             [value]="'dark'"
           >
             <mat-icon matChipTrailingIcon>dark_mode</mat-icon>
-          </mat-chip-option>
+          </mat-chip-option> -->
         </mat-chip-listbox>
         <div *ngIf="!userService.user?.otp_enabled">
           <button
