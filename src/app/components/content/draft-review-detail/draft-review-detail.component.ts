@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angula
 import { AfterViewInit, Component, ElementRef, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -61,6 +61,8 @@ export class DraftReviewDetailComponent implements AfterViewInit {
   ) {
     this.route.params.subscribe(params => {
       this.draftId = params['id'];
+      console.log(params['id']);
+      
       if (this.draftId) {
         this.loadDraft(this.draftId);
         this.setupAutoSave();
@@ -68,7 +70,7 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       }
     });
     this.collaboratorForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      userIds: [[], [Validators.required]],
       accessLevel: ['viewer', Validators.required],
       reason: ['', Validators.required]
     });
@@ -129,17 +131,57 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       }
     })
   }
-
+  collaboratorIds: Set<string> = new Set<string>();
   loadDraft(id: string) {
     this.draftService.fetchDraft(id).subscribe({
       next: (response: HttpResponse<any>) => {
         this.draft = response.body;
+        this.collaboratorIds.clear();
+        // Populate the Set with collaborator IDs
+        if (this.draft.collaborators) {
+          this.draft.collaborators.forEach((collab: any) => {
+            this.collaboratorIds.add(collab.id);
+          });
+        }
         if (this.editor && this.draft.content) {
           this.editor.setMarkdown(this.draft.content);
         }
       }
     });
   }
+  /**
+   * Check if the given user ID belongs to the author.
+   * @param userId - ID of the user to check
+   * @returns boolean indicating if the user is the author
+   */
+  isAuthor(userId: string): boolean {
+    return this.draft?.author?.id === userId;
+  }
+
+  /**
+   * Check if the given user ID is already a collaborator.
+   * @param userId - ID of the user to check
+   * @returns boolean indicating if the user is a collaborator
+   */
+  isCollaborator(userId: string): boolean {
+    return this.collaboratorIds.has(userId);
+  }
+
+
+    /**
+   * Get tooltip message for a user.
+   * @param userId - ID of the user
+   * @returns string message
+   */
+    getTooltip(userId: string): string {
+      if (this.isAuthor(userId)) {
+        return 'Cannot add the author as a collaborator.';
+      } else if (this.isCollaborator(userId)) {
+        return 'User is already a collaborator.';
+      }
+      return '';
+    }
+  
 
   ngOnDestroy() {
     this.editor?.destroy();
@@ -253,37 +295,47 @@ export class DraftReviewDetailComponent implements AfterViewInit {
   @ViewChild('confirmationDialog') ConfirmationDialogComponent!: TemplateRef<any>;
 
   openAddCollaboratorDialog() {
-    const dialogRef = this.dialog.open(this.collaboratorDialog, {
+    this.dialogRef = this.dialog.open(this.collaboratorDialog, {
       width: '400px',
       hasBackdrop: true,
     });
-    const userIds = this.collaboratorForm.value.userIds;
+  }
 
+
+  dialogRef!: MatDialogRef<any>;
+  addCollaborator() {
+    const userIds = this.collaboratorForm.value.userIds;
+  
+    // Validate user selection
     if (userIds?.length === 0) {
       this.snackBarService.error('Please select at least one user to add as a collaborator.');
       return;
     }
-
+  
     // Prepare the data to be sent to the backend
     const collaboratorData = {
       user_ids: userIds,
       reason: this.collaboratorForm.value.reason,
       access_level: this.collaboratorForm.value.accessLevel
     };
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.draftService.addCollaborators(this.draftId, collaboratorData).subscribe({
-          next: () => {
-            this.loadDraft(this.draftId);
-            this.snackBarService.success('Collaborator added successfully', 500, 'center', 'top');
-            this.collaboratorForm.reset({ accessLevel: 'viewer' });
-          }
-        });
+  
+    console.log('Collaborator Data:', collaboratorData);
+  
+    // Call the service to add collaborators
+    this.draftService.addCollaborators(this.draftId, collaboratorData).subscribe({
+      next: () => {
+        this.loadDraft(this.draftId);
+        this.snackBarService.success('Collaborator added successfully', 500, 'center', 'top');
+        
+        // Reset the form and close the dialog on success
+        this.collaboratorForm.reset({ accessLevel: 'viewer' });
+        this.dialogRef.close();  // Close the dialog after success
+      },
+      error: (err) => {
+        this.snackBarService.error('Failed to add collaborator: ' + err.message);
       }
     });
   }
-
 
   copyEditorContent() {
     const content = this.editor.getMarkdown();

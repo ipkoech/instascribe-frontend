@@ -46,9 +46,9 @@ export class DraftService {
 
   addCollaborators(draftId: string, collaborators: any): Observable<any> {
     return this.http.post(`${this.api.base_uri}drafts/${draftId}/add_collaborator`, {
-      user_ids: collaborators.userIds,
+      user_ids: collaborators.user_ids,
       reason: collaborators.reason,
-      access_level: collaborators.accessLevel
+      access_level: collaborators.access_level
     });
   }
 

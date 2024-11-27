@@ -70,7 +70,9 @@
             <mat-label>Select Collaborators</mat-label>
             <mat-select multiple formControlName="userIds">
               <!-- Loop through the users data and create an option for each user -->
-              <mat-option *ngFor="let user of users?.data" [value]="user.id" [disabled]="user.id === draft?.author?.id">
+              <mat-option *ngFor="let user of users?.data" [value]="user.id" 
+              [disabled]="isAuthor(user.id) || isCollaborator(user.id)"
+              [matTooltip]="getTooltip(user.id)">
                 {{ user.f_name }} {{ user.l_name }}
               </mat-option>
             </mat-select>
@@ -93,7 +95,7 @@
       </mat-dialog-content>
       <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button [mat-dialog-close]="true" [disabled]="!collaboratorForm.valid" color="primary">Add</button>
+        <button mat-button  (click)="addCollaborator()" [disabled]="!collaboratorForm.valid" color="primary">Add</button>
       </mat-dialog-actions>
     </ng-template>
 

@@ -163,7 +163,7 @@ export class RoleDetailComponent {
 
   addPermissions(permissionIds: string[]) {
     this.http
-      .post(`${this.api.base_uri}roles/${this.role?.id}/permissions`, {
+      .post(`${this.api.base_uri}roles/${this.role?.id}/attach-permissions`, {
         permission_ids: permissionIds,
       })
       .subscribe({
@@ -189,7 +189,7 @@ export class RoleDetailComponent {
     this.http
       .request(
         'delete',
-        `${this.api.base_uri}roles/${this.role?.id}/permissions`,
+        `${this.api.base_uri}roles/${this.role?.id}/revoke-permissions`,
         {
           body: { permission_ids: permissionIds },
         }
