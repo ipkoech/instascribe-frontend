@@ -1,7 +1,7 @@
-<button style="border-radius: 30px" routerLink="/" mat-button>
-  <mat-icon fontSet="material-icons-outlined">chevron_left</mat-icon>
+<!-- <button style="border-radius: 30px" routerLink="/" mat-button>
+  <mat-icon>chevron_left</mat-icon>
   Home
-</button>
+</button> -->
 <nav
   mat-align-tabs="center"
   [color]="'primary'"
@@ -26,13 +26,13 @@
     [active]="transactionsRouterLinkAvtive.isActive"
     >Notification Alerts</a
   >
-  <a
+  <!-- <a
     routerLink="settings"
     routerLinkActive
     #invoicesRouterLinkAvtive="routerLinkActive"
     mat-tab-link
     [active]="invoicesRouterLinkAvtive.isActive"
     >Settings</a
-  >
+  > -->
 </nav>
 <mat-tab-nav-panel #tabPanel><router-outlet></router-outlet></mat-tab-nav-panel>
