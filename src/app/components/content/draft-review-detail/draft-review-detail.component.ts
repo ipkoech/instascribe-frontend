@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,8 @@ import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { DraftService } from '../services/draft.service';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { ApiService } from '../../../core/services/api.service';
+import { UserModelsResponse } from '../../../core/interfaces/user.model';
 
 @Component({
   selector: 'app-draft-review-detail',
@@ -34,7 +36,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
   templateUrl: './draft-review-detail.component.html',
   styleUrl: './draft-review-detail.component.scss'
 })
-export class DraftReviewDetailComponent  implements AfterViewInit {
+export class DraftReviewDetailComponent implements AfterViewInit {
   @ViewChild('editorElement') editorElement!: ElementRef;
   @Output() onChange = new EventEmitter<string>();
 
@@ -52,13 +54,17 @@ export class DraftReviewDetailComponent  implements AfterViewInit {
     private draftService: DraftService,
     private snackBarService: SnackBarService,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private api: ApiService,
+
   ) {
     this.route.params.subscribe(params => {
       this.draftId = params['id'];
       if (this.draftId) {
         this.loadDraft(this.draftId);
         this.setupAutoSave();
+        this.loadUsers();
       }
     });
     this.collaboratorForm = this.fb.group({
@@ -110,6 +116,18 @@ export class DraftReviewDetailComponent  implements AfterViewInit {
       this.onChange.emit(content);
       this.contentChanges.next(content);
     });
+  }
+  users: UserModelsResponse | undefined
+  loadUsers() {
+    this.http.get(this.api.base_uri_api + 'users', { withCredentials: true, observe: 'response', params: new HttpParams().append('include', 'roles').append('per_page', -1) }).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          this.users = response.body
+        }
+      }, error: (errorResponse: HttpErrorResponse) => {
+
+      }
+    })
   }
 
   loadDraft(id: string) {
@@ -163,9 +181,14 @@ export class DraftReviewDetailComponent  implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.draftService.approveDraft(this.draftId).subscribe({
-          next: () => {
-            this.loadDraft(this.draftId);
-            this.snackBarService.success('Draft approved', 500, 'center', 'top');
+          next: (response: HttpResponse<any>) => {
+            if (response.ok) {
+              this.loadDraft(this.draftId);
+              this.snackBarService.success('Draft approved', 500, 'center', 'top');
+            }
+          },
+          error: (error) => {
+            this.snackBarService.error(error.error['error']);
           }
         });
       }
@@ -186,9 +209,14 @@ export class DraftReviewDetailComponent  implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.draftService.rejectDraft(this.draftId).subscribe({
-          next: () => {
-            this.loadDraft(this.draftId);
-            this.snackBarService.info('Draft rejected', 500, 'center', 'top');
+          next: (response: HttpResponse<any>) => {
+            if (response.ok) {
+              this.loadDraft(this.draftId);
+              this.snackBarService.info('Draft rejected', 500, 'center', 'top');
+            }
+          },
+          error: (error) => {
+            this.snackBarService.error(error.error['error']);
           }
         });
       }
@@ -229,10 +257,23 @@ export class DraftReviewDetailComponent  implements AfterViewInit {
       width: '400px',
       hasBackdrop: true,
     });
+    const userIds = this.collaboratorForm.value.userIds;
+
+    if (userIds?.length === 0) {
+      this.snackBarService.error('Please select at least one user to add as a collaborator.');
+      return;
+    }
+
+    // Prepare the data to be sent to the backend
+    const collaboratorData = {
+      user_ids: userIds,
+      reason: this.collaboratorForm.value.reason,
+      access_level: this.collaboratorForm.value.accessLevel
+    };
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.draftService.addCollaborators(this.draftId, this.collaboratorForm.value).subscribe({
+        this.draftService.addCollaborators(this.draftId, collaboratorData).subscribe({
           next: () => {
             this.loadDraft(this.draftId);
             this.snackBarService.success('Collaborator added successfully', 500, 'center', 'top');

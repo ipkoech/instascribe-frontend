@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationComponent } from './components/shared/navigation/navigation.component';
 import { SettingsComponent } from './components/preferences/settings/settings.component';

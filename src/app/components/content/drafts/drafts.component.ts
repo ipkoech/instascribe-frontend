@@ -29,7 +29,7 @@ import { RouterLink, RouterModule } from '@angular/router';
   styleUrl: './drafts.component.scss'
 })
 export class DraftsComponent implements OnInit {
-  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at', 'actions'];
+  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

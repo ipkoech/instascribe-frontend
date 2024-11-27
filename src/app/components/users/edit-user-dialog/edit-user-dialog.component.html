@@ -1,0 +1,31 @@
+<mat-toolbar>
+    <span>Edit {{user.f_name}}</span>
+</mat-toolbar>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <form style="display: flex;flex-direction: column; gap: 8px;padding: 4px;" [formGroup]="editUserForm">
+        <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
+            appearance="outline" style="width: 100%;">
+            <mat-label>Name</mat-label>
+            <input formControlName="f_name" type="text" matInput>
+        </mat-form-field>
+        <mat-form-field  [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
+            appearance="outline" style="width: 100%;">
+            <mat-label>Email</mat-label>
+            <mat-hint>If changed, you'll need to verify the new email.</mat-hint>
+            <input formControlName="email" type="text" matInput>
+        </mat-form-field>
+        <mat-form-field style="width: 100%;">
+            <label for="userGroup">Select a Role</label>
+            <mat-select multiple="true" formControlName="role_ids">
+                <mat-option *ngFor="let role of roles?.data" [value]="role.id">{{role.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div style="display: flex;gap: 4px;">
+        <button mat-stroked-button color="accent" [mat-dialog-close]="true">Cancel</button>
+        <button mat-raised-button (click)="edit_user()">Save changes</button>
+    </div>
+</mat-dialog-actions>

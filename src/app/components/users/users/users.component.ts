@@ -17,6 +17,7 @@ import { debounceTime } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
 import { UserService } from '../../../core/services/user.service';
 import { RouterModule } from '@angular/router';
+import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 
 @Component({
   selector: 'app-users',
@@ -72,6 +73,16 @@ export class UsersComponent {
 
       }
     })
+  }
+
+  add_new_user() {
+    let dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '400px',
+      hasBackdrop: true,
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.get_users(`${this.api.base_uri}users`);
+    });
   }
 
 

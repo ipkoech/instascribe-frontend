@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,19 @@ export class SnackBarService {
       horizontalPosition,
       verticalPosition
     });
+  }
+
+  private snackbarSubject = new BehaviorSubject<{ message: string; type: string } | null>(null);
+  snackbarState$ = this.snackbarSubject.asObservable();
+
+  show(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    this.snackbarSubject.next({ message, type });
+    
+    // Automatically hide the snackbar after 3 seconds
+    setTimeout(() => this.hide(), 3000);
+  }
+
+  hide() {
+    this.snackbarSubject.next(null);
   }
 }

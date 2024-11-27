@@ -29,7 +29,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ReviewComponent {
 
-  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at', 'actions'];
+  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

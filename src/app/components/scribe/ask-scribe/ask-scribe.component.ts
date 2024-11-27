@@ -84,9 +84,9 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       }
       if (newConversationId) {
         this.conversation_id = newConversationId;
-        this.subscribeToChatUpdates(newConversationId);
+        this.subscribeToChatUpdates(newConversationId); // Subscribing to updates for the new conversation
         this.currentChannelSubscription = newConversationId;
-        this.loadChats();
+        this.loadChats(); // Load the existing chats for the conversation
       }
     });
   }
@@ -350,6 +350,11 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
           this.loadingMessageIds.add(data.chat.id);
           this.scrollToBottom();
         }
+      }
+
+      if (data.action === 'chat_created') {
+        this.loadChats();  // Refresh the chat list
+        this.scrollToBottom();  // Scroll to the bottom
       }
     }
   }

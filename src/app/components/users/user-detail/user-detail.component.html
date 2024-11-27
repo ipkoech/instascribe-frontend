@@ -18,7 +18,25 @@
         <p class="location">{{user.last_sign_in_at | date:'mediumDate'}}</p>
       </div>
     </div>
-    <button mat-stroked-button class="edit-button">
+    <div *ngIf="!user?.otp_enabled">
+      <button
+        mat-raised-button
+        (click)="openEnable2FaDialog()"
+        *ngIf="!user?.otp_enabled"
+      >
+        Enable 2FA
+      </button>
+    </div>
+    <div *ngIf="user?.otp_enabled">
+      <button
+        mat-raised-button
+        (click)="openDisable2FaDialog()"
+        *ngIf="user?.otp_enabled"
+      >
+        Disable 2FA
+      </button>
+    </div>
+    <button (click)="edit_user(user)" mat-stroked-button class="edit-button">
       Edit <mat-icon>edit</mat-icon>
     </button>
   </div>
@@ -26,9 +44,9 @@
   <div class="profile-section">
     <div class="section-header">
       <h3>Personal Information</h3>
-      <button mat-stroked-button class="edit-button">
+      <!-- <button mat-stroked-button class="edit-button">
         Edit <mat-icon>edit</mat-icon>
-      </button>
+      </button> -->
     </div>
 
     <div class="info-grid">
@@ -54,4 +72,39 @@
       </div>
     </div>
   </div>
+  <ng-template #enable2FaDialog>
+    <h2 style="font-size: 1.5em" mat-dialog-title>
+      Enable Two-Factor Authentication
+    </h2>
+    <mat-dialog-content>
+      <p>
+        Are you sure you want to enable two-factor authentication for this user?
+      </p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>No</button>
+      <button mat-button color="primary" (click)="confirmEnable2Fa()">
+        Yes
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+  
+  <!-- Confirmation Dialog for Disabling 2FA -->
+  <ng-template #disable2FaDialog>
+    <h2 style="font-size: 1.5em" mat-dialog-title>
+      Disable Two-Factor Authentication
+    </h2>
+    <mat-dialog-content>
+      <p>
+        Are you sure you want to disable two-factor authentication for this
+        user?
+      </p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>No</button>
+      <button mat-button color="primary" (click)="confirmDisable2Fa()">
+        Yes
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
 </div>

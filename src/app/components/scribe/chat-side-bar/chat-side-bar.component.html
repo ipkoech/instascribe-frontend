@@ -24,7 +24,7 @@
       <a *ngFor="let item of conversations?.data" [routerLink]="item.id" class="chat-item"
         [class.active]="!item.archived">
         <mat-icon>chat_bubble_outline</mat-icon>
-        <span class="item-title">{{ item.id }}</span>
+        <span class="item-title">{{ getConversationTitle(item )}}</span>
       </a>
     </div>
   </div>

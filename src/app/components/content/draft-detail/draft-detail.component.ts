@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DraftService } from '../services/draft.service';
-import { HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import Editor from '@toast-ui/editor';
 import { DraftModel } from '../../../core/interfaces/draft.model';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
@@ -17,6 +17,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { ApiService } from '../../../core/services/api.service';
+import { UserModelsResponse } from '../../../core/interfaces/user.model';
 @Component({
   selector: 'app-draft-detail',
   standalone: true,
@@ -53,17 +55,19 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     private draftService: DraftService,
     private snackBarService: SnackBarService,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private api: ApiService, private http: HttpClient,
   ) {
     this.route.params.subscribe(params => {
       this.draftId = params['id'];
       if (this.draftId) {
         this.loadDraft(this.draftId);
         this.setupAutoSave();
+        this.loadUsers()
       }
     });
     this.collaboratorForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      userIds: [[], [Validators.required]],
       accessLevel: ['viewer', Validators.required],
       reason: ['', Validators.required]
     });
@@ -104,7 +108,18 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.initializeEditor();
   }
 
+  users: UserModelsResponse | undefined
+  loadUsers() {
+    this.http.get(this.api.base_uri_api + 'users', { withCredentials: true, observe: 'response', params: new HttpParams().append('include', 'roles').append('per_page', -1) }).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          this.users = response.body
+        }
+      }, error: (errorResponse: HttpErrorResponse) => {
 
+      }
+    })
+  }
 
   private initializeEditor() {
     this.editor = new Editor({
@@ -191,10 +206,9 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
   @ViewChild('collaboratorDialog') collaboratorDialog!: TemplateRef<any>;
-
+  selectedUserIds: string[] = [];
 
   @ViewChild('confirmationDialog') ConfirmationDialogComponent!: TemplateRef<any>;
-
   openAddCollaboratorDialog() {
     const dialogRef = this.dialog.open(this.collaboratorDialog, {
       width: '400px',
@@ -203,16 +217,37 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.draftService.addCollaborators(this.draftId, this.collaboratorForm.value).subscribe({
+        // Get the selected user ids
+        const userIds = this.collaboratorForm.value.userIds;
+
+        if (userIds?.length === 0) {
+          this.snackBarService.error('Please select at least one user to add as a collaborator.');
+          return;
+        }
+
+        // Prepare the data to be sent to the backend
+        const collaboratorData = {
+          user_ids: userIds,
+          reason: this.collaboratorForm.value.reason,
+          access_level: this.collaboratorForm.value.accessLevel
+        };
+
+        // Call the backend service to add collaborators
+        this.draftService.addCollaborators(this.draftId, collaboratorData).subscribe({
           next: () => {
             this.loadDraft(this.draftId);
             this.snackBarService.success('Collaborator added successfully', 500, 'center', 'top');
             this.collaboratorForm.reset({ accessLevel: 'viewer' });
+          },
+          error: (err) => {
+            this.snackBarService.error(err.error['error']);
           }
         });
       }
     });
   }
+
+
 
 
   copyEditorContent() {

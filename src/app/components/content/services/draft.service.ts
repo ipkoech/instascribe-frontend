@@ -63,7 +63,7 @@ export class DraftService {
   }
 
   approveDraft(draftId: string): Observable<any> {
-    return this.http.post(`${this.api.base_uri}drafts/${draftId}/approve`, {});
+    return this.http.post(`${this.api.base_uri}drafts/${draftId}/approve`, {},{ withCredentials: true, observe: 'response' });
   }
 
   rejectDraft(draftId: string): Observable<any> {

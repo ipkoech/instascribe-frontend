@@ -1,10 +1,14 @@
+
+<head>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+</head>
 <div class="draft-container">
   <div class="editor-container" #editorElement></div>
   <div class="side-nav-container">
     <!-- Draft Actions -->
     <div class="actions-section">
       <div class="action-buttons">
-        <button mat-icon-button matTooltip="Save Draft" (click)="saveDraft(editor.getMarkdown())">
+        <button mat-icon-button matTooltip="Save Changes" (click)="saveDraft(editor.getMarkdown())">
           <mat-icon>save</mat-icon>
         </button>
         <button mat-icon-button matTooltip="Submit for Review" (click)="startReview()" *ngIf="draft?.status === 'editing'">
@@ -55,11 +59,19 @@
       <h2 mat-dialog-title>Add Collaborator</h2>
       <mat-dialog-content>
         <form [formGroup]="collaboratorForm">
+          
+          <!-- User Selection: Multiple users can be selected -->
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" placeholder="Enter collaborator email">
+            <mat-label>Select Collaborators</mat-label>
+            <mat-select multiple formControlName="userIds">
+              <!-- Loop through the users data and create an option for each user -->
+              <mat-option *ngFor="let user of users?.data" [value]="user.id" [disabled]="user.id === draft?.author?.id">
+                {{ user.f_name }} {{ user.l_name }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
-
+    
+          <!-- Access Level Selection: Select between Viewer, Editor, or Admin -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Access Level</mat-label>
             <mat-select formControlName="accessLevel">
@@ -68,11 +80,13 @@
               <mat-option value="admin">Admin</mat-option>
             </mat-select>
           </mat-form-field>
-
+    
+          <!-- Reason Input: A text area for the user to provide a reason -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Reason</mat-label>
             <textarea matInput formControlName="reason" placeholder="Why are you adding this collaborator?"></textarea>
           </mat-form-field>
+    
         </form>
       </mat-dialog-content>
       <mat-dialog-actions align="end">
@@ -80,6 +94,8 @@
         <button mat-button [mat-dialog-close]="true" [disabled]="!collaboratorForm.valid" color="primary">Add</button>
       </mat-dialog-actions>
     </ng-template>
+    
+    
 
     <ng-template #confirmationDialog let-data>
       <div class="dialog-container">

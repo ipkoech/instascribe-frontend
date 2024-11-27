@@ -1,0 +1,50 @@
+<mat-toolbar>
+    <span style="font-size: 1em">ADD NEW USER</span>
+    <mat-icon style="cursor: pointer; margin-inline-start: auto;" [mat-dialog-close]="true">close</mat-icon>
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <div class="content">
+      <form style="display: flex;flex-direction: column; gap: 8px;" [formGroup]="addUserForm">
+       <!-- first name  -->
+        <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
+          appearance="outline" style="width: 100%;">
+          <mat-label>First Name</mat-label>
+          <input formControlName="f_name" type="text" matInput required>
+          <mat-error>{{addUserForm.controls.f_name.errors?.['backend']}}
+          </mat-error>
+        </mat-form-field>
+        <!-- last name  -->
+        <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
+        appearance="outline" style="width: 100%;">
+        <mat-label>Last Name</mat-label>
+        <input formControlName="l_name" type="text" matInput required>
+        <mat-error>{{addUserForm.controls.l_name.errors?.['backend']}}
+        </mat-error>
+      </mat-form-field>
+
+        <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
+          appearance="outline" style="width: 100%;">
+          <mat-label>Email</mat-label>
+          <input formControlName="email" type="text" matInput required>
+          <mat-error>{{addUserForm.controls.email.errors?.['backend']}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <label for="userGroup">Select a Role*</label>
+          <mat-select multiple="true" formControlName="role_ids">
+            <mat-option *ngFor="let role of roles?.data" [value]="role.id">{{
+              role.name
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+  
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-stroked-button color="accent" [mat-dialog-close]="true">Cancel</button>
+    <button mat-flat-button (click)="add_user()">
+      ADD
+    </button>
+  </mat-dialog-actions>
