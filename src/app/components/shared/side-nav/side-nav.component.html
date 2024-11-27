@@ -1,100 +1,196 @@
-
 <mat-nav-list class="nav-list">
   <!-- if scribe is active close the sidenav-->
-  <a class="nav-item" mat-list-item routerLink="ask" routerLinkActive="active-link" #askScribe="routerLinkActive"
-    [class.active-link]="askScribe.isActive" [routerLinkActiveOptions]="{ exact: true }">
-    <mat-icon [style.color]="askScribe.isActive ? 'white' : ''" matListItemIcon>forum</mat-icon>
+  <a
+    class="nav-item"
+    mat-list-item
+    routerLink="ask"
+    routerLinkActive="active-link"
+    #askScribe="routerLinkActive"
+    [class.active-link]="askScribe.isActive"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <mat-icon [style.color]="askScribe.isActive ? 'white' : ''" matListItemIcon
+      >forum</mat-icon
+    >
     <span matListItemTitle>Ask Insta</span>
   </a>
 
-  <a mat-list-item routerLink="dashboard" routerLinkActive="active-link" #dashboardrla="routerLinkActive"
+  <!-- <a mat-list-item routerLink="dashboard" routerLinkActive="active-link" #dashboardrla="routerLinkActive"
     [class.active-link]="dashboardrla.isActive" [routerLinkActiveOptions]="{ exact: true }">
     <mat-icon [style.color]="dashboardrla.isActive ? 'white' : ''" matListItemIcon>dashboard</mat-icon>
     <span matListItemTitle>Dashboard</span>
-  </a>
+  </a> -->
 
   <!-- Content Section -->
   <div class="nav-group">
-    <div class="nav-group-header"
-         (click)="toggleContent()"
-         [class.active-parent]="isContentActive">
+    <div
+      class="nav-group-header"
+      (click)="toggleContent()"
+      [class.active-parent]="isContentActive"
+    >
       <div class="header-content">
         <mat-icon>folder_copy</mat-icon>
         <span>Content</span>
       </div>
-      <mat-icon class="arrow" [class.rotated]="isContentExpanded">keyboard_arrow_down</mat-icon>
+      <mat-icon class="arrow" [class.rotated]="isContentExpanded"
+        >keyboard_arrow_down</mat-icon
+      >
     </div>
     <div class="nav-group-items" [class.expanded]="isContentExpanded">
-      <a class="nav-item" mat-list-item routerLink="/content/drafts" routerLinkActive="active-link" #draftsLink="routerLinkActive"
-        [class.active-link]="draftsLink.isActive" (isActiveChange)="updateContent()">
-        <mat-icon [style.color]="draftsLink.isActive ? 'white' : ''" matListItemIcon>edit_note</mat-icon>
+      <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/content/drafts"
+        routerLinkActive="active-link"
+        #draftsLink="routerLinkActive"
+        [class.active-link]="draftsLink.isActive"
+        (isActiveChange)="updateContent()"
+      >
+        <mat-icon
+          [style.color]="draftsLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >edit_note</mat-icon
+        >
         <span matListItemTitle>Drafts</span>
       </a>
 
-      <a class="nav-item" mat-list-item routerLink="/content/review" routerLinkActive="active-link" #reviewLink="routerLinkActive"
-        [class.active-link]="reviewLink.isActive" (isActiveChange)="updateContent()">
-        <mat-icon [style.color]="reviewLink.isActive ? 'white' : ''" matListItemIcon>pending_actions</mat-icon>
+      <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/content/review"
+        routerLinkActive="active-link"
+        #reviewLink="routerLinkActive"
+        [class.active-link]="reviewLink.isActive"
+        (isActiveChange)="updateContent()"
+      >
+        <mat-icon
+          [style.color]="reviewLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >pending_actions</mat-icon
+        >
         <span matListItemTitle>Review</span>
       </a>
     </div>
   </div>
   <!-- Knowledge Base Section -->
   <div class="nav-group">
-    <div class="nav-group-header"
-         (click)="toggleKnowledgeBase()"
-         [class.active-parent]="isKnowledgeBaseActive">
+    <div
+      class="nav-group-header"
+      (click)="toggleKnowledgeBase()"
+      [class.active-parent]="isKnowledgeBaseActive"
+    >
       <div class="header-content">
         <mat-icon>library_books</mat-icon>
         <span>Library</span>
       </div>
-      <mat-icon class="arrow" [class.rotated]="isKnowledgeBaseExpanded">keyboard_arrow_down</mat-icon>
+      <mat-icon class="arrow" [class.rotated]="isKnowledgeBaseExpanded"
+        >keyboard_arrow_down</mat-icon
+      >
     </div>
 
     <div class="nav-group-items" [class.expanded]="isKnowledgeBaseExpanded">
-      <a class="nav-item" mat-list-item routerLink="/knowledge-base/posts" routerLinkActive="active-link" #postsLink="routerLinkActive"
-        [class.active-link]="postsLink.isActive" (isActiveChange)="updateKnowledgeBaseActive()">
-        <mat-icon [style.color]="postsLink.isActive ? 'white' : ''" matListItemIcon>topic</mat-icon>
+      <!-- <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/knowledge-base/posts"
+        routerLinkActive="active-link"
+        #postsLink="routerLinkActive"
+        [class.active-link]="postsLink.isActive"
+        (isActiveChange)="updateKnowledgeBaseActive()"
+      >
+        <mat-icon
+          [style.color]="postsLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >topic</mat-icon
+        >
         <span matListItemTitle>Posts</span>
-      </a>
+      </a> -->
 
-      <a class="nav-item" mat-list-item routerLink="/knowledge-base/files" routerLinkActive="active-link" #podcastsLink="routerLinkActive"
-        [class.active-link]="podcastsLink.isActive" (isActiveChange)="updateKnowledgeBaseActive()">
-        <mat-icon [style.color]="podcastsLink.isActive ? 'white' : ''" matListItemIcon>folder_open</mat-icon>
+      <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/knowledge-base/files"
+        routerLinkActive="active-link"
+        #podcastsLink="routerLinkActive"
+        [class.active-link]="podcastsLink.isActive"
+        (isActiveChange)="updateKnowledgeBaseActive()"
+      >
+        <mat-icon
+          [style.color]="podcastsLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >folder_open</mat-icon
+        >
         <span matListItemTitle>Files</span>
       </a>
-
     </div>
   </div>
   <!-- Management Section -->
   <div class="nav-group">
-    <div class="nav-group-header"
-         (click)="toggleManagement()"
-         [class.active-parent]="isManagementActive">
+    <div
+      class="nav-group-header"
+      (click)="toggleManagement()"
+      [class.active-parent]="isManagementActive"
+    >
       <div class="header-content">
         <mat-icon>settings_accessibility</mat-icon>
         <span>Accessibility</span>
       </div>
-      <mat-icon class="arrow" [class.rotated]="isManagementExpanded">keyboard_arrow_down</mat-icon>
+      <mat-icon class="arrow" [class.rotated]="isManagementExpanded"
+        >keyboard_arrow_down</mat-icon
+      >
     </div>
 
     <div class="nav-group-items" [class.expanded]="isManagementExpanded">
-      <a class="nav-item" mat-list-item routerLink="/users" routerLinkActive="active-link" #usersLink="routerLinkActive"
-        [class.active-link]="usersLink.isActive" (isActiveChange)="updateManagementActive()">
-        <mat-icon [style.color]="usersLink.isActive ? 'white' : ''" matListItemIcon>people</mat-icon>
+      <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/users"
+        routerLinkActive="active-link"
+        #usersLink="routerLinkActive"
+        [class.active-link]="usersLink.isActive"
+        (isActiveChange)="updateManagementActive()"
+      >
+        <mat-icon
+          [style.color]="usersLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >people</mat-icon
+        >
         <span matListItemTitle>Users</span>
       </a>
 
-      <a class="nav-item" mat-list-item routerLink="/roles" routerLinkActive="active-link" #rolesLink="routerLinkActive"
-        [class.active-link]="rolesLink.isActive" (isActiveChange)="updateManagementActive()">
-        <mat-icon [style.color]="rolesLink.isActive ? 'white' : ''" matListItemIcon>verified_user</mat-icon>
+      <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/roles"
+        routerLinkActive="active-link"
+        #rolesLink="routerLinkActive"
+        [class.active-link]="rolesLink.isActive"
+        (isActiveChange)="updateManagementActive()"
+      >
+        <mat-icon
+          [style.color]="rolesLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >verified_user</mat-icon
+        >
         <span matListItemTitle>Roles</span>
       </a>
 
-      <a class="nav-item" mat-list-item routerLink="/settings" routerLinkActive="active-link" #settingsLink="routerLinkActive"
-        [class.active-link]="settingsLink.isActive" (isActiveChange)="updateManagementActive()">
-        <mat-icon [style.color]="settingsLink.isActive ? 'white' : ''" matListItemIcon>settings</mat-icon>
+      <!-- <a
+        class="nav-item"
+        mat-list-item
+        routerLink="/settings"
+        routerLinkActive="active-link"
+        #settingsLink="routerLinkActive"
+        [class.active-link]="settingsLink.isActive"
+        (isActiveChange)="updateManagementActive()"
+      >
+        <mat-icon
+          [style.color]="settingsLink.isActive ? 'white' : ''"
+          matListItemIcon
+          >settings</mat-icon
+        >
         <span matListItemTitle>Settings</span>
-      </a>
+      </a> -->
     </div>
   </div>
 </mat-nav-list>

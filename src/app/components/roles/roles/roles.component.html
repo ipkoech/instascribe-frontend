@@ -1,1 +1,86 @@
-<p>roles works!</p>
+<div class="container">
+  <div style="padding: 20px">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      "
+    >
+      <input
+        type="text"
+        placeholder="Search by role name or name of admin"
+        [(ngModel)]="searchTerm"
+        (input)="filterRoles()"
+        style="
+          flex: 1;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-right: 20px;
+        "
+      />
+      <button (click)="add_role()" mat-stroked-button color="secondary">
+        <div style="display: flex; align-items: center">
+          <mat-icon style="transform: scale(0.8)">add</mat-icon>
+          <span> Role</span>
+        </div>
+      </button>
+    </div>
+    <div *ngIf="roles?.data">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <div
+          *ngFor="let role of paginatedRoles"
+          style="
+            flex: 1 1 calc(25% - 20px);
+            box-sizing: border-box;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+            "
+          >
+            <span>{{ role.name | uppercase }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <p>{{ role.description }}</p>
+          <div style="display: flex; align-items: center; margin-top: 20px">
+            <span style="margin-left: 10px"
+              >{{ role.users.length }} assigned</span
+            >
+            <span style="margin-left: 10px"
+              >{{ role.permissions.length }} Permissions</span
+            >
+          </div>
+          <div style="display: flex; gap: 1rem; margin-inline-start: auto">
+            <button mat-stroked-button color="secondary" [routerLink]="role.id">
+              <div style="display: flex; align-items: center">
+                <span>View role</span>
+                <mat-icon style="transform: scale(0.8)">arrow_forward</mat-icon>
+              </div>
+            </button>
+            <button mat-stroked-button color="warn" (click)="delete(role)">
+              <div style="display: flex; align-items: center">
+                <!-- <span>Delete role</span> -->
+                <mat-icon style="transform: scale(0.8)">delete</mat-icon>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-paginator
+      [length]="roles?.data?.length || 0"
+      [pageSize]="5"
+      (page)="onPageChange($event)"
+    ></mat-paginator>
+  </div>
+</div>

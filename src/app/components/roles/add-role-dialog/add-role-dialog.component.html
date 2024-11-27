@@ -1,0 +1,43 @@
+<mat-dialog-content>
+  <div class="header">
+    <h3 style="font-size: 1em">ADD NEW ROLE</h3>
+    <mat-icon style="cursor: pointer" [mat-dialog-close]="true">close</mat-icon>
+  </div>
+  <div class="content">
+    <form class="user-information" [formGroup]="roleForm">
+      <div class="form-field">
+        <label for="role">Role*</label>
+        <input
+          type="text"
+          id="role"
+          placeholder="Role"
+          formControlName="name"
+        />
+      </div>
+      <mat-form-field style="width: 100%">
+        <mat-label>Enter Role Description</mat-label>
+        <textarea
+          matInput
+          placeholder="Add Description"
+          formControlName="description"
+        ></textarea>
+      </mat-form-field>
+      <mat-form-field style="width: 100%">
+        <label for="permissions">Select a Permission*</label>
+        <mat-select multiple="true" formControlName="permission_ids">
+          <mat-option
+            *ngFor="let permission of permissions?.data"
+            [value]="permission.id"
+            >{{ permission.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <div class="actions">
+      <button class="add-new-user-button" (click)="on_submit()">
+        Add Role
+      </button>
+      <button class="cancel-button" [mat-dialog-close]="true">Cancel</button>
+    </div>
+  </div>
+</mat-dialog-content>

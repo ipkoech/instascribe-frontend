@@ -1,0 +1,11 @@
+<div class="notifications-container">
+  <h2>Notifications you receive</h2>
+  <div
+    class="notification-item"
+    *ngFor="let alert of alerts?.data"
+    [routerLink]="alert.id"
+  >
+    <span>{{ alert.name }}</span>
+    <mat-icon>chevron_right</mat-icon>
+  </div>
+</div>

@@ -1,33 +1,71 @@
 <mat-toolbar style="position: sticky; top: 0; z-index: 5">
   <div class="toolbar-content">
     <div class="logo-container">
-      <img src="assets/icons8-logo-50.svg" alt="Logo" class="logo">
+      <img src="assets/icons8-logo-50.svg" alt="Logo" class="logo" />
       <span class="brand-name">Instascribe</span>
-      <button style="margin-inline-start: 10px;" mat-icon-button (click)="sidenav.toggle()">
+      <button
+        style="margin-inline-start: 10px"
+        mat-icon-button
+        (click)="sidenav.toggle()"
+      >
         <mat-icon>menu</mat-icon>
       </button>
     </div>
     <div class="toolbar-actions">
       <div class="search-bar">
         <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="Search..." />
       </div>
       <button mat-icon-button>
         <mat-icon>notifications</mat-icon>
       </button>
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <!-- <button mat-icon-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
+      </button> -->
+      <button
+        #profileRouterLinkActive="routerLinkActive"
+        routerLinkActive
+        routerLink="/profile"
+        *ngIf="userService.user"
+        [color]="undefined"
+        mat-icon-button
+      >
+        <mat-icon
+          style="transform: scale(0.8)"
+          [color]="profileRouterLinkActive.isActive ? 'primary' : undefined"
+          [fontSet]="
+            profileRouterLinkActive.isActive
+              ? 'material-icons-round'
+              : 'material-icons-outlined'
+          "
+        >
+          account_circle
+        </mat-icon>
       </button>
-      <mat-menu #userMenu="matMenu">
+      <!-- <mat-menu #userMenu="matMenu">
         <button mat-menu-item>
           <mat-icon>person</mat-icon>
           <span>Profile</span>
         </button>
-        <button mat-menu-item *ngIf="userService.user" color="warn" (click)="userService.logout()">
+        <button
+          mat-menu-item
+          *ngIf="userService.user"
+          color="warn"
+          (click)="userService.logout()"
+        >
           <mat-icon style="transform: scale(0.8)">logout</mat-icon>
           <span>Logout</span>
         </button>
-      </mat-menu>
+      </mat-menu> -->
+      <button
+        *ngIf="userService.user"
+        fontSet="material-icons-outlined"
+        color="warn"
+        (click)="userService.logout()"
+        mat-icon-button
+      >
+        <mat-icon style="transform: scale(0.8)">logout</mat-icon>
+      </button>
     </div>
   </div>
 </mat-toolbar>

@@ -26,23 +26,25 @@ import { UserService } from '../../../core/services/user.service';
     MatMenuModule,
     MatTooltipModule,
     MatSnackBarModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './files-overview.component.html',
-  styleUrl: './files-overview.component.scss'
+  styleUrl: './files-overview.component.scss',
 })
 export class FilesOverviewComponent {
-
   tabs = [
-    { label: 'View all', route: 'all' },
+    // { label: 'View all', route: 'all' },
     { label: 'Documents', route: 'docs' },
     { label: 'Podcasts', route: 'podcasts' },
     { label: 'Audio/Videos', route: 'audio-video' },
   ];
   activeLink = this.tabs[0].route;
 
-
-  constructor(private http: HttpClient, private api: ApiService, private userService: UserService) { }
+  constructor(
+    private http: HttpClient,
+    private api: ApiService,
+    private userService: UserService
+  ) {}
   isUploading: boolean = false;
 
   uploadFile(event: any, fileType: string) {
@@ -52,13 +54,16 @@ export class FilesOverviewComponent {
       const formData = new FormData();
       const user = this.userService.user;
       formData.append('file', file);
-      this.http.post(`${this.api.base_uri}media`, formData, { withCredentials: true, observe: 'response' })
+      this.http
+        .post(`${this.api.base_uri}media`, formData, {
+          withCredentials: true,
+          observe: 'response',
+        })
         .subscribe({
           next: (response: HttpResponse<any>) => {
             console.log(response.body);
-          }
+          },
         });
     }
   }
-
 }

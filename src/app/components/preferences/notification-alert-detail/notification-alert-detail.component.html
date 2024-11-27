@@ -1,0 +1,29 @@
+<button style="border-radius: 30px; margin: 10px" routerLink="../" mat-button>
+  <mat-icon fontSet="material-icons-outlined">chevron_left</mat-icon>
+  Notification Alerts
+</button>
+
+<div class="trigger-container">
+  <h1 style="font-size: 1em">In app notifications</h1>
+  <span style="font-size: 0.8em">Delivered inside the app</span>
+  <div class="trigger-item" *ngFor="let trigger of alert?.triggers">
+    <span>{{ trigger.name }}</span>
+    <mat-slide-toggle
+      style="transform: scale(0.7)"
+      [checked]="isSubscribedInApp(trigger)"
+      (change)="onToggleInAppChange($event, trigger)"
+    ></mat-slide-toggle>
+  </div>
+</div>
+
+<div class="trigger-container">
+  <h1 style="font-size: 1em">Email notifications</h1>
+  <span style="font-size: 0.8em">sent on your primary email</span>
+  <div class="trigger-item" *ngFor="let trigger of alert?.triggers">
+    <span>{{ trigger.name }}</span>
+    <mat-slide-toggle
+      style="transform: scale(0.7)"
+      (change)="onToggleEmailChange($event, trigger)"
+    ></mat-slide-toggle>
+  </div>
+</div>

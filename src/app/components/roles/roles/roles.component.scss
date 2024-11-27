@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  margin-top: 1rem;
+  flex-direction: column;
+  font-size: 0.8em;
+  gap: 6px;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.accesses {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+#client {
+  display: flex;
+  // align-items: center;
+  flex-direction: column;
+}
+#lead {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
