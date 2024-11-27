@@ -1,0 +1,38 @@
+/* role-detail.component.scss */
+
+.role-detail-container {
+  padding: 16px;
+}
+
+.role-card {
+  margin-bottom: 16px;
+}
+
+.role-avatar {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.permissions-card {
+  margin-top: 16px;
+  padding: 10px;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.select-all-checkbox {
+  float: right;
+  margin-right: 16px;
+}
+
+mat-selection-list {
+  max-height: fit-content;
+  overflow: auto;
+}
+
+mat-paginator {
+  margin-top: 16px;
+}

@@ -1,0 +1,91 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.close-icon {
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.content {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.user-information {
+  margin-bottom: 20px;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field label,
+.checkbox-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.2);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-new-user-button {
+  background-color: #477dd7;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.cancel-button {
+  background-color: white;
+  color: #222;
+  border: 1px solid #4e4e4e;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9em;
+}

@@ -1,0 +1,89 @@
+<ng-template [ngIf]="userService.user$ | async">
+  <div style="padding-bottom: 16px; padding-top: 16px">
+    <mat-card style="max-width: 700px; border-radius: 0; margin: auto">
+      <div style="display: flex; gap: 16px; padding: 16px; padding-bottom: 0">
+        <mat-chip-listbox
+          (change)="theme.setTheme($event.value)"
+          class="m-3"
+          [value]="theme.getTheme() | async"
+          style="margin-inline-start: auto"
+          aria-label="Notification status"
+        >
+          <mat-chip-option
+            color="accent"
+            [selectable]="(theme.getTheme() | async) === 'dark'"
+            [value]="'light'"
+          >
+            <mat-icon matChipTrailingIcon>light_mode</mat-icon>
+          </mat-chip-option>
+          <mat-chip-option
+            color="accent"
+            [selectable]="(theme.getTheme() | async) === 'light'"
+            [value]="'dark'"
+          >
+            <mat-icon matChipTrailingIcon>dark_mode</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <div *ngIf="!userService.user?.otp_enabled">
+          <button
+            mat-button
+            (click)="enable2Fa()"
+            *ngIf="!userService.user?.otp_enabled"
+          >
+            Enable 2FA
+          </button>
+        </div>
+        <div *ngIf="userService.user?.otp_enabled">
+          <button
+            mat-button
+            (click)="disable2Fa()"
+            *ngIf="userService.user?.otp_enabled"
+          >
+            Disable 2FA
+          </button>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div
+        style="
+          display: flex;
+          gap: 16px;
+          justify-content: center;
+          padding-bottom: 0;
+        "
+      >
+        <div
+          style="
+            max-width: 100%;
+            width: 100%;
+            border-radius: 0;
+            padding-bottom: 0;
+          "
+        >
+          <div
+            style="
+              padding: 8px 16px;
+              display: flex;
+              gap: 16px;
+              justify-content: space-between;
+            "
+          >
+            <div style="display: flex; flex-direction: column">
+              <div class="mat-headline-4" style="margin: 0">
+                {{ (userService.user$ | async)?.f_name | uppercase }}
+              </div>
+              <div class="mat-headline-6" style="margin: 0">
+                {{ (userService.user$ | async)?.email }}
+              </div>
+              <div class="mat-caption">
+                Joined
+                {{ (userService.user$ | async)?.created_at | date : "medium" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card>
+  </div>
+</ng-template>

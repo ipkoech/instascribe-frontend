@@ -1,0 +1,32 @@
+<mat-toolbar style="background: inherit">
+  <button style="margin-inline-start: auto" mat-dialog-close mat-icon-button>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <ng-template [ngIf]="userService.user$ | async">
+    <form
+      style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px"
+      [formGroup]="user_form"
+    >
+      <mat-form-field
+        [color]="(theme.getTheme() | async) === 'light' ? 'primary' : 'accent'"
+        subscriptSizing="dynamic"
+        style="width: 100%"
+      >
+        <mat-label>Name</mat-label>
+        <input formControlName="name" type="text" matInput />
+      </mat-form-field>
+      <mat-form-field
+        [color]="(theme.getTheme() | async) === 'light' ? 'primary' : 'accent'"
+        subscriptSizing="dynamic"
+        style="width: 100%"
+      >
+        <mat-label>Email</mat-label>
+        <mat-hint>If changed, you'll need to verify the new email.</mat-hint>
+        <input formControlName="email" type="text" matInput />
+      </mat-form-field>
+    </form>
+  </ng-template>
+</mat-dialog-content>

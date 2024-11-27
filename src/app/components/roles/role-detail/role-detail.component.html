@@ -1,1 +1,147 @@
-<p>role-detail works!</p>
+<div class="role-detail-container" *ngIf="role">
+  <div style="width: 100%; display: flex; margin-bottom: 8px">
+    <!-- Back Button -->
+    <button mat-button routerLink="../">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+
+    <!-- Add Users Button -->
+    <button
+      style="margin-inline-start: auto"
+      mat-icon-button
+      color="primary"
+      (click)="openAddUsersDialog()"
+    >
+      <mat-icon>person_add</mat-icon>
+    </button>
+  </div>
+
+  <!-- Role Information -->
+  <mat-card class="role-card">
+    <mat-card-header>
+      <div mat-card-avatar class="role-avatar">
+        <mat-icon>security</mat-icon>
+      </div>
+      <mat-card-title>{{ role.name | titlecase }}</mat-card-title>
+      <mat-card-subtitle>
+        {{ role.description || "No description provided" }}
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <!-- Permissions Section -->
+  <mat-card class="permissions-card">
+    <mat-card-title>
+      Permissions
+      <!-- Select All Checkbox -->
+      <mat-checkbox
+        [(ngModel)]="selectAllPermissions"
+        (change)="onSelectAllPermissions($event)"
+        class="select-all-checkbox"
+      >
+        Select All
+      </mat-checkbox>
+    </mat-card-title>
+    <mat-card-content>
+      <!-- Search Bar -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Permissions</mat-label>
+        <input
+          matInput
+          placeholder="Search"
+          [(ngModel)]="searchTerm"
+          (input)="filterPermissions()"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Permissions List -->
+      <mat-selection-list
+        [multiple]="true"
+        (selectionChange)="onPermissionSelectionChange($event)"
+        ngModelOptions="{ standalone: true }"
+      >
+        <mat-list-option
+          *ngFor="let permission of filteredPermissions"
+          [value]="permission.id"
+          [selected]="hasPermission(role, permission.id)"
+          (click)="
+            $event.stopPropagation(); openConfirmPermissionDialog(permission)
+          "
+        >
+          <span style="font-size: 12px !important">
+            {{ permission.name | titlecase }}
+          </span>
+        </mat-list-option>
+      </mat-selection-list>
+
+      <!-- Paginator -->
+      <mat-paginator
+        [length]="permissions?.total || 0"
+        [pageSize]="perPage"
+        (page)="onPageChange($event)"
+        showFirstLastButtons="true"
+      ></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Add Users Dialog -->
+<ng-template #addUsersDialog>
+  <span mat-dialog-title>Add Users to {{ role?.name | titlecase }}</span>
+  <mat-dialog-content>
+    <!-- Users List -->
+    <mat-selection-list
+      #usersSelectionList
+      [multiple]="true"
+      [(ngModel)]="selectedUserIds"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <mat-list-option
+        *ngFor="let user of users?.data"
+        [value]="user.id"
+        [disabled]="isUserAlreadyInRole(user.id)"
+      >
+        {{ user.name }} ({{ user.email }})
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+      mat-button
+      color="primary"
+      (click)="confirmAddUsers()"
+      [disabled]="!selectedUserIds.length"
+    >
+      Add
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- Confirm Permission Change Dialog -->
+<ng-template #confirmPermissionDialog let-data>
+  <h3 mat-dialog-title>Confirm Permission Change</h3>
+  <mat-dialog-content>
+    <p>
+      Are you sure you want to
+      <strong>{{ data.action }}</strong>
+
+      <strong>{{ data.permission.name | titlecase }}</strong>
+      for the role <strong>{{ role?.name | titlecase }}</strong
+      >?
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>No</button>
+    <button
+      mat-button
+      color="primary"
+      (click)="confirmPermissionChange(data)"
+      mat-dialog-close
+    >
+      Yes
+    </button>
+  </mat-dialog-actions>
+</ng-template>
