@@ -32,6 +32,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,8 @@ export class ForgotPasswordComponent {
       return;
     }
 
+    this.isLoading = true; // Show loader
+
     this.http
       .post(`${this.api.base_uri}forgot`, this.forgotPasswordForm.value, {
         observe: 'response',
@@ -62,6 +65,7 @@ export class ForgotPasswordComponent {
       })
       .subscribe({
         next: (response: HttpResponse<any>) => {
+          this.isLoading = false; // Hide loader
           if (response.ok) {
             this.snack.open(`${response.body['message']}`, '', {
               duration: 4000,
@@ -70,6 +74,7 @@ export class ForgotPasswordComponent {
           }
         },
         error: (error) => {
+          this.isLoading = false; // Hide loader
           const serverErrors = error.error?.errors;
           if (serverErrors?.email) {
             // Set server error message to the email form control
