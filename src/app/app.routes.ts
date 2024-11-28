@@ -53,10 +53,6 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
       },
-      // {
-      //   path: 'settings',
-      //   component: SettingsComponent,
-      // },
       {
         path: 'profile',
         component: ProfileOverviewComponent,
@@ -76,4 +72,5 @@ export const routes: Routes = [
       { path: 'notifications', component: NotificationsComponent },
     ],
   },
+  { path: '**', redirectTo: 'auth' },
 ];
