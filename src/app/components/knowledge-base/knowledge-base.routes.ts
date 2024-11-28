@@ -19,7 +19,7 @@ export const KNOWLEDGE_BASE_ROUTES: Routes = [
               { path: 'podcasts', component: PodcastsComponent },
               { path: 'docs', component: DocsComponent },
               { path: 'all', component: AllFilesComponent },
-              { path: '', redirectTo: 'all', pathMatch: 'full' },
+              { path: '', redirectTo: 'docs', pathMatch: 'full' },
             ]
           },
         ]

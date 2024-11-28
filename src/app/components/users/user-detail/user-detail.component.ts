@@ -144,7 +144,7 @@ export class UserDetailComponent {
   enable2Fa(userId: string) {
     this.http
       .post(
-        `${this.api.base_uri}otp/enable`,
+        `${this.api.base_uri}users/${userId}/otp/enable`,
         {},
         { withCredentials: true, observe: 'response' }
       )

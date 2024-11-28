@@ -38,24 +38,18 @@ export class NotificationsComponent {
     private websocketService: WebSocketService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
 
-  notifications: any | undefined;
-  displayedColumns: string[] = ['index', 'title', 'body', 'read_at'];
-  pageEvent: PageEvent = new PageEvent();
-  userId: any;
-  private markAsReadSubject = new Subject<void>();
-  unreadNotificationIds: string[] = [];
-
-  ngOnInit(): void {
-    this.getNotifications(`${this.api.base_uri}notifications`);
     this.userId = this.userService.user?.id;
+          console.log(this.userId);
+          
     if (!this.userId) {
       this.userService.user$.subscribe((user) => {
         if (user) {
           this.userId = user.id;
           if (this.userId) {
             this.subscribeToChannels(this.userId);
+    this.getNotifications(`${this.api.base_uri}notifications`);
           }
         }
       });
@@ -73,10 +67,17 @@ export class NotificationsComponent {
       });
   }
 
+  notifications: any | undefined;
+  displayedColumns: string[] = ['index', 'title', 'body', 'read_at'];
+  pageEvent: PageEvent = new PageEvent();
+  userId: any;
+  private markAsReadSubject = new Subject<void>();
+  unreadNotificationIds: string[] = [];
+
   subscribeToChannels(user_id: string) {
     this.websocketService.subscribeAndListenToChannel(
       'NotificationChannel',
-      { user_id: this.userId },
+      { user_id: user_id},
       this.handleReadNotifications.bind(this)
     );
 
@@ -85,10 +86,11 @@ export class NotificationsComponent {
 
   getNotifications(url: string, pageEvent?: PageEvent) {
     let params = new HttpParams()
-      .append('per_page', pageEvent ? pageEvent.pageSize.toString() : '10')
-      .append('page', pageEvent ? (pageEvent.pageIndex + 1).toString() : '1')
-      .append('order_by', 'created_at desc')
-      .append('user_id_eq', this.userId);
+    .set('per_page', pageEvent ? pageEvent.pageSize.toString() : '10')
+    .set('page', pageEvent ? (pageEvent.pageIndex + 1).toString() : '1')
+    .set('q[s]', 'created_at desc')
+    .set('q[recipient_id_eq]', this.userId);
+  
 
     this.http
       .get(url, { params, withCredentials: true, observe: 'response' })

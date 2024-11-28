@@ -174,6 +174,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
           next: () => {
             this.loadDraft(this.draftId);
             this.snackBarService.info('Submitted successfully', 500, 'center', 'top');
+            this.router.navigate(['/content/drafts'])
           }
         });
       }
