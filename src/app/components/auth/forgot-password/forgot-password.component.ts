@@ -46,23 +46,12 @@ export class ForgotPasswordComponent {
     });
   }
 
-  // onSubmit(): void {
-  //   if (this.forgotPasswordForm.valid) {
-  //     const { email } = this.forgotPasswordForm.value;
-  //     this.snackbar.info('Sending reset instructions...');
-  //     this.authService.requestPasswordReset(email!).subscribe({
-  //       next: () => {
-  //         this.notification.success('Reset instructions sent to your email');
-  //         this.forgotPasswordForm.reset();
-  //       },
-  //       error: () => {
-  //         this.notification.error('Failed to send reset instructions');
-  //       },
-  //     });
-  //   }
-  // }
-
   onSubmit(): void {
+    if (this.forgotPasswordForm.invalid) {
+      this.forgotPasswordForm.markAllAsTouched();
+      return;
+    }
+
     this.http
       .post(`${this.api.base_uri}forgot`, this.forgotPasswordForm.value, {
         observe: 'response',
@@ -77,6 +66,25 @@ export class ForgotPasswordComponent {
             this.snack.open(`${response.body['message']}`, '', {
               duration: 4000,
             });
+            this.forgotPasswordForm.reset();
+          }
+        },
+        error: (error) => {
+          const serverErrors = error.error?.errors;
+          if (serverErrors?.email) {
+            // Set server error message to the email form control
+            this.forgotPasswordForm.get('email')?.setErrors({
+              serverError: serverErrors.email.join(', '),
+            });
+          } else {
+            // Show a general error message
+            this.snack.open(
+              'An unexpected error occurred. Please try again.',
+              '',
+              {
+                duration: 4000,
+              }
+            );
           }
         },
       });
