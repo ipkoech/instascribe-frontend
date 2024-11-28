@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +15,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { UserService } from '../../../core/services/user.service';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse,
+} from '@angular/common/http';
 import { ApiService } from '../../../core/services/api.service';
 
 @Component({
@@ -23,14 +33,13 @@ import { ApiService } from '../../../core/services/api.service';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-
-  loginForm: FormGroup
+  loginForm: FormGroup;
   hidePassword = true;
   redirect_to?: null | string;
   general_form_error: string | undefined;
@@ -43,11 +52,11 @@ export class LoginComponent {
     public userService: UserService,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private api: ApiService,
+    private api: ApiService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
     this.route.queryParamMap.subscribe({
       next: (paramMap) => {
