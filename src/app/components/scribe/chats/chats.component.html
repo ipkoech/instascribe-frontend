@@ -1,13 +1,15 @@
 <mat-sidenav-container class="chat-container">
-  <mat-sidenav #mainSidenav mode="side" opened class="chat-sidenav">
-    <app-chat-side-bar></app-chat-side-bar>
-  </mat-sidenav>
-
   <mat-sidenav-content class="chat-content">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 
-  <mat-sidenav #editSidenav mode="side" position="end" opened="false" class="edit-sidenav">
+  <mat-sidenav
+    #editSidenav
+    mode="side"
+    position="end"
+    opened="false"
+    class="edit-sidenav"
+  >
     <app-edit-response></app-edit-response>
   </mat-sidenav>
 </mat-sidenav-container>

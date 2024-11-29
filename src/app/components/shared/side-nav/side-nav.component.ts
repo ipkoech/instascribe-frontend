@@ -7,14 +7,18 @@ import { MatSidenav } from '@angular/material/sidenav';
 import {
   ActivatedRoute,
   NavigationEnd,
+  NavigationStart,
   Router,
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
 import { Observable } from 'rxjs';
 import { UserModel } from '../../../core/interfaces/user.model';
+import { ChatService } from '../../scribe/services/chat.service';
+import { ConversationsResponse } from '../../../core/interfaces/conversation.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-side-nav',
@@ -38,8 +42,12 @@ export class SideNavComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public userService: UserService
-  ) {}
+    public userService: UserService,
+    private chatService: ChatService
+  ) {
+    //chat side bar code
+    this.getConversations();
+  }
 
   ngOnInit() {
     this.user$ = this.userService.user$;
@@ -54,6 +62,30 @@ export class SideNavComponent implements OnInit {
           this.sidenav.close();
         }
       });
+
+    //chat-side-bar code
+    // Listen for router events to track navigation changes
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        // Capture the previous URL before navigation starts
+        this.previousUrl = this.router.url;
+        this.previousConversationId = this.extractConversationId(
+          this.previousUrl
+        );
+      }
+
+      if (event instanceof NavigationEnd) {
+        const currentUrl = event.urlAfterRedirects;
+        const currentConversationId = this.extractConversationId(currentUrl);
+        // Check if the user has navigated away from the previous conversation route
+        if (
+          this.previousConversationId &&
+          this.previousConversationId !== currentConversationId
+        ) {
+          this.checkAndDeletePreviousConversation(this.previousConversationId);
+        }
+      }
+    });
   }
   isManagementExpanded = false;
   isManagementActive = false;
@@ -123,31 +155,125 @@ export class SideNavComponent implements OnInit {
     }
   }
 
-  recentChats = [
-    { id: 1, name: 'Climate Change' },
-    { id: 2, name: 'Marketing Strategy' },
-    { id: 3, name: 'Blog Ideas' },
-  ];
-
   selectedChat: number | null = null;
-
-  user = {
-    name: 'Sarah Johnson',
-    role: 'Content Manager',
-  };
 
   selectChat(chat: any): void {
     this.selectedChat = chat.id;
     console.log(`Selected Chat: ${chat.name}`);
   }
 
-  openSettings(): void {
-    console.log('Opening settings...');
-  }
-
   isContentPanelOpen = false; // State for Content Panel
 
   toggleContentPanel(): void {
     this.isContentPanelOpen = !this.isContentPanelOpen;
+  }
+
+  //chat-side-bar
+  conversationId!: string;
+  isConversationNew: boolean = false;
+  hasChats: boolean = false;
+  conversations: ConversationsResponse | undefined;
+  private previousUrl: string | null = null;
+  private previousConversationId: string | null = null;
+  private isCheckingPreviousConversation: boolean = false;
+
+  ngOnDestroy(): void {
+    // Ensure the previous conversation is checked when the component is destroyed
+    if (this.previousConversationId) {
+      this.checkAndDeletePreviousConversation(this.previousConversationId);
+    }
+  }
+
+  createConversation(): void {
+    this.chatService.createConversation().subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          const conversation = response.body;
+          this.conversationId = conversation.id;
+          this.getConversations();
+          this.router.navigate(['/ask', this.conversationId]);
+          this.isConversationNew = true;
+        }
+      },
+      error: (error) => {
+        this.getConversations();
+      },
+      complete: () => {},
+    });
+  }
+
+  getConversations(): void {
+    this.chatService
+      .fetchConversations()
+      .subscribe((response: HttpResponse<any>) => {
+        this.conversations = response.body || [];
+        this.updateHasChats();
+      });
+  }
+
+  updateHasChats(): void {
+    const currentConversation = this.conversations?.data.find(
+      (conv) => conv.id === this.conversationId
+    );
+    this.hasChats =
+      !!currentConversation && currentConversation?.chats?.length > 0;
+  }
+
+  checkAndDeletePreviousConversation(conversationId: string): void {
+    if (this.isCheckingPreviousConversation) {
+      return; // Prevent multiple checks
+    }
+
+    this.isCheckingPreviousConversation = true;
+
+    this.chatService.fetchConversation(conversationId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          const conversation = response.body;
+          const hasChats = conversation?.chats?.length > 0;
+          if (!hasChats) {
+            this.chatService.deleteConversation(conversation.id).subscribe({
+              next: (response: HttpResponse<any>) => {
+                if (response.ok) {
+                  this.getConversations();
+                }
+              },
+              error: (error) => {
+                this.getConversations();
+              },
+            });
+          } else {
+            this.getConversations();
+          }
+        }
+
+        this.isCheckingPreviousConversation = false;
+      },
+    });
+  }
+
+  private extractConversationId(url: string): string | null {
+    const match = url.match(/\/ask\/([a-zA-Z0-9-]+)/);
+    return match ? match[1] : null;
+  }
+
+  getConversationTitle(conversation: any): string {
+    if (conversation.title) {
+      return conversation.title;
+    } else {
+      const createdAt = new Date(conversation.created_at);
+      return `Conversation started at ${this.formatDate(createdAt)}`;
+    }
+  }
+
+  // Helper method to format the date
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 }

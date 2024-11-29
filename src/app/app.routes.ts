@@ -7,6 +7,7 @@ import { NotificationAlertsComponent } from './components/preferences/notificati
 import { ProfileOverviewComponent } from './components/preferences/profile-overview/profile-overview.component';
 import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
+import { AskScribeComponent } from './components/scribe/ask-scribe/ask-scribe.component';
 
 export const routes: Routes = [
   {

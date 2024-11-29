@@ -1,7 +1,26 @@
 <div class="ask-chat-container">
+  <!-- Header Section -->
+  <div
+    class="flex flex-col items-center justify-center py-1 text-center bg-white shadow-md sticky top-0 z-1000"
+  >
+    <div
+      class="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-600"
+    >
+      <span class="material-icons text-white">psychology</span>
+    </div>
+    <h5 class="mt-4 text-xs font-semibold text-gray-800">Welcome to InstaAI</h5>
+    <p class="mt-2 text-gray-600 text-sm">
+      Unleash the power of AI-driven content creation. Ask anything, and watch
+      as InstaAI generates engaging, tailored content to elevate your marketing
+      strategy.
+    </p>
+  </div>
   <div class="messages-container" #messagesContainer>
-    <div *ngFor="let message of chats?.data" [ngClass]="message.role === 'user' ? 'user-message' : 'bot-message'"
-      class="message-wrapper">
+    <div
+      *ngFor="let message of chats?.data"
+      [ngClass]="message.role === 'user' ? 'user-message' : 'bot-message'"
+      class="message-wrapper"
+    >
       <div class="message-content">
         <div *ngIf="message.highlighted_text" class="highlighted-text">
           <mat-icon>format_quote</mat-icon>
@@ -10,12 +29,15 @@
 
         <!-- User Input -->
         <div class="user-input">
-          <div class="user-message">{{message.user_input}}</div>
+          <div class="user-message">{{ message.user_input }}</div>
         </div>
 
         <!-- Loading Indicator -->
-        <div *ngIf="message.role === 'user' && !message.bot_reply" class="bot-reply loading">
-          <img src="assets/ai-avatar.jpg" alt="Bot Avatar" class="bot-avatar">
+        <div
+          *ngIf="message.role === 'user' && !message.bot_reply"
+          class="bot-reply loading"
+        >
+          <img src="assets/ai-avatar.jpg" alt="Bot Avatar" class="bot-avatar" />
           <div class="reply-content">
             <div class="loading-indicator">
               <mat-spinner diameter="20"></mat-spinner>
@@ -24,81 +46,137 @@
           </div>
         </div>
 
-
         <!-- Bot Reply -->
-        <div *ngIf="message.role === 'bot' && message.bot_reply" class="bot-reply">
-          <img src="assets/ai-avatar.jpg" alt="Bot Avatar" class="bot-avatar">
+        <div
+          *ngIf="message.role === 'bot' && message.bot_reply"
+          class="bot-reply"
+        >
+          <img src="assets/ai-avatar.jpg" alt="Bot Avatar" class="bot-avatar" />
           <div class="reply-content">
-            <div class="markdown-content" [innerHTML]="parseMarkdown(message.bot_reply)"></div>
+            <div
+              class="markdown-content"
+              [innerHTML]="parseMarkdown(message.bot_reply)"
+            ></div>
           </div>
         </div>
 
         <!-- Message Actions -->
         <div class="message-actions" *ngIf="message.role === 'bot'">
-
-          <button matTooltip="Copy" mat-icon-button (click)="copyMessage(message)">
+          <button
+            matTooltip="Copy"
+            mat-icon-button
+            (click)="copyMessage(message)"
+          >
             <mat-icon>content_copy</mat-icon>
           </button>
-          <button matTooltip="Save and proceeed" mat-icon-button (click)="saveMessage(message)">
+          <button
+            matTooltip="Save and proceeed"
+            mat-icon-button
+            (click)="saveMessage(message)"
+          >
             <mat-icon>save</mat-icon>
           </button>
-          <button matTooltip="Good Response" mat-icon-button (click)="likeMessage(message)">
-            <mat-icon [ngClass]="message.liked ? 'liked' : ''">thumb_up</mat-icon>
+          <button
+            matTooltip="Good Response"
+            mat-icon-button
+            (click)="likeMessage(message)"
+          >
+            <mat-icon [ngClass]="message.liked ? 'liked' : ''"
+              >thumb_up</mat-icon
+            >
           </button>
-          <button matTooltip="Bad Response" mat-icon-button (click)="dislikeMessage(message)">
-            <mat-icon [ngClass]="message.disliked ? 'disliked' : ''">thumb_down</mat-icon>
+          <button
+            matTooltip="Bad Response"
+            mat-icon-button
+            (click)="dislikeMessage(message)"
+          >
+            <mat-icon [ngClass]="message.disliked ? 'disliked' : ''"
+              >thumb_down</mat-icon
+            >
           </button>
-          <button matTooltip="Edit and save as Draft" mat-icon-button (click)="launchContentEditor(message)">
+          <button
+            matTooltip="Edit and save as Draft"
+            mat-icon-button
+            (click)="launchContentEditor(message)"
+          >
             <mat-icon>rate_review</mat-icon>
           </button>
-          <button matTooltip="Retry" mat-icon-button (click)="retry(message.bot_reply)">
+          <button
+            matTooltip="Retry"
+            mat-icon-button
+            (click)="retry(message.bot_reply)"
+          >
             <mat-icon>autorenew</mat-icon>
           </button>
         </div>
-
       </div>
     </div>
   </div>
 
-  <ng-template #saveDraft>
-
-  </ng-template>
+  <ng-template #saveDraft> </ng-template>
   <!-- Scroll to Bottom Button -->
-  <button mat-icon-button *ngIf="showScrollToBottom" class="scroll-to-bottom" (click)="scrollToBottom()">
+  <button
+    mat-icon-button
+    *ngIf="showScrollToBottom"
+    class="scroll-to-bottom"
+    (click)="scrollToBottom()"
+  >
     <mat-icon>arrow_downward</mat-icon>
   </button>
-  <form class="input-container" [formGroup]="chatForm">
-    <div class="input-wrapper">
-      <!-- File Attachment Button -->
-      <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden />
-      <button mat-icon-button class="attach-button" (click)="triggerFileInput()">
-        <mat-icon>attach_file</mat-icon>
-      </button>
-      <div style="display: flex;flex-direction: column;gap: 4px;width: 100%;">
+  <form
+    class="flex items-center justify-between px-4 py-2 border-t bg-white"
+    [formGroup]="chatForm"
+  >
+    <!-- File Attachment Button -->
+    <input
+      type="file"
+      id="fileInput"
+      (change)="onFileSelected($event)"
+      class="hidden"
+    />
+    <button
+      type="button"
+      class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+      (click)="triggerFileInput()"
+    >
+      <mat-icon class="text-gray-500">attach_file</mat-icon>
+    </button>
 
-        <!-- Display selected file -->
-        <div *ngIf="fileName" class="file-display">
-          <div class="file-info">
-            <mat-icon class="file-icon">insert_drive_file</mat-icon>
-            <div class="file-details">
-              <span class="file-name">{{ fileName }}</span>
-              <span class="file-type">{{fileType}}</span>
-            </div>
-            <mat-icon class="file-remove" (click)="clearFileSelection()"
-              style="transform: scale(0.8);cursor: pointer;">close</mat-icon>
-          </div>
-        </div>
-
-        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
-          formControlName="user_input" (keydown.enter)="handleKeyDown($event)" placeholder="Ask a follow up..."
-          class="input-field">
-    </textarea>
-      </div>
-
-      <button mat-icon-button class="send-button" [class.active]="chatForm.get('user_input')?.value"
-        [disabled]="!chatForm.get('user_input')?.value||!selectedFile" (click)="onSend()">
-        <mat-icon>north</mat-icon>
-      </button>
+    <!-- Input Field -->
+    <div class="flex-1 mx-4">
+      <textarea
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="5"
+        formControlName="user_input"
+        (keydown.enter)="handleKeyDown($event)"
+        placeholder="Type your message..."
+        class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+      ></textarea>
     </div>
+
+    <!-- Tone Selector -->
+    <div class="flex items-center space-x-2">
+      <label for="tone-selector" class="text-sm text-gray-600">Tone:</label>
+      <select
+        id="tone-selector"
+        class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        <option>Default</option>
+        <option>Casual</option>
+        <option>Formal</option>
+      </select>
+    </div>
+
+    <!-- Send Button -->
+    <button
+      type="button"
+      class="ml-4 flex items-center justify-center w-10 h-10 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50"
+      [disabled]="!chatForm.get('user_input')?.value && !selectedFile"
+      (click)="onSend()"
+    >
+      <mat-icon>send</mat-icon>
+    </button>
   </form>
 </div>

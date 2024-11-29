@@ -15,7 +15,7 @@
   <!-- InstaAI Section -->
   <div class="px-4 mt-6">
     <button
-      routerLink="ask"
+      (click)="createConversation()"
       class="flex items-center justify-center w-full text-white text-sm px-6 py-1 rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition duration-300"
       style="background-color: #5038ed"
     >
@@ -27,19 +27,20 @@
   <!-- Recent Chats Section -->
   <div class="mt-6 px-4">
     <p class="text-sm text-gray-500">Recent Chats</p>
-    <ul class="mt-2 space-y-1">
-      <li
-        *ngFor="let chat of recentChats"
-        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-        [ngClass]="{
-          'bg-gray-100': selectedChat === chat.id
-        }"
+    <div class="mt-2 space-y-1 section-items h-32 overflow-y-auto">
+      <a
+        *ngFor="let chat of conversations?.data"
+        [routerLink]="['/ask', chat.id]"
+        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer chat-item"
+        [class.active]="!chat.archived"
         (click)="selectChat(chat)"
       >
-        <span class="material-icons text-gray-500 text-sm">history</span>
-        <span class="ml-2 text-sm text-black">{{ chat.name }}</span>
-      </li>
-    </ul>
+        <mat-icon class="text-gray-500 text-sm">chat_bubble_outline</mat-icon>
+        <span class="ml-2 text-sm text-black item-title">
+          {{ getConversationTitle(chat) }}
+        </span>
+      </a>
+    </div>
   </div>
 
   <div class="border-t border-gray-300 my-4 p-2"></div>
@@ -127,14 +128,6 @@
 
   <!-- User Section -->
   <div class="mt-auto px-4 py-3 border-t border-gray-300 flex items-center">
-    <!-- <div *ngIf="user$ | async as user">
-      <p class="text-xs font-medium text-black">
-        {{ user.f_name }} {{ user.l_name }}
-      </p>
-      <p class="text-xs font-medium text-black" *ngFor="let role of user.roles">
-        {{ role.name }}
-      </p>
-    </div> -->
     <div *ngIf="user$ | async as user" class="flex items-center space-x-3 p-3">
       <!-- Account Icon -->
       <div
@@ -160,10 +153,6 @@
         </p>
       </div>
     </div>
-
-    <button class="ml-auto" (click)="openSettings()">
-      <span class="material-icons text-gray-500">settings</span>
-    </button>
     <button
       *ngIf="userService.user"
       (click)="userService.logout()"
