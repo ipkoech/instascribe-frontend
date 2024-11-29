@@ -1,196 +1,175 @@
-<mat-nav-list class="nav-list">
-  <!-- if scribe is active close the sidenav-->
-  <a
-    class="nav-item"
-    mat-list-item
-    routerLink="ask"
-    routerLinkActive="active-link"
-    #askScribe="routerLinkActive"
-    [class.active-link]="askScribe.isActive"
-    [routerLinkActiveOptions]="{ exact: true }"
-  >
-    <mat-icon [style.color]="askScribe.isActive ? 'white' : ''" matListItemIcon
-      >forum</mat-icon
-    >
-    <span matListItemTitle>Ask Insta</span>
-  </a>
-
-  <!-- <a mat-list-item routerLink="dashboard" routerLinkActive="active-link" #dashboardrla="routerLinkActive"
-    [class.active-link]="dashboardrla.isActive" [routerLinkActiveOptions]="{ exact: true }">
-    <mat-icon [style.color]="dashboardrla.isActive ? 'white' : ''" matListItemIcon>dashboard</mat-icon>
-    <span matListItemTitle>Dashboard</span>
-  </a> -->
-
-  <!-- Content Section -->
-  <div class="nav-group">
+<div class="flex flex-col h-full bg-white">
+  <!-- Logo Section -->
+  <div class="flex items-center p-2 border-b border-gray-300">
+    <!-- Logo with background -->
     <div
-      class="nav-group-header"
-      (click)="toggleContent()"
-      [class.active-parent]="isContentActive"
+      class="flex items-center justify-center w-8 h-8 rounded-md"
+      style="background-color: #5038ed"
     >
-      <div class="header-content">
-        <mat-icon>folder_copy</mat-icon>
-        <span>Content</span>
-      </div>
-      <mat-icon class="arrow" [class.rotated]="isContentExpanded"
-        >keyboard_arrow_down</mat-icon
-      >
+      <span class="material-icons text-white text-lg">description</span>
     </div>
-    <div class="nav-group-items" [class.expanded]="isContentExpanded">
-      <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/content/drafts"
-        routerLinkActive="active-link"
-        #draftsLink="routerLinkActive"
-        [class.active-link]="draftsLink.isActive"
-        (isActiveChange)="updateContent()"
-      >
-        <mat-icon
-          [style.color]="draftsLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >edit_note</mat-icon
-        >
-        <span matListItemTitle>Drafts</span>
-      </a>
-
-      <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/content/review"
-        routerLinkActive="active-link"
-        #reviewLink="routerLinkActive"
-        [class.active-link]="reviewLink.isActive"
-        (isActiveChange)="updateContent()"
-      >
-        <mat-icon
-          [style.color]="reviewLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >pending_actions</mat-icon
-        >
-        <span matListItemTitle>Review</span>
-      </a>
-    </div>
+    <!-- Brand Name -->
+    <span class="ml-3 text-lg text-black">Instascribe</span>
   </div>
-  <!-- Knowledge Base Section -->
-  <div class="nav-group">
-    <div
-      class="nav-group-header"
-      (click)="toggleKnowledgeBase()"
-      [class.active-parent]="isKnowledgeBaseActive"
+
+  <!-- InstaAI Section -->
+  <div class="px-4 mt-6">
+    <button
+      routerLink="ask"
+      class="flex items-center justify-center w-full text-white text-sm px-6 py-1 rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition duration-300"
+      style="background-color: #5038ed"
     >
-      <div class="header-content">
-        <mat-icon>library_books</mat-icon>
-        <span>Library</span>
-      </div>
-      <mat-icon class="arrow" [class.rotated]="isKnowledgeBaseExpanded"
-        >keyboard_arrow_down</mat-icon
-      >
-    </div>
-
-    <div class="nav-group-items" [class.expanded]="isKnowledgeBaseExpanded">
-      <!-- <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/knowledge-base/posts"
-        routerLinkActive="active-link"
-        #postsLink="routerLinkActive"
-        [class.active-link]="postsLink.isActive"
-        (isActiveChange)="updateKnowledgeBaseActive()"
-      >
-        <mat-icon
-          [style.color]="postsLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >topic</mat-icon
-        >
-        <span matListItemTitle>Posts</span>
-      </a> -->
-
-      <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/knowledge-base/files"
-        routerLinkActive="active-link"
-        #podcastsLink="routerLinkActive"
-        [class.active-link]="podcastsLink.isActive"
-        (isActiveChange)="updateKnowledgeBaseActive()"
-      >
-        <mat-icon
-          [style.color]="podcastsLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >folder_open</mat-icon
-        >
-        <span matListItemTitle>Files</span>
-      </a>
-    </div>
+      <span class="material-icons text-base mr-2">add_comment</span>
+      InstaAI
+    </button>
   </div>
-  <!-- Management Section -->
-  <div class="nav-group">
-    <div
-      class="nav-group-header"
-      (click)="toggleManagement()"
-      [class.active-parent]="isManagementActive"
+
+  <!-- Recent Chats Section -->
+  <div class="mt-6 px-4">
+    <p class="text-sm text-gray-500">Recent Chats</p>
+    <ul class="mt-2 space-y-1">
+      <li
+        *ngFor="let chat of recentChats"
+        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+        [ngClass]="{
+          'bg-gray-100': selectedChat === chat.id
+        }"
+        (click)="selectChat(chat)"
+      >
+        <span class="material-icons text-gray-500 text-sm">history</span>
+        <span class="ml-2 text-sm text-black">{{ chat.name }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="border-t border-gray-300 my-4 p-2"></div>
+
+  <!-- tools  -->
+  <div class="px-4">
+    <!-- Tools Header -->
+    <p class="text-sm text-gray-500 mb-2">Tools</p>
+
+    <ul class="mt-2 space-y-1">
+      <!-- Content (Expandable Panel) -->
+      <li class="flex flex-col">
+        <div
+          class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+          (click)="toggleContentPanel()"
+        >
+          <div class="flex items-center">
+            <span class="material-icons text-gray-500 text-sm"
+              >tips_and_updates</span
+            >
+            <span class="ml-2 text-sm text-black">Content</span>
+          </div>
+          <span
+            class="material-icons text-gray-400 text-sm transition-transform duration-300"
+            [ngClass]="{ 'rotate-180': isContentPanelOpen }"
+          >
+            expand_more
+          </span>
+        </div>
+        <ul
+          class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
+          [ngClass]="{
+            'max-h-0': !isContentPanelOpen,
+            'max-h-40': isContentPanelOpen
+          }"
+        >
+          <li
+            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="/content/drafts"
+            routerLinkActive="bg-gray-100"
+          >
+            <span class="material-icons text-gray-500 text-sm">folder</span>
+            <span class="ml-2 text-sm text-black">Drafts</span>
+          </li>
+          <li
+            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="/content/review"
+            routerLinkActive="bg-gray-100"
+          >
+            <span class="material-icons text-gray-500 text-sm">pending</span>
+            <span class="ml-2 text-sm text-black">Review</span>
+          </li>
+          <li
+            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="/content/posts"
+            routerLinkActive="bg-gray-100"
+          >
+            <span class="material-icons text-gray-500 text-sm">article</span>
+            <span class="ml-2 text-sm text-black">Posts</span>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Library -->
+      <li
+        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+        routerLink="/library"
+        routerLinkActive="bg-gray-100"
+      >
+        <span class="material-icons text-gray-500 text-sm">library_books</span>
+        <span class="ml-2 text-sm text-black">Library</span>
+      </li>
+
+      <!-- Team -->
+      <li
+        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+        routerLink="/team"
+        routerLinkActive="bg-gray-100"
+      >
+        <span class="material-icons text-gray-500 text-sm">groups</span>
+        <span class="ml-2 text-sm text-black">Team</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- User Section -->
+  <div class="mt-auto px-4 py-3 border-t border-gray-300 flex items-center">
+    <!-- <div *ngIf="user$ | async as user">
+      <p class="text-xs font-medium text-black">
+        {{ user.f_name }} {{ user.l_name }}
+      </p>
+      <p class="text-xs font-medium text-black" *ngFor="let role of user.roles">
+        {{ role.name }}
+      </p>
+    </div> -->
+    <div *ngIf="user$ | async as user" class="flex items-center space-x-3 p-3">
+      <!-- Account Icon -->
+      <div
+        routerLink="/profile"
+        *ngIf="userService.user"
+        class="flex items-center justify-center w-7 h-7 bg-blue-500 text-white rounded-full cursor-pointer"
+      >
+        <span class="material-icons text-md">account_circle</span>
+      </div>
+
+      <!-- User Details -->
+      <div>
+        <!-- User Name -->
+        <p class="text-sm font-medium text-gray-900">
+          {{ user.f_name }} {{ user.l_name }}
+        </p>
+        <!-- User Roles -->
+        <p
+          class="text-xs text-gray-500 font-medium"
+          *ngFor="let role of user.roles"
+        >
+          {{ role.name }}
+        </p>
+      </div>
+    </div>
+
+    <button class="ml-auto" (click)="openSettings()">
+      <span class="material-icons text-gray-500">settings</span>
+    </button>
+    <button
+      *ngIf="userService.user"
+      (click)="userService.logout()"
+      class="ml-6"
     >
-      <div class="header-content">
-        <mat-icon>settings_accessibility</mat-icon>
-        <span>Accessibility</span>
-      </div>
-      <mat-icon class="arrow" [class.rotated]="isManagementExpanded"
-        >keyboard_arrow_down</mat-icon
-      >
-    </div>
-
-    <div class="nav-group-items" [class.expanded]="isManagementExpanded">
-      <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/users"
-        routerLinkActive="active-link"
-        #usersLink="routerLinkActive"
-        [class.active-link]="usersLink.isActive"
-        (isActiveChange)="updateManagementActive()"
-      >
-        <mat-icon
-          [style.color]="usersLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >people</mat-icon
-        >
-        <span matListItemTitle>Users</span>
-      </a>
-
-      <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/roles"
-        routerLinkActive="active-link"
-        #rolesLink="routerLinkActive"
-        [class.active-link]="rolesLink.isActive"
-        (isActiveChange)="updateManagementActive()"
-      >
-        <mat-icon
-          [style.color]="rolesLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >verified_user</mat-icon
-        >
-        <span matListItemTitle>Roles</span>
-      </a>
-
-      <!-- <a
-        class="nav-item"
-        mat-list-item
-        routerLink="/settings"
-        routerLinkActive="active-link"
-        #settingsLink="routerLinkActive"
-        [class.active-link]="settingsLink.isActive"
-        (isActiveChange)="updateManagementActive()"
-      >
-        <mat-icon
-          [style.color]="settingsLink.isActive ? 'white' : ''"
-          matListItemIcon
-          >settings</mat-icon
-        >
-        <span matListItemTitle>Settings</span>
-      </a> -->
-    </div>
+      <span class="material-icons text-gray-500">logout</span>
+    </button>
   </div>
-</mat-nav-list>
+</div>

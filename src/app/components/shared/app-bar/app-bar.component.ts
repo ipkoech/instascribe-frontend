@@ -1,14 +1,3 @@
-// import { CommonModule } from '@angular/common';
-// import { Component, Input } from '@angular/core';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatMenuModule } from '@angular/material/menu';
-// import { MatSidenav } from '@angular/material/sidenav';
-// import { UserService } from '../../../core/services/user.service';
-// import { RouterLink, RouterModule } from '@angular/router';
-// import { NotificationService } from '../../../core/services/notification.service';
-// import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -42,7 +31,6 @@ import { UserService } from '../../../core/services/user.service';
     MatListModule,
     RouterModule,
     CommonModule,
-    RouterLink,
     FormsModule,
     ReactiveFormsModule,
     MatBottomSheetModule,

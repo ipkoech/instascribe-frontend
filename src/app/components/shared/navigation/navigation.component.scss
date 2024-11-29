@@ -1,25 +1,116 @@
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+// }
 
+// .sidenav-container {
+//   flex: 1;
+//   height: calc(100vh - 64px); // Subtract the height of app-bar
+// }
+
+// .sidenav {
+//   width: 300px;
+//   background: #f8f9fa;
+//   padding-inline-start: 10px;
+//   border-radius: 0 !important;
+//   background: white;
+// }
+
+// .sidenav-content {
+//   padding: 2rem;
+//   height: 100%;
+//   overflow-y: auto;
+// }
+
+// code 1
+
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+//   overflow: hidden; /* Prevent overflow issues */
+// }
+
+// .sidenav-container {
+//   display: flex; /* Align sidenav and content side by side */
+//   flex: 1; /* Ensure the content and sidenav expand equally */
+//   height: calc(100vh - 64px); /* Subtract the app-bar height */
+//   overflow: hidden; /* Prevent scrollbars */
+// }
+
+// .sidenav {
+//   width: 300px; /* Keep fixed width */
+//   background: #ffffff; /* White background for sidenav */
+//   padding-inline-start: 10px;
+//   flex-shrink: 0; /* Prevent shrinking of the sidenav */
+//   border-right: 1px solid #e6e6e6; /* Add subtle divider for sidenav */
+//   border-radius: 0 !important;
+// }
+
+// .sidenav-content {
+//   flex: 1; /* Allow content area to take up remaining space */
+//   padding: 2rem;
+//   height: 100%; /* Ensure it matches the container height */
+//   overflow-y: auto; /* Add scrolling for content overflow */
+//   background: #f8f9fa; /* Optional: light background for content */
+// }
+
+// .app-bar {
+//   height: 64px; /* Fixed height of app-bar */
+//   background: #ffffff; /* White background for app-bar */
+//   display: flex;
+//   align-items: center;
+//   padding: 0 1rem; /* Add padding for content alignment */
+//   border-bottom: 1px solid #e6e6e6; /* Add subtle divider for app-bar */
+//   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+//   z-index: 10; /* Keep app-bar above other elements */
+// }
+
+// code 2
 :host {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent unwanted scrolling */
 }
 
 .sidenav-container {
-  flex: 1;
-  height: calc(100vh - 64px); // Subtract the height of app-bar
+  display: flex; /* Place sidenav and content side by side */
+  flex: 1; /* Ensure the sidenav container occupies full height below app-bar */
+  height: calc(100vh - 64px); /* Subtract the height of the app-bar */
+  overflow: hidden; /* Prevent overflow */
 }
 
 .sidenav {
-  width: 300px;
-  background: #f8f9fa;
+  width: 300px; /* Fixed width for sidenav */
+  background: #ffffff; /* White background for sidenav */
   padding-inline-start: 10px;
-  border-radius: 0 !important;
-  background: white;
+  flex-shrink: 0; /* Prevent shrinking of the sidenav */
+  border-right: 1px solid #e6e6e6; /* Add subtle divider for sidenav */
+  border-radius: 0 !important; /* Remove curves */
 }
 
 .sidenav-content {
-  padding: 2rem;
-  height: 100%;
-  overflow-y: auto;
+  // width: 100%;
+  flex: 1; /* Take up remaining space */
+  padding: 2rem; /* Add padding for content */
+  height: 100%; /* Full height of container */
+  overflow-y: auto; /* Allow scrolling for content overflow */
+  background: #f8f9fa; /* Light background for content */
+}
+
+.app-bar {
+  height: 64px; /* Fixed height for app-bar */
+  background: #ffffff; /* White background for app-bar */
+  display: flex;
+  align-items: center; /* Vertically center content */
+  padding: 0 1rem; /* Add horizontal padding */
+  border-bottom: 1px solid #e6e6e6; /* Subtle divider for app-bar */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05); /* Add a subtle shadow */
+  z-index: 10; /* Ensure it remains on top */
+}
+
+.mat-sidenav-content {
+  width: 100%;
 }

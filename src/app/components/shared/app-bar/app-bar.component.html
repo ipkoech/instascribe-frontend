@@ -1,4 +1,4 @@
-<mat-toolbar style="position: sticky; top: 0; z-index: 5">
+<!-- <mat-toolbar style="position: sticky; top: 0; z-index: 5">
   <div class="toolbar-content">
     <div class="logo-container">
       <img src="assets/icons8-logo-50.svg" alt="Logo" class="logo" />
@@ -16,9 +16,6 @@
         <mat-icon>search</mat-icon>
         <input type="text" placeholder="Search..." />
       </div>
-      <!-- <button mat-icon-button>
-        <mat-icon>notifications</mat-icon>
-      </button> -->
       <button
         [mat-menu-trigger-for]="menu"
         matBadgePosition="above after"
@@ -86,9 +83,6 @@
           [pageIndex]="notificationsService.notifications.current_page - 1"
         ></mat-paginator>
       </mat-menu>
-      <!-- <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-      </button> -->
       <button
         #profileRouterLinkActive="routerLinkActive"
         routerLinkActive
@@ -104,21 +98,6 @@
           account_circle
         </mat-icon>
       </button>
-      <!-- <mat-menu #userMenu="matMenu">
-        <button mat-menu-item>
-          <mat-icon>person</mat-icon>
-          <span>Profile</span>
-        </button>
-        <button
-          mat-menu-item
-          *ngIf="userService.user"
-          color="warn"
-          (click)="userService.logout()"
-        >
-          <mat-icon style="transform: scale(0.8)">logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu> -->
       <button
         *ngIf="userService.user"
         fontSet="material-icons-outlined"
@@ -130,4 +109,85 @@
       </button>
     </div>
   </div>
-</mat-toolbar>
+</mat-toolbar> -->
+<div
+  class="sticky top-0 z-50 bg-white border-b border-gray-200 flex items-center px-6 py-2 shadow-sm"
+>
+  <!-- Sidebar Toggle Button -->
+  <button
+    class="text-gray-700 text-xl focus:outline-none mr-4"
+    (click)="sidenav.toggle()"
+  >
+    <span class="material-icons">menu</span>
+  </button>
+
+  <!-- Search Bar -->
+  <!-- <div
+    class="flex items-center bg-gray-50 border border-gray-300 rounded-lg w-full max-w-md px-4 py-2"
+  >
+    <span class="text-gray-400 text-base">
+      <span class="material-icons">search</span>
+    </span>
+    <input
+      type="text"
+      placeholder="Search conversations..."
+      class="w-full bg-transparent text-sm text-gray-700 focus:outline-none ml-2"
+    />
+  </div> -->
+  <div
+    class="flex items-center bg-gray-50 border border-gray-300 rounded-lg w-full max-w-md px-4"
+  >
+    <span class="text-gray-400 text-base flex items-center justify-center h-5">
+      <span class="material-icons text-md">search</span>
+    </span>
+    <input
+      type="text"
+      placeholder="Search conversations..."
+      class="w-full bg-transparent text-xs text-gray-700 focus:outline-none ml-2 h-10"
+    />
+  </div>
+
+  <!-- Toolbar Actions -->
+  <div class="flex items-center space-x-4 ml-auto">
+    <!-- Notifications Button -->
+    <!-- <button
+      *ngIf="userService.user"
+      matBadgePosition="above after"
+      [matBadge]="
+        (notificationsService.notifications?.total ?? 0) +
+        notificationsService.new_notifications.length
+      "
+      matBadgeColor="primary"
+      class="relative focus:outline-none"
+    >
+      <span class="material-icons text-gray-700">notifications</span>
+    </button> -->
+
+    <!-- Profile Button -->
+    <!-- <button
+      #profileRouterLinkActive="routerLinkActive"
+      routerLinkActive
+      routerLink="/profile"
+      *ngIf="userService.user"
+      class="focus:outline-none"
+    >
+      <span
+        class="material-icons text-gray-700"
+        [ngClass]="{
+          'text-blue-500': profileRouterLinkActive.isActive
+        }"
+      >
+        account_circle
+      </span>
+    </button> -->
+
+    <!-- Logout Button -->
+    <!-- <button
+      *ngIf="userService.user"
+      class="focus:outline-none"
+      (click)="userService.logout()"
+    >
+      <span class="material-icons text-red-500">logout</span>
+    </button> -->
+  </div>
+</div>
