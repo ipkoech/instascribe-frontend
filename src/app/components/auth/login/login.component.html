@@ -1,53 +1,124 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
-      <mat-icon class="login-icon">login</mat-icon>
-      <h1>Sign in with email</h1>
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200 p-4"
+>
+  <div class="bg-white shadow-lg rounded-2xl p-6 max-w-sm w-full">
+    <div class="text-center mb-6">
+      <div class="flex justify-center items-center mb-3">
+        <!-- <span class="material-icons text-blue-600 text-xl"> login </span> -->
+        <span class="text-blue-600 text-xl">Instacribe</span>
+      </div>
+      <h5 class="text-xs font-medium text-gray-800">Sign in with email</h5>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <div class="form-field">
-        <mat-icon class="field-icon">mail</mat-icon>
+    <form [formGroup]="loginForm" class="space-y-4">
+      <!-- General Error Message -->
+      <div
+        *ngIf="general_form_error"
+        class="text-red-500 text-xs text-center mb-2"
+      >
+        {{ general_form_error }}
+      </div>
+      <!-- Email Field -->
+      <div class="relative">
         <input
           type="email"
           formControlName="email"
           placeholder="Email"
-          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          class="w-full pl-10 pr-2 h-10 border border-gray-300 rounded-md focus:outline-none text-sm"
+          [ngClass]="{
+            'border-gray-300 focus:ring-2 focus:ring-blue-500':
+              loginForm.get('email')?.valid || !loginForm.get('email')?.touched,
+            'border-red-500 focus:ring-0':
+              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          }"
+        />
+        <span
+          class="material-icons absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400 text-base"
+        >
+          mail_outline
+        </span>
+        <!-- Email Error Messages -->
+        <div
+          *ngIf="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          <div *ngIf="loginForm.get('email')?.errors?.['required']">
+            Email is required
+          </div>
+          <div *ngIf="loginForm.get('email')?.errors?.['email']">
+            Invalid email address
+          </div>
+        </div>
       </div>
 
-      <div class="form-field">
-        <mat-icon class="field-icon">lock</mat-icon>
+      <!-- Password Field -->
+      <div class="relative">
         <input
           [type]="hidePassword ? 'password' : 'text'"
           formControlName="password"
           placeholder="Password"
-          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        <mat-icon
-          class="visibility-icon"
-          (click)="hidePassword = !hidePassword">
-          {{hidePassword ? 'visibility_off' : 'visibility'}}
-        </mat-icon>
-      </div>
-
-      <a routerLink="/auth/forgot-password" class="forgot-password">
-        Forgot password?
-      </a>
-
-      <button
-        type="submit"
-        class="submit-button"
-        [disabled]="loginForm.invalid">
-        Sign in
-      </button>
-
-      <div class="social-login">
-        <p>Or sign in with</p>
-        <div class="social-buttons">
-          <button type="button" class="social-button google">
-            <img src="assets/google-48.svg" alt="Google">
-          </button>
+          class="w-full pl-10 pr-10 h-10 border border-gray-300 rounded-md focus:outline-none text-sm"
+          [ngClass]="{
+            'border-gray-300 focus:ring-2 focus:ring-blue-500':
+              loginForm.get('password')?.valid ||
+              !loginForm.get('password')?.touched,
+            'border-red-500 focus:ring-0':
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+          }"
+        />
+        <span
+          class="material-icons absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400 text-base"
+        >
+          lock_outline
+        </span>
+        <button
+          type="button"
+          class="absolute top-1/2 transform -translate-y-1/2 right-3 text-gray-400 focus:outline-none"
+          (click)="hidePassword = !hidePassword"
+        >
+          <span class="material-icons text-base">
+            {{ hidePassword ? "visibility_off" : "visibility" }}
+          </span>
+        </button>
+        <!-- Password Error Messages -->
+        <div
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required
+          </div>
+          <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Password must be at least 6 characters
+          </div>
         </div>
       </div>
+
+      <!-- Forgot Password Link -->
+      <div class="flex justify-end">
+        <a
+          routerLink="/auth/forgot-password"
+          class="text-blue-600 hover:underline text-xs"
+        >
+          Forgot password?
+        </a>
+      </div>
+
+      <!-- Sign In Button -->
+      <button
+        (click)="onSubmit()"
+        type="button"
+        class="w-full py-1.5 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 text-sm disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+        [disabled]="loginForm.invalid"
+      >
+        Sign in
+      </button>
     </form>
   </div>
 </div>

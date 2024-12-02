@@ -1,21 +1,10 @@
-// import { CommonModule } from '@angular/common';
-// import { Component, Input } from '@angular/core';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatMenuModule } from '@angular/material/menu';
-// import { MatSidenav } from '@angular/material/sidenav';
-// import { UserService } from '../../../core/services/user.service';
-// import { RouterLink, RouterModule } from '@angular/router';
-// import { NotificationService } from '../../../core/services/notification.service';
-// import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -42,7 +31,6 @@ import { UserService } from '../../../core/services/user.service';
     MatListModule,
     RouterModule,
     CommonModule,
-    RouterLink,
     FormsModule,
     ReactiveFormsModule,
     MatBottomSheetModule,
@@ -67,4 +55,19 @@ export class AppBarComponent {
     public userService: UserService
   ) {}
   @Input() sidenav!: MatSidenav;
+
+  // Property to track unread notifications
+  unreadNotifications: number = 5; // Example value, replace it with dynamic data
+
+  // Method to open settings
+  openSettings(): void {
+    console.log('Settings clicked');
+    // Implement your logic to open settings here
+  }
+
+  // Method to show notifications
+  showNotifications(): void {
+    console.log('Notifications clicked');
+    // Implement your logic to display notifications here
+  }
 }

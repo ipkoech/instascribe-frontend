@@ -1,0 +1,292 @@
+<div class="p-4 bg-gray-50 min-h-screen">
+  <!-- Page Title -->
+  <p class="text-lg text-blue-900 mb-4">Team Management</p>
+  <!-- Tabs -->
+  <div class="flex space-x-2 mb-4">
+    <button
+      class="px-3 py-1.5 text-blue-900 text-xs font-medium bg-white rounded-lg shadow-sm border border-blue-200 hover:bg-blue-100 focus:outline-none"
+      [ngClass]="{
+        'bg-white border-blue-200': activeTab === 'overview',
+        'bg-blue-50': activeTab !== 'overview'
+      }"
+      (click)="setActiveTab('overview')"
+    >
+      Overview
+    </button>
+    <button
+      class="px-3 py-1.5 text-blue-900 text-xs font-medium bg-blue-50 rounded-lg hover:bg-blue-100 focus:outline-none"
+      [ngClass]="{
+        'bg-white border-blue-200': activeTab === 'users',
+        'bg-blue-50': activeTab !== 'users'
+      }"
+      (click)="setActiveTab('users')"
+    >
+      Users
+    </button>
+    <button
+      class="px-3 py-1.5 text-blue-900 text-xs font-medium bg-blue-50 rounded-lg hover:bg-blue-100 focus:outline-none"
+      [ngClass]="{
+        'bg-white border-blue-200': activeTab === 'roles',
+        'bg-blue-50': activeTab !== 'roles'
+      }"
+      (click)="setActiveTab('roles')"
+    >
+      Roles & Permissions
+    </button>
+  </div>
+
+  <!-- Overview Content -->
+  <div *ngIf="activeTab === 'overview'">
+    <!-- Overview Cards -->
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="bg-blue-100 p-3 rounded-lg shadow-sm">
+        <div class="flex items-center">
+          <p class="text-sm font-medium text-blue-700">Total Users</p>
+          <span class="material-icons ml-auto text-blue-500 text-lg"
+            >group</span
+          >
+        </div>
+        <p class="text-sm font-bold text-blue-900">120</p>
+      </div>
+
+      <div class="bg-blue-100 p-3 rounded-lg shadow-sm">
+        <div class="flex items-center">
+          <p class="text-sm font-medium text-blue-700">Active Roles</p>
+          <span class="material-icons ml-auto text-blue-500 text-lg"
+            >shield</span
+          >
+        </div>
+        <p class="text-sm font-bold text-blue-900">5</p>
+      </div>
+
+      <div class="bg-blue-100 p-3 rounded-lg shadow-sm">
+        <div class="flex items-center">
+          <p class="text-sm font-medium text-blue-700">Pending Invitations</p>
+          <span class="material-icons ml-auto text-blue-500 text-lg"
+            >person_add</span
+          >
+        </div>
+        <p class="text-sm font-bold text-blue-900">3</p>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="bg-white p-3 rounded-lg shadow-sm mb-4">
+      <p class="text-md text-blue-900 mb-2">Activity Feed</p>
+      <ul class="text-xs text-blue-700 space-y-1">
+        <li>User John Doe added (2 minutes ago)</li>
+        <li>Admin role modified (1 hour ago)</li>
+        <li>User Jane Smith deactivated (3 hours ago)</li>
+      </ul>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-between items-center">
+      <div class="flex space-x-3">
+        <button
+          class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none"
+        >
+          Add New User
+        </button>
+        <button
+          class="bg-white text-blue-500 border border-blue-500 text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-50 focus:outline-none"
+        >
+          Create New Role
+        </button>
+      </div>
+      <div class="flex space-x-3">
+        <input
+          type="text"
+          placeholder="Search users or roles..."
+          class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
+        />
+        <select
+          class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
+        >
+          <option>All</option>
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Admin</option>
+          <option>Editor</option>
+          <option>Viewer</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'users'">
+    <div class="bg-white p-4 rounded-lg shadow">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex space-x-2">
+          <input
+            type="text"
+            placeholder="Search users..."
+            class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
+            [(ngModel)]="searchQuery"
+          />
+          <select
+            class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none cursor-pointer"
+            [(ngModel)]="filter"
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="admin">Admin</option>
+            <option value="editor">Editor</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </div>
+        <button
+          class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none"
+          (click)="addNewUser()"
+        >
+          Add New User
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-blue-50 text-xs text-gray-600 uppercase">
+              <th class="py-2 px-3">
+                <input type="checkbox" (change)="toggleSelectAll($event)" />
+              </th>
+              <th class="py-2 px-3">Name</th>
+              <th class="py-2 px-3">Email</th>
+              <th class="py-2 px-3">Role</th>
+              <th class="py-2 px-3">Last Active</th>
+              <th class="py-2 px-3">Date Added</th>
+              <th class="py-2 px-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let user of filteredUsers()"
+              class="text-xs text-gray-700 hover:bg-blue-50"
+            >
+              <td class="py-2 px-3">
+                <input
+                  type="checkbox"
+                  [checked]="selectedUsers.includes(user)"
+                  (change)="toggleSelectUser(user)"
+                />
+              </td>
+              <td class="py-2 px-3">{{ user.name }}</td>
+              <td class="py-2 px-3">{{ user.email }}</td>
+              <td class="py-2 px-3">{{ user.role }}</td>
+              <td class="py-2 px-3">{{ user.lastActive }}</td>
+              <td class="py-2 px-3">{{ user.dateAdded }}</td>
+              <td class="py-2 px-3 flex space-x-2">
+                <button
+                  class="text-blue-500 hover:text-blue-700 focus:outline-none flex items-center space-x-1"
+                  (click)="viewUser(user)"
+                >
+                  <span class="material-icons text-sm">visibility</span>
+                  <span>View</span>
+                </button>
+                <button
+                  class="text-blue-500 hover:text-blue-700 focus:outline-none flex items-center space-x-1"
+                  (click)="editUser(user)"
+                >
+                  <span class="material-icons text-sm">edit</span>
+                  <span>Edit</span>
+                </button>
+                <button
+                  class="text-red-500 hover:text-red-700 focus:outline-none flex items-center space-x-1"
+                  (click)="deleteUser(user)"
+                >
+                  <span class="material-icons text-sm">delete</span>
+                  <span>Delete</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Batch Actions -->
+      <div class="flex space-x-2 mt-4">
+        <button
+          class="bg-white text-blue-500 border border-blue-500 text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-50 focus:outline-none focus:ring focus:ring-blue-300 cursor-pointer"
+          [disabled]="selectedUsers.length === 0"
+          (click)="assignRole()"
+        >
+          Assign Role
+        </button>
+        <button
+          class="bg-white text-blue-500 border border-blue-500 text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-50 focus:outline-none focus:ring focus:ring-blue-300 cursor-pointer"
+          [disabled]="selectedUsers.length === 0"
+          (click)="deactivateUsers()"
+        >
+          Deactivate
+        </button>
+        <button
+          class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300 cursor-pointer"
+          [disabled]="selectedUsers.length === 0"
+          (click)="deleteSelectedUsers()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'roles'">
+    <div class="bg-white p-4 rounded-lg shadow">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-4">
+        <p class="text-lg text-blue-900">Roles</p>
+        <div class="flex space-x-2">
+          <input
+            type="text"
+            placeholder="Search roles..."
+            class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
+            [(ngModel)]="roles_searchQuery"
+          />
+          <button
+            class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none"
+            (click)="createNewRole()"
+          >
+            Create New Role
+          </button>
+        </div>
+      </div>
+
+      <!-- Roles Grid -->
+      <div class="grid grid-cols-3 gap-4">
+        <div
+          *ngFor="let role of filteredRoles()"
+          class="bg-blue-50 p-4 rounded-lg shadow-sm border border-blue-100"
+        >
+          <p class="text-md text-blue-900 mb-2">{{ role.name }}</p>
+          <p class="text-sm text-blue-700 mb-1">Users: {{ role.users }}</p>
+          <p class="text-sm text-blue-700 mb-3">
+            Permissions: {{ role.permissions }}
+          </p>
+          <div class="flex space-x-2">
+            <button
+              class="bg-white text-blue-500 border border-blue-500 text-xs px-3 py-1 rounded-lg shadow-sm hover:bg-blue-50 focus:outline-none"
+              (click)="viewRole(role)"
+            >
+              View
+            </button>
+            <button
+              class="bg-white text-blue-500 border border-blue-500 text-xs px-3 py-1 rounded-lg shadow-sm hover:bg-blue-50 focus:outline-none"
+              (click)="editRole(role)"
+            >
+              Edit
+            </button>
+            <button
+              class="bg-red-500 text-white text-xs px-3 py-1 rounded-lg shadow-sm hover:bg-red-600 focus:outline-none"
+              (click)="deleteRole(role)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,11 +1,25 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChatModel, ChatsResponse } from '../../../core/interfaces/chat.model';
 import { HttpClient, HttpResponse } from '@angular/common/http';
@@ -43,15 +57,14 @@ interface SaveDraftDialogData {
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   templateUrl: './ask-scribe.component.html',
   styleUrl: './ask-scribe.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
 export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
-
-  chat!: ChatModel
+  chat!: ChatModel;
   conversation_id!: string;
   chats: ChatsResponse | undefined;
   chatForm: FormGroup;
@@ -69,18 +82,20 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     private websocketsService: WebsocketsService,
     private http: HttpClient,
     private api: ApiService,
-    private sidenavService: SidenavService,
+    private sidenavService: SidenavService
   ) {
     this.chatForm = this.fb.group({
       user_input: ['', [Validators.required]],
     });
-  }
-
-  ngOnInit(): void {
     this.activatedRoute.params.subscribe(async (params) => {
       const newConversationId = params['id'];
-      if (this.currentChannelSubscription && this.currentChannelSubscription !== newConversationId) {
-        this.websocketsService.unsubscribeFromChannel(`ChatChannel_${this.currentChannelSubscription}`);
+      if (
+        this.currentChannelSubscription &&
+        this.currentChannelSubscription !== newConversationId
+      ) {
+        this.websocketsService.unsubscribeFromChannel(
+          `ChatChannel_${this.currentChannelSubscription}`
+        );
       }
       if (newConversationId) {
         this.conversation_id = newConversationId;
@@ -91,15 +106,21 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this.scrollToBottom();
-    this.messagesContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
-
+    this.messagesContainer.nativeElement.addEventListener(
+      'scroll',
+      this.onScroll.bind(this)
+    );
   }
 
   ngOnDestroy(): void {
     if (this.currentChannelSubscription) {
-      this.websocketsService.unsubscribeFromChannel(`ChatChannel_${this.currentChannelSubscription}`);
+      this.websocketsService.unsubscribeFromChannel(
+        `ChatChannel_${this.currentChannelSubscription}`
+      );
     }
   }
 
@@ -110,7 +131,8 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
   onScroll(): void {
     if (this.messagesContainer) {
       const element = this.messagesContainer.nativeElement;
-      const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+      const atBottom =
+        element.scrollHeight - element.scrollTop === element.clientHeight;
       this.showScrollToBottom = !atBottom;
     }
   }
@@ -123,7 +145,8 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   scrollToBottom(): void {
     try {
-      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+      this.messagesContainer.nativeElement.scrollTop =
+        this.messagesContainer.nativeElement.scrollHeight;
     } catch (err) {
       console.error('Scroll to bottom failed:', err);
     }
@@ -148,7 +171,6 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-
   // Handle file selection
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -158,7 +180,6 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         this.fileName = this.selectedFile.name;
         this.fileType = this.selectedFile.type;
         console.log(this.fileName);
-
       }
     }
   }
@@ -175,7 +196,7 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         // Clear form and reset file selection
         this.chatForm.reset();
         this.selectedFile = undefined;
-        this.clearFileSelection()
+        this.clearFileSelection();
       }
     }
   }
@@ -184,20 +205,22 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     this.isLoading = true;
     const conversationId = this.conversation_id;
 
-    this.chatService.sendChatMessage(conversationId, userInput, file).subscribe({
-      next: (response: HttpResponse<any>) => {
-        if (response.ok) {
-          this.chat = response.body;
-        }
-      },
-      error: (error) => {
-        console.error('Error sending message:', error);
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+    this.chatService
+      .sendChatMessage(conversationId, userInput, file)
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response.ok) {
+            this.chat = response.body;
+          }
+        },
+        error: (error) => {
+          console.error('Error sending message:', error);
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   loadChat(chat: ChatModel) {
@@ -212,8 +235,8 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       },
       complete: () => {
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   retry(arg0: any) {
@@ -224,9 +247,7 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         if (response.ok) {
           this.chat = response.body;
           this.updateBotReply(arg0, response.body.bot_reply);
-
         }
-
       },
       error: (error) => {
         this.isLoading = false;
@@ -234,21 +255,20 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       },
       complete: () => {
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   updateBotReply(userInput: string, botReply: string) {
     // Find the placeholder message and update it with the actual bot response
     const botMessageIndex = this.chats?.data.findIndex(
-      chat => chat.role === 'bot' && chat.bot_reply === 'Loading...'
+      (chat) => chat.role === 'bot' && chat.bot_reply === 'Loading...'
     );
     if (botMessageIndex !== -1 && this.chats?.data) {
       this.chats.data[botMessageIndex!].bot_reply = botReply;
       this.chats.data[botMessageIndex!].updated_at = new Date();
     }
   }
-
 
   loadChats(retryCount = 0): void {
     this.chatService.fetchChats(this.conversation_id).subscribe({
@@ -263,10 +283,9 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         } else {
           this.snackBarService.error('Failed to load chats. Please try again.');
         }
-      }
+      },
     });
   }
-
 
   parseMarkdown(markdown: string | undefined): any {
     if (!markdown) {
@@ -280,7 +299,7 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     this.chatService.like(chat).subscribe({
       next: (response: HttpResponse<any>) => {
         // this.loadChats();
-      }
+      },
     });
   }
 
@@ -290,18 +309,23 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         if (response.ok) {
           // this.loadChats();
         }
-      }
+      },
     });
   }
 
-
   copyMessage(chat: ChatModel) {
-    const messageToCopy = chat.role === 'user' ? chat.user_input : chat.bot_reply;
+    const messageToCopy =
+      chat.role === 'user' ? chat.user_input : chat.bot_reply;
 
     if (messageToCopy) {
       navigator.clipboard.writeText(messageToCopy).then(
         () => {
-          this.snackBarService.success('Message copied to clipboard!', 500, 'center', 'top');
+          this.snackBarService.success(
+            'Message copied to clipboard!',
+            500,
+            'center',
+            'top'
+          );
         },
         (err) => {
           this.snackBarService.error('Failed to copy message: ' + err);
@@ -309,7 +333,6 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       );
     }
   }
-
 
   saveMessage(_t5: ChatModel) {
     this.snackBarService.info(`${_t5.id} saved!`);
@@ -327,24 +350,26 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-
-
   loadingMessageIds: Set<string> = new Set();
 
   handleWebSocketUpdate(data: any): void {
     if (data.chat?.conversation_id === this.conversation_id) {
-      const messageExists = this.chats?.data?.some(msg => msg.id === data.chat.id);
+      const messageExists = this.chats?.data?.some(
+        (msg) => msg.id === data.chat.id
+      );
 
       if (!messageExists) {
         this.chats?.data.push(data.chat);
         this.loadingMessageIds.add(data.chat.id);
-        this.loadChats()
+        this.loadChats();
         this.scrollToBottom();
       }
 
       // If the message is updated (e.g., bot reply), update the message
       if (data.action === 'update') {
-        const messageIndex = this.chats?.data.findIndex(msg => msg.id === data.chat.id);
+        const messageIndex = this.chats?.data.findIndex(
+          (msg) => msg.id === data.chat.id
+        );
         if (messageIndex !== -1) {
           this.chats!.data[messageIndex!] = data.chat;
           this.loadingMessageIds.add(data.chat.id);
@@ -353,12 +378,9 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       }
 
       if (data.action === 'chat_created') {
-        this.loadChats();  // Refresh the chat list
-        this.scrollToBottom();  // Scroll to the bottom
+        this.loadChats(); // Refresh the chat list
+        this.scrollToBottom(); // Scroll to the bottom
       }
     }
   }
-
-
-
 }
