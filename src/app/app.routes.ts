@@ -8,6 +8,7 @@ import { ProfileOverviewComponent } from './components/preferences/profile-overv
 import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
 import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
+import { TeamManagementComponent } from './components/content/team-management/team-management.component';
 
 export const routes: Routes = [
   {
@@ -72,6 +73,7 @@ export const routes: Routes = [
       },
       { path: 'notifications', component: NotificationsComponent },
       { path: 'library-management', component: LibraryManagementComponent },
+      { path: 'team-management', component: TeamManagementComponent },
     ],
   },
   { path: '**', redirectTo: 'auth' },
