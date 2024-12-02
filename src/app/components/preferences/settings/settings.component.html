@@ -440,8 +440,183 @@
   </div>
 
   <div *ngIf="activeTab === 'aiConfig'" class="bg-white p-3 rounded-lg shadow">
-    <h2 class="text-sm font-medium text-blue-600 mb-3">AI Configuration</h2>
-    <p class="text-xs text-gray-600">Configure AI-related settings here.</p>
+    <!-- AI Model Configuration Card -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-md mb-4 font-medium">AI Model Configuration</p>
+
+      <!-- AI Model Selection -->
+      <div class="mb-4">
+        <label for="aiModel" class="block text-xs font-medium text-gray-700"
+          >AI Model</label
+        >
+        <select
+          id="aiModel"
+          [(ngModel)]="aiConfig.model"
+          class="mt-1 block w-full px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="GPT-4">GPT-4</option>
+          <option value="GPT-3.5">GPT-3.5</option>
+          <option value="Custom">Custom</option>
+        </select>
+      </div>
+
+      <!-- API Key -->
+      <div class="mb-4">
+        <label for="apiKey" class="block text-xs font-medium text-gray-700"
+          >API Key</label
+        >
+        <input
+          type="text"
+          id="apiKey"
+          [(ngModel)]="aiConfig.apiKey"
+          placeholder="Enter your API key"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        />
+      </div>
+
+      <!-- Use Custom Prompts -->
+      <div class="flex items-center justify-between mb-4">
+        <label for="useCustomPrompts" class="text-xs font-medium text-gray-700">
+          Use Custom Prompts
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="useCustomPrompts"
+            [(ngModel)]="aiConfig.useCustomPrompts"
+            class="sr-only peer"
+          />
+          <div
+            class="w-10 h-5 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:border-white"
+          ></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Content Generation Settings Card -->
+    <div class="bg-white p-6 rounded-lg shadow mt-6">
+      <p class="text-md font-medium text-gray-800 mb-4">
+        Content Generation Settings
+      </p>
+      <!-- Temperature Slider -->
+      <div class="mb-4">
+        <label
+          for="temperature"
+          class="block text-xs font-medium text-gray-700"
+        >
+          Temperature (Creativity)
+        </label>
+        <input
+          type="range"
+          id="temperature"
+          [(ngModel)]="contentGenerationSettings.temperature"
+          min="0"
+          max="1"
+          step="0.01"
+          class="w-full mt-2 h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+        />
+        <p class="text-sm text-gray-600 mt-1">
+          Value: {{ contentGenerationSettings.temperature }}
+        </p>
+      </div>
+      <!-- Max Tokens -->
+      <div class="mb-4">
+        <label for="maxTokens" class="block text-xs font-medium text-gray-700">
+          Max Tokens
+        </label>
+        <input
+          type="number"
+          id="maxTokens"
+          [(ngModel)]="contentGenerationSettings.maxTokens"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Enter max tokens"
+        />
+      </div>
+      <!-- Use Keyword Optimization -->
+      <div class="flex items-center justify-between mb-4">
+        <label
+          for="useKeywordOptimization"
+          class="text-sm font-medium text-gray-700"
+        >
+          Use Keyword Optimization
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="useKeywordOptimization"
+            [(ngModel)]="contentGenerationSettings.useKeywordOptimization"
+            class="sr-only peer"
+          />
+          <div
+            class="w-8 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4"
+          ></span>
+        </label>
+      </div>
+    </div>
+    <!-- AI Training -->
+    <div class="bg-white p-4 rounded-lg shadow mb-4 mt-6">
+      <p class="text-md font-medium mb-4">AI Training</p>
+      <div class="flex items-center justify-between mb-4">
+        <label
+          for="enableCustomTraining"
+          class="text-xs font-medium text-gray-700"
+        >
+          Enable Custom Training
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="enableCustomTraining"
+            [(ngModel)]="aiTraining.enableCustomTraining"
+            class="sr-only peer"
+          />
+          <div
+            class="w-8 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4"
+          ></span>
+        </label>
+      </div>
+      <div class="mb-4">
+        <label
+          for="trainingDataSource"
+          class="block text-xs font-medium text-gray-700"
+        >
+          Training Data Source
+        </label>
+        <select
+          id="trainingDataSource"
+          [(ngModel)]="aiTraining.trainingDataSource"
+          class="mt-1 block w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="" disabled>Select data source</option>
+          <option *ngFor="let source of trainingDataSources" [value]="source">
+            {{ source }}
+          </option>
+        </select>
+      </div>
+      <button
+        class="bg-black text-white text-xs px-4 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-blue-300"
+        type="button"
+        (click)="startTraining()"
+      >
+        Start Training
+      </button>
+    </div>
+
+    <!-- Save AI Settings Button -->
+    <div class="bg-black text-center py-1 rounded-lg shadow mt-4">
+      <button
+        class="text-white text-xs font-medium focus:outline-none"
+        (click)="saveAISettings()"
+      >
+        Save AI Settings
+      </button>
+    </div>
   </div>
 
   <div

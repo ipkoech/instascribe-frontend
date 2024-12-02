@@ -147,4 +147,38 @@ export class SettingsComponent {
     console.log('Delete User:', user);
     this.users = this.users.filter((u) => u !== user);
   }
+
+  // ai config
+  aiConfig = {
+    model: 'GPT-4', // Default AI model
+    apiKey: '', // Placeholder for the API key
+    useCustomPrompts: false, // Whether custom prompts are enabled
+  };
+
+  contentGenerationSettings = {
+    temperature: 0.7, // Default slider value
+    maxTokens: 2048, // Default max tokens value
+    useKeywordOptimization: false, // Default toggle state
+  };
+
+  aiTraining = {
+    enableCustomTraining: false,
+    trainingDataSource: '',
+  };
+
+  trainingDataSources = ['Data Source 1', 'Data Source 2', 'Data Source 3'];
+
+  startTraining() {
+    if (!this.aiTraining.trainingDataSource) {
+      alert('Please select a training data source.');
+      return;
+    }
+    console.log('AI Training started with:', this.aiTraining);
+    // Logic to initiate training
+  }
+
+  saveAISettings() {
+    console.log('AI Settings saved.');
+    // Logic for saving AI settings can be added here
+  }
 }
