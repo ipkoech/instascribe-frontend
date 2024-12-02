@@ -280,5 +280,6 @@ export class SideNavComponent implements OnInit {
   // Toggle the Posts Panel
   togglePostsPanel(): void {
     this.isPostsPanelOpen = !this.isPostsPanelOpen;
+    console.log('isPostsPanelOpen toggled:', this.isPostsPanelOpen);
   }
 }

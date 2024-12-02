@@ -96,10 +96,10 @@
             <span class="ml-2 text-sm text-black">Review</span>
           </li>
           <!-- Posts (Expandable Panel) -->
-          <li class="flex flex-col" routerLink="content/posts">
+          <li class="flex flex-col">
             <div
               class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-              (click)="togglePostsPanel();"
+              (click)="togglePostsPanel()"
             >
               <div class="flex items-center">
                 <span class="material-icons text-gray-500 text-sm"
@@ -118,13 +118,24 @@
               class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
               [ngClass]="{
                 'max-h-0': !isPostsPanelOpen,
-                'max-h-40': isPostsPanelOpen
+                'max-h-fit': isPostsPanelOpen
               }"
             >
+              <!-- Posts -->
+              <li
+                class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+                routerLink="content/posts"
+                routerLinkActive="bg-gray-100"
+              >
+                <span class="material-icons text-gray-500 text-sm"
+                  >article</span
+                >
+                <span class="ml-2 text-sm text-black">Posts</span>
+              </li>
               <!-- Collaboration -->
               <li
                 class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-                routerLink="/content/posts/collaboration"
+                routerLink="content/collaboration"
                 routerLinkActive="bg-gray-100"
               >
                 <span class="material-icons text-gray-500 text-sm">groups</span>
