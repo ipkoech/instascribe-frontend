@@ -45,7 +45,7 @@
 
   <div class="border-t border-gray-300 my-4 p-2"></div>
 
-  <!-- tools  -->
+  <!-- Tools Section -->
   <div class="px-4">
     <!-- Tools Header -->
     <p class="text-sm text-gray-500 mb-2">Tools</p>
@@ -77,6 +77,7 @@
             'max-h-40': isContentPanelOpen
           }"
         >
+          <!-- Drafts -->
           <li
             class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
             routerLink="/content/drafts"
@@ -85,6 +86,7 @@
             <span class="material-icons text-gray-500 text-sm">folder</span>
             <span class="ml-2 text-sm text-black">Drafts</span>
           </li>
+          <!-- Review -->
           <li
             class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
             routerLink="/content/review"
@@ -93,13 +95,42 @@
             <span class="material-icons text-gray-500 text-sm">pending</span>
             <span class="ml-2 text-sm text-black">Review</span>
           </li>
-          <li
-            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-            routerLink="/content/posts"
-            routerLinkActive="bg-gray-100"
-          >
-            <span class="material-icons text-gray-500 text-sm">article</span>
-            <span class="ml-2 text-sm text-black">Posts</span>
+          <!-- Posts (Expandable Panel) -->
+          <li class="flex flex-col" routerLink="content/posts">
+            <div
+              class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+              (click)="togglePostsPanel();"
+            >
+              <div class="flex items-center">
+                <span class="material-icons text-gray-500 text-sm"
+                  >article</span
+                >
+                <span class="ml-2 text-sm text-black">Posts</span>
+              </div>
+              <span
+                class="material-icons text-gray-400 text-sm transition-transform duration-300"
+                [ngClass]="{ 'rotate-180': isPostsPanelOpen }"
+              >
+                expand_more
+              </span>
+            </div>
+            <ul
+              class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
+              [ngClass]="{
+                'max-h-0': !isPostsPanelOpen,
+                'max-h-40': isPostsPanelOpen
+              }"
+            >
+              <!-- Collaboration -->
+              <li
+                class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+                routerLink="/content/posts/collaboration"
+                routerLinkActive="bg-gray-100"
+              >
+                <span class="material-icons text-gray-500 text-sm">groups</span>
+                <span class="ml-2 text-sm text-black">Collaboration</span>
+              </li>
+            </ul>
           </li>
         </ul>
       </li>

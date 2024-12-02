@@ -1,0 +1,29 @@
+<div class="posts-container p-4">
+  <p class="text-lg font-medium mb-4">Posts</p>
+  <div
+    *ngFor="let post of posts"
+    class="post-item bg-white p-3 mb-3 rounded-lg shadow flex justify-between items-center"
+  >
+    <div>
+      <p class="text-md font-medium text-gray-800">{{ post.title }}</p>
+      <p class="text-xs text-gray-600">
+        Platform: {{ post.platform }} | Posted:
+        {{ post.postedDate | date : "yyyy-MM-dd" }}
+      </p>
+    </div>
+    <div class="actions flex space-x-2">
+      <button
+        class="bg-blue-500 text-white text-xs px-2 py-1 rounded hover:bg-blue-600 flex items-center"
+      >
+        <span class="material-icons text-sm mr-1">visibility</span>
+        View
+      </button>
+      <button
+        class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 flex items-center"
+      >
+        <span class="material-icons text-sm mr-1">content_copy</span>
+        Copy
+      </button>
+    </div>
+  </div>
+</div>

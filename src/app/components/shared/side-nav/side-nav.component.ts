@@ -9,8 +9,7 @@ import {
   NavigationEnd,
   NavigationStart,
   Router,
-  RouterLink,
-  RouterLinkActive,
+  RouterModule,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
@@ -25,8 +24,7 @@ import { HttpResponse } from '@angular/common/http';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    RouterLinkActive,
+    RouterModule,
     MatListModule,
     MatIconModule,
     MatButtonModule,
@@ -275,5 +273,12 @@ export class SideNavComponent implements OnInit {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  isPostsPanelOpen: boolean = false;
+
+  // Toggle the Posts Panel
+  togglePostsPanel(): void {
+    this.isPostsPanelOpen = !this.isPostsPanelOpen;
   }
 }
