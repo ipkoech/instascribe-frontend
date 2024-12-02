@@ -7,7 +7,7 @@ import { NotificationAlertsComponent } from './components/preferences/notificati
 import { ProfileOverviewComponent } from './components/preferences/profile-overview/profile-overview.component';
 import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
-import { AskScribeComponent } from './components/scribe/ask-scribe/ask-scribe.component';
+import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +71,7 @@ export const routes: Routes = [
         ],
       },
       { path: 'notifications', component: NotificationsComponent },
+      { path: 'library-management', component: LibraryManagementComponent },
     ],
   },
   { path: '**', redirectTo: 'auth' },
