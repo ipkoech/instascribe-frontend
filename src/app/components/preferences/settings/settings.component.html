@@ -600,7 +600,7 @@
         </select>
       </div>
       <button
-        class="bg-black text-white text-xs px-4 py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-blue-300"
+        class="bg-black text-white text-xs px-4 py-2 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring focus:ring-blue-300"
         type="button"
         (click)="startTraining()"
       >
@@ -623,8 +623,620 @@
     *ngIf="activeTab === 'integrations'"
     class="bg-white p-3 rounded-lg shadow"
   >
-    <h2 class="text-sm font-medium text-blue-600 mb-3">Integrations</h2>
-    <p class="text-xs text-gray-600">Manage integrations here.</p>
+    <!-- Social Media Integrations Card -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-md font-medium text-gray-800 mb-4">
+        Social Media Integrations
+      </p>
+      <div class="space-y-3">
+        <!-- Facebook -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Facebook</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="integrations.facebook"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+        <!-- Twitter -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Twitter</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="integrations.twitter"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+        <!-- LinkedIn -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">LinkedIn</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="integrations.linkedin"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- CMS Integrations Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">CMS Integrations</p>
+
+      <!-- WordPress Integration -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">WordPress</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="wordpressToggle"
+              [(ngModel)]="cmsIntegrations.enableWordPress"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+
+        <!-- WordPress URL -->
+        <div>
+          <label
+            for="wordpressURL"
+            class="block text-xs font-medium text-gray-700"
+            >WordPress URL</label
+          >
+          <input
+            type="url"
+            id="wordpressURL"
+            [(ngModel)]="cmsIntegrations.wordpressURL"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="https://your-wordpress-site.com"
+          />
+        </div>
+
+        <!-- WordPress API Key -->
+        <div>
+          <label
+            for="wordpressAPIKey"
+            class="block text-xs font-medium text-gray-700"
+            >WordPress API Key</label
+          >
+          <input
+            type="text"
+            id="wordpressAPIKey"
+            [(ngModel)]="cmsIntegrations.wordpressAPIKey"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter your WordPress API key"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Marketing Integrations Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">
+        Email Marketing Integrations
+      </p>
+
+      <!-- Mailchimp Integration -->
+      <div class="space-y-3">
+        <!-- Mailchimp Toggle -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Mailchimp</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="mailchimpToggle"
+              [(ngModel)]="emailMarketingIntegrations.mailchimpEnabled"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+
+        <!-- Mailchimp API Key -->
+        <div>
+          <label
+            for="mailchimpAPIKey"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Mailchimp API Key
+          </label>
+          <input
+            type="text"
+            id="mailchimpAPIKey"
+            [(ngModel)]="emailMarketingIntegrations.mailchimpApiKey"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter your Mailchimp API key"
+            [disabled]="!emailMarketingIntegrations.mailchimpEnabled"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Integrations Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">
+        Analytics Integrations
+      </p>
+
+      <!-- Google Analytics -->
+      <div class="space-y-3">
+        <!-- Google Analytics Toggle -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Google Analytics</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="googleAnalyticsToggle"
+              [(ngModel)]="analyticsIntegrations.googleAnalyticsEnabled"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+
+        <!-- Google Analytics ID -->
+        <div>
+          <label
+            for="googleAnalyticsID"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Google Analytics ID
+          </label>
+          <input
+            type="text"
+            id="googleAnalyticsID"
+            [(ngModel)]="analyticsIntegrations.googleAnalyticsID"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="UA-XXXXXXXXX-X"
+            [disabled]="!analyticsIntegrations.googleAnalyticsEnabled"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- Save Integration Settings Button -->
+    <div class="mt-2">
+      <button
+        class="bg-black text-white text-xs px-6 py-2 w-full rounded shadow hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-300"
+        (click)="saveIntegrationSettings()"
+      >
+        Save Integration Settings
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'workflow'">
+    <!-- Content Approval Workflow Card -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-sm font-medium text-gray-800 mb-3">
+        Content Approval Workflow
+      </p>
+
+      <!-- Enable Approval Workflow Toggle -->
+      <div class="flex items-center justify-between mb-3">
+        <label
+          for="enableApprovalWorkflow"
+          class="text-xs font-medium text-gray-700"
+        >
+          Enable Approval Workflow
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="enableApprovalWorkflow"
+            [(ngModel)]="workflowSettings.enableApprovalWorkflow"
+            class="sr-only peer"
+          />
+          <div
+            class="w-6 h-3 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-0.5 top-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+          ></span>
+        </label>
+      </div>
+
+      <!-- Number of Approval Stages Dropdown -->
+      <div>
+        <label
+          for="approvalStages"
+          class="block text-xs font-medium text-gray-700 mb-1"
+        >
+          Number of Approval Stages
+        </label>
+        <select
+          id="approvalStages"
+          [(ngModel)]="workflowSettings.approvalStages"
+          class="block w-full mt-1 px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 appearance-none"
+        >
+          <option value="1 Stage">1 Stage</option>
+          <option value="2 Stages">2 Stages</option>
+          <option value="3 Stages">3 Stages</option>
+        </select>
+      </div>
+    </div>
+    <!-- Auto-scheduling Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-sm font-medium text-gray-800 mb-3">Auto-scheduling</p>
+
+      <!-- Enable Auto-scheduling Toggle -->
+      <div class="flex items-center justify-between mb-3">
+        <label
+          for="enableAutoScheduling"
+          class="text-xs font-medium text-gray-700"
+        >
+          Enable Auto-scheduling
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="enableAutoScheduling"
+            [(ngModel)]="autoSchedulingSettings.enableAutoScheduling"
+            class="sr-only peer"
+          />
+          <div
+            class="w-6 h-3 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-0.5 top-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+          ></span>
+        </label>
+      </div>
+
+      <!-- Maximum Posts Per Day -->
+      <div class="mb-3">
+        <label
+          for="maxPostsPerDay"
+          class="block text-xs font-medium text-gray-700 mb-1"
+        >
+          Maximum Posts Per Day
+        </label>
+        <input
+          type="number"
+          id="maxPostsPerDay"
+          [(ngModel)]="autoSchedulingSettings.maxPostsPerDay"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Enter maximum posts"
+        />
+      </div>
+
+      <!-- Optimal Posting Time Dropdown -->
+      <div>
+        <label
+          for="optimalPostingTime"
+          class="block text-xs font-medium text-gray-700 mb-1"
+        >
+          Optimal Posting Time
+        </label>
+        <select
+          id="optimalPostingTime"
+          [(ngModel)]="autoSchedulingSettings.optimalPostingTime"
+          class="block w-full mt-1 px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 appearance-none"
+        >
+          <option value="Morning (8 AM - 12 PM)">Morning (8 AM - 12 PM)</option>
+          <option value="Afternoon (12 PM - 4 PM)">
+            Afternoon (12 PM - 4 PM)
+          </option>
+          <option value="Evening (4 PM - 8 PM)">Evening (4 PM - 8 PM)</option>
+        </select>
+      </div>
+    </div>
+    <!-- Content Recycling Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-sm font-medium text-gray-800 mb-3">Content Recycling</p>
+
+      <!-- Enable Content Recycling Toggle -->
+      <div class="flex items-center justify-between mb-3">
+        <label
+          for="enableContentRecycling"
+          class="text-xs font-medium text-gray-700"
+        >
+          Enable Content Recycling
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="enableContentRecycling"
+            [(ngModel)]="contentRecyclingSettings.enableRecycling"
+            class="sr-only peer"
+          />
+          <div
+            class="w-6 h-3 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-0.5 top-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+          ></span>
+        </label>
+      </div>
+
+      <!-- Minimum Recycling Interval -->
+      <div>
+        <label
+          for="minRecyclingInterval"
+          class="block text-xs font-medium text-gray-700 mb-1"
+        >
+          Minimum Recycling Interval (days)
+        </label>
+        <input
+          type="number"
+          id="minRecyclingInterval"
+          [(ngModel)]="contentRecyclingSettings.minInterval"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Enter minimum interval in days"
+        />
+      </div>
+    </div>
+    <!-- Collaboration Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-sm font-medium text-gray-800 mb-3">Collaboration</p>
+
+      <!-- Enable Team Collaboration Toggle -->
+      <div class="flex items-center justify-between mb-3">
+        <label
+          for="enableCollaboration"
+          class="text-xs font-medium text-gray-700"
+        >
+          Enable Team Collaboration
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="enableCollaboration"
+            [(ngModel)]="collaborationSettings.enableCollaboration"
+            class="sr-only peer"
+          />
+          <div
+            class="w-6 h-3 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-0.5 top-0.5 w-2.5 h-2.5 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+          ></span>
+        </label>
+      </div>
+
+      <!-- Preferred Collaboration Tool -->
+      <div>
+        <label
+          for="preferredCollaborationTool"
+          class="block text-xs font-medium text-gray-700 mb-1"
+        >
+          Preferred Collaboration Tool
+        </label>
+        <select
+          id="preferredCollaborationTool"
+          [(ngModel)]="collaborationSettings.preferredTool"
+          class="block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="internalComments">Internal Comments</option>
+          <option value="slackIntegration">Slack Integration</option>
+          <option value="microsoftTeams">Microsoft Teams</option>
+        </select>
+      </div>
+    </div>
+    <!-- Save Workflow Settings Button -->
+    <div class="mt-2">
+      <button
+        class="w-full bg-gray-900 text-white text-xs py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-700"
+        (click)="saveWorkflowSettings()"
+      >
+        Save Workflow Settings
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'analytics'">
+    <div class="bg-white p-4 rounded-lg shadow mt-4">
+      <p class="text-md font-medium text-gray-800 mb-4">Performance Metrics</p>
+      <div class="space-y-3">
+        <!-- Track Page Views -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Track Page Views</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="performanceMetrics.trackPageViews"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+
+        <!-- Track User Engagement -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Track User Engagement</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="performanceMetrics.trackUserEngagement"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+
+        <!-- Track Conversions -->
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-700">Track Conversions</p>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="performanceMetrics.trackConversions"
+              class="sr-only peer"
+            />
+            <div
+              class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+            ></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">Reporting</p>
+
+      <!-- Report Frequency -->
+      <div class="mb-4">
+        <label
+          for="reportFrequency"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Report Frequency
+        </label>
+        <select
+          id="reportFrequency"
+          [(ngModel)]="reportingSettings.frequency"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      <!-- Report Recipients -->
+      <div>
+        <label
+          for="reportRecipients"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Report Recipients (comma-separated emails)
+        </label>
+        <input
+          type="text"
+          id="reportRecipients"
+          [(ngModel)]="reportingSettings.recipients"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="email1@example.com, email2@example.com"
+        />
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">Custom Events</p>
+
+      <!-- Enable Custom Event Tracking -->
+      <div class="flex items-center justify-between mb-4">
+        <label
+          for="customEventTracking"
+          class="text-sm font-medium text-gray-700"
+        >
+          Enable Custom Event Tracking
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="customEventTracking"
+            [(ngModel)]="customEvents.enableTracking"
+            class="sr-only peer"
+          />
+          <div
+            class="w-7 h-4 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="absolute left-1 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-3"
+          ></span>
+        </label>
+      </div>
+
+      <!-- Custom Event Name -->
+      <div>
+        <label
+          for="customEventName"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Custom Event Name
+        </label>
+        <input
+          type="text"
+          id="customEventName"
+          [(ngModel)]="customEvents.eventName"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="e.g., Newsletter Signup"
+          [disabled]="!customEvents.enableTracking"
+        />
+      </div>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">Data Retention</p>
+
+      <!-- Data Retention Period -->
+      <div>
+        <label
+          for="dataRetentionPeriod"
+          class="block text-sm font-medium text-gray-700"
+        >
+          Data Retention Period
+        </label>
+        <select
+          id="dataRetentionPeriod"
+          [(ngModel)]="dataRetention.period"
+          class="mt-1 block w-full px-3 py-2 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option *ngFor="let option of retentionOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-2">
+      <button
+        class="w-full bg-gray-900 text-white text-xs py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-700"
+        (click)="saveAnalyticsSettings()"
+      >
+        Save Analytics Settings
+      </button>
+    </div>
   </div>
   <!-- </div> -->
 </div>
