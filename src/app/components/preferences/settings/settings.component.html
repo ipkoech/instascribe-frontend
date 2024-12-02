@@ -1,1 +1,455 @@
-<p>settings works!</p>
+<div class="px-6 py-4">
+  <!-- Page Header -->
+  <p class="text-lg font-medium text-blue-700 mb-4">System Settings</p>
+
+  <!-- Tabs -->
+  <div class="flex space-x-4 border-b border-gray-200 mb-4">
+    <button
+      *ngFor="let tab of tabs"
+      class="px-3 py-2 text-xs font-medium rounded-t-lg"
+      [class.text-blue-700]="activeTab === tab.key"
+      [class.bg-blue-50]="activeTab === tab.key"
+      [class.border-b-2]="activeTab === tab.key"
+      [class.border-blue-600]="activeTab === tab.key"
+      (click)="switchTab(tab.key)"
+    >
+      {{ tab.label }}
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div *ngIf="activeTab === 'general'" class="bg-white p-3 rounded-lg shadow">
+    <!-- Company Information -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-sm font-medium mb-3">Company Information</p>
+      <form>
+        <div class="mb-3">
+          <label
+            for="companyName"
+            class="block text-xs font-medium text-gray-600"
+            >Company Name</label
+          >
+          <input
+            type="text"
+            id="companyName"
+            class="mt-1 block w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            placeholder="Enter company name"
+            [(ngModel)]="companyName"
+          />
+        </div>
+        <div class="mb-3">
+          <label
+            for="companyLogo"
+            class="block text-xs font-medium text-gray-600"
+            >Company Logo</label
+          >
+          <input
+            type="file"
+            id="companyLogo"
+            class="mt-1 block w-full text-xs text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            (change)="uploadLogo($event)"
+          />
+        </div>
+      </form>
+    </div>
+    <!-- System Preferences -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-sm font-medium mb-3">System Preferences</p>
+      <div class="mb-3">
+        <label
+          for="defaultLanguage"
+          class="block text-xs font-medium text-gray-600 mb-1"
+          >Default Language</label
+        >
+        <select
+          id="defaultLanguage"
+          class="block w-full border border-gray-300 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring focus:ring-blue-200"
+          [(ngModel)]="defaultLanguage"
+        >
+          <option value="English">English</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="German">German</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label
+          for="timeZone"
+          class="block text-xs font-medium text-gray-600 mb-1"
+          >Time Zone</label
+        >
+        <select
+          id="timeZone"
+          class="block w-full border border-gray-300 rounded-md px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring focus:ring-blue-200"
+          [(ngModel)]="timeZone"
+        >
+          <option value="UTC">UTC</option>
+          <option value="PST">PST</option>
+          <option value="EST">EST</option>
+          <option value="CST">CST</option>
+        </select>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <label for="darkMode" class="text-xs font-medium text-gray-600"
+          >Dark Mode</label
+        >
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="darkMode"
+            class="sr-only peer"
+            [(ngModel)]="darkMode"
+          />
+          <div
+            class="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-500 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
+          ></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-sm font-medium mb-3">Notifications</p>
+      <div class="flex items-center justify-between mb-3">
+        <label
+          for="emailNotifications"
+          class="text-xs font-medium text-gray-600"
+          >Email Notifications</label
+        >
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="emailNotifications"
+            class="sr-only peer"
+            [(ngModel)]="emailNotifications"
+          />
+          <div
+            class="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-500 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
+          ></div>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <label
+          for="inAppNotifications"
+          class="text-xs font-medium text-gray-600"
+          >In-App Notifications</label
+        >
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="inAppNotifications"
+            class="sr-only peer"
+            [(ngModel)]="inAppNotifications"
+          />
+          <div
+            class="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-500 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
+          ></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Save Changes Button -->
+    <div
+      class="bg-black text-white text-center py-1 rounded-lg cursor-pointer hover:bg-gray-800 mt-2"
+    >
+      <button class="text-xs font-medium" (click)="saveChanges()">
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'content'" class="bg-white p-3 rounded-lg shadow">
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-md font-medium mb-3">Content Types</p>
+      <form>
+        <div class="mb-2 flex items-center">
+          <input
+            type="checkbox"
+            id="blogPosts"
+            class="w-3 h-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            [(ngModel)]="contentTypes.blogPosts"
+            name="blogPosts"
+          />
+          <label for="blogPosts" class="ml-2 text-xs font-medium text-gray-700">
+            Blog Posts
+          </label>
+        </div>
+        <div class="mb-2 flex items-center">
+          <input
+            type="checkbox"
+            id="socialMediaPosts"
+            class="w-3 h-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            [(ngModel)]="contentTypes.socialMediaPosts"
+            name="socialMediaPosts"
+          />
+          <label
+            for="socialMediaPosts"
+            class="ml-2 text-xs font-medium text-gray-700"
+          >
+            Social Media Posts
+          </label>
+        </div>
+        <div class="mb-2 flex items-center">
+          <input
+            type="checkbox"
+            id="emailNewsletters"
+            class="w-3 h-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            [(ngModel)]="contentTypes.emailNewsletters"
+            name="emailNewsletters"
+          />
+          <label
+            for="emailNewsletters"
+            class="ml-2 text-xs font-medium text-gray-700"
+          >
+            Email Newsletters
+          </label>
+        </div>
+        <div class="mb-2 flex items-center">
+          <input
+            type="checkbox"
+            id="productDescriptions"
+            class="w-3 h-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            [(ngModel)]="contentTypes.productDescriptions"
+            name="productDescriptions"
+          />
+          <label
+            for="productDescriptions"
+            class="ml-2 text-xs font-medium text-gray-700"
+          >
+            Product Descriptions
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <!-- Content Guidelines Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium mb-3">Content Guidelines</p>
+      <form>
+        <div class="mb-3">
+          <label
+            for="maxWordCount"
+            class="block text-xs font-medium text-gray-700"
+            >Maximum Word Count</label
+          >
+          <input
+            type="number"
+            id="maxWordCount"
+            [(ngModel)]="contentGuidelines.wordCount"
+            class="mt-1 block w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter maximum word count"
+          />
+        </div>
+        <div class="mb-3">
+          <label
+            for="defaultTone"
+            class="block text-xs font-medium text-gray-700"
+            >Default Content Tone</label
+          >
+          <select
+            id="defaultTone"
+            [(ngModel)]="contentGuidelines.defaultTone"
+            class="mt-1 block w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            <option value="professional">Professional</option>
+            <option value="casual">Casual</option>
+            <option value="informative">Informative</option>
+          </select>
+        </div>
+        <div class="mb-3 flex items-center justify-between">
+          <label for="enableKeywordOptimization" class="text-xs text-gray-700">
+            Enable Keyword Optimization
+          </label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="enableKeywordOptimization"
+              [(ngModel)]="contentGuidelines.enableOptimization"
+              class="sr-only peer"
+            />
+            <div
+              class="w-9 h-5 bg-gray-300 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-600 peer-checked:ring-2 peer-checked:ring-blue-300"
+            ></div>
+            <span
+              class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full peer-checked:translate-x-4 transition-transform"
+            ></span>
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <!-- Content Approval Process Card -->
+    <div class="bg-white p-4 rounded-lg shadow mt-4">
+      <p class="text-md font-medium mb-4">Content Approval Process</p>
+      <form>
+        <div class="mb-3 flex items-center justify-between">
+          <label for="requireApproval" class="text-xs text-gray-700">
+            Require Content Approval
+          </label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="requireApproval"
+              [(ngModel)]="contentApproval.requireApproval"
+              class="sr-only peer"
+            />
+            <div
+              class="w-9 h-5 bg-gray-300 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-600 peer-checked:ring-2 peer-checked:ring-blue-300"
+            ></div>
+            <span
+              class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full peer-checked:translate-x-4 transition-transform"
+            ></span>
+          </label>
+        </div>
+        <div class="mb-3">
+          <label for="approvalStages" class="text-xs text-gray-700 block mb-1">
+            Approval Stages
+          </label>
+          <select
+            id="approvalStages"
+            class="block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            [(ngModel)]="contentApproval.approvalStages"
+          >
+            <option value="single">Single Stage</option>
+            <option value="two">Two Stage</option>
+            <option value="multi">Multi Stage</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <!-- Save Changes Button -->
+    <div class="bg-black p-1 rounded-lg shadow">
+      <button
+        class="text-white w-full text-center text-xs font-medium focus:outline-none"
+        (click)="saveContentApproval()"
+      >
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="activeTab === 'userManagement'"
+    class="bg-white p-3 rounded-lg shadow"
+  >
+    <!-- add new user  -->
+    <div class="bg-white p-4 rounded-lg shadow mb-4">
+      <p class="text-md font-medium text-gray-800 mb-3">Add New User</p>
+      <form (ngSubmit)="addUser()">
+        <div class="mb-3">
+          <label for="userName" class="block text-xs font-medium text-gray-700"
+            >Name</label
+          >
+          <input
+            type="text"
+            id="userName"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter user's name"
+            [(ngModel)]="newUser.name"
+            name="name"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="userEmail" class="block text-xs font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="userEmail"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter user's email"
+            [(ngModel)]="newUser.email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="userRole" class="block text-xs font-medium text-gray-700"
+            >Role</label
+          >
+          <select
+            id="userRole"
+            class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            [(ngModel)]="newUser.role"
+            name="role"
+            required
+          >
+            <option value="" disabled>Select user role</option>
+            <option value="Admin">Admin</option>
+            <option value="Editor">Editor</option>
+            <option value="Viewer">Viewer</option>
+          </select>
+        </div>
+        <button
+          class="bg-black text-white text-xs px-4 py-1 rounded-md hover:bg-gray-800 focus:outline-none focus:ring focus:ring-blue-300"
+          type="submit"
+        >
+          Add User
+        </button>
+      </form>
+    </div>
+    <!-- User List Card -->
+    <div class="bg-white p-4 rounded-lg shadow">
+      <p class="text-md font-medium text-gray-800 mb-3">User List</p>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="text-xs text-gray-600 border-b">
+            <th class="py-2 text-left">Name</th>
+            <th class="py-2 text-left">Email</th>
+            <th class="py-2 text-left">Role</th>
+            <th class="py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let user of users"
+            class="text-xs text-gray-700 border-b hover:bg-gray-50"
+          >
+            <td class="py-2">{{ user.name }}</td>
+            <td class="py-2">{{ user.email }}</td>
+            <td class="py-2">{{ user.role }}</td>
+            <td class="py-2">
+              <button
+                class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-300 mr-2"
+                (click)="editUser(user)"
+              >
+                <div class="flex items-center">
+                  <span class="material-icons text-sm mr-1">edit</span>
+                  <span>Edit</span>
+                </div>
+              </button>
+              <button
+                class="bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600"
+                (click)="deleteUser(user)"
+              >
+                <div class="flex items-center">
+                  <span class="material-icons text-sm mr-1">delete</span>
+                  <span>Delete</span>
+                </div>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'aiConfig'" class="bg-white p-3 rounded-lg shadow">
+    <h2 class="text-sm font-medium text-blue-600 mb-3">AI Configuration</h2>
+    <p class="text-xs text-gray-600">Configure AI-related settings here.</p>
+  </div>
+
+  <div
+    *ngIf="activeTab === 'integrations'"
+    class="bg-white p-3 rounded-lg shadow"
+  >
+    <h2 class="text-sm font-medium text-blue-600 mb-3">Integrations</h2>
+    <p class="text-xs text-gray-600">Manage integrations here.</p>
+  </div>
+  <!-- </div> -->
+</div>

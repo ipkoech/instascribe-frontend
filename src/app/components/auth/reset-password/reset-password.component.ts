@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
@@ -18,63 +26,99 @@ import { SnackBarService } from '../../../core/services/snack-bar.service';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+  styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent implements OnInit {
-  resetPasswordForm:FormGroup;
+  resetPasswordForm: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
-  private token: string = '';
+  token: string = '';
+  isReseting: boolean = false;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private snackbar: SnackBarService
+    private snackbar: SnackBarService,
+    private http: HttpClient
   ) {
-  this.resetPasswordForm = this.fb.group({
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
-}
+    // Form initialization
+    this.resetPasswordForm = this.fb.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        password_confirmation: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
+  }
 
   ngOnInit(): void {
+    // Extract token from query parameters
     this.token = this.route.snapshot.queryParams['token'];
     if (!this.token) {
       this.router.navigate(['/auth/login']);
     }
   }
 
-  passwordMatchValidator(form: any) {
-    const password = form.get('password');
-    const confirmPassword = form.get('confirmPassword');
+  // Custom Validator for Password Match
+  passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('password_confirmation')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
 
-    if (password.value !== confirmPassword.value) {
-      return { passwordMismatch: true };
-    }
-    return null;
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 
   onSubmit(): void {
-    if (this.resetPasswordForm.valid && this.token) {
-      const { password } = this.resetPasswordForm.value;
-
-      this.snackbar.info('Resetting password...');
-      // this.authService.resetPassword(this.token, password!)
-      //   .subscribe({
-      //     next: () => {
-      //       this.snackbar.success('Password reset successful');
-      //       this.router.navigate(['/auth/login']);
-      //     },
-      //     error: () => {
-      //       this.snackbar.error('Failed to reset password');
-      //       this.resetPasswordForm.reset();
-      //     }
-      //   });
+    if (this.resetPasswordForm.invalid || !this.token) {
+      this.resetPasswordForm.markAllAsTouched();
+      return;
     }
+
+    this.isReseting = true;
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    const payload = {
+      token: this.token,
+      password: this.resetPasswordForm.get('password')?.value,
+      password_confirmation: this.resetPasswordForm.get('password_confirmation')
+        ?.value,
+    };
+
+    this.http
+      .post(`${this.authService.base_uri}/reset`, payload, {
+        observe: 'response',
+      })
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response.ok) {
+            this.successMessage =
+              'Password reset successfully. Redirecting to login...';
+            setTimeout(() => this.router.navigate(['/auth/login']), 3000);
+          }
+        },
+        error: (error) => {
+          this.errorMessage =
+            error.error?.message ||
+            'Failed to reset the password. Please try again.';
+          this.isReseting = false;
+        },
+        complete: () => {
+          this.isReseting = false;
+        },
+      });
   }
 }
