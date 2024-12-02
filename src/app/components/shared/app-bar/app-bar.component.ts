@@ -55,4 +55,19 @@ export class AppBarComponent {
     public userService: UserService
   ) {}
   @Input() sidenav!: MatSidenav;
+
+  // Property to track unread notifications
+  unreadNotifications: number = 5; // Example value, replace it with dynamic data
+
+  // Method to open settings
+  openSettings(): void {
+    console.log('Settings clicked');
+    // Implement your logic to open settings here
+  }
+
+  // Method to show notifications
+  showNotifications(): void {
+    console.log('Notifications clicked');
+    // Implement your logic to display notifications here
+  }
 }

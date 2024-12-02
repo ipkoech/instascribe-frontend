@@ -9,6 +9,7 @@ import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
 import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
 import { TeamManagementComponent } from './components/content/team-management/team-management.component';
+import { SettingsComponent } from './components/preferences/settings/settings.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,7 @@ export const routes: Routes = [
       { path: 'notifications', component: NotificationsComponent },
       { path: 'library-management', component: LibraryManagementComponent },
       { path: 'team-management', component: TeamManagementComponent },
+      { path: 'settings', component: SettingsComponent },
     ],
   },
   { path: '**', redirectTo: 'auth' },
