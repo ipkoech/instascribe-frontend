@@ -276,6 +276,7 @@ export class SideNavComponent implements OnInit {
   }
 
   isPostsPanelOpen: boolean = false;
+  contentHeight = 0;
 
   // Toggle the Posts Panel
   togglePostsPanel(): void {

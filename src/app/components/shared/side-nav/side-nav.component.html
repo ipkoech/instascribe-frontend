@@ -73,8 +73,7 @@
         <ul
           class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
           [ngClass]="{
-            'max-h-0': !isContentPanelOpen,
-            'max-h-40': isContentPanelOpen
+            'max-h-0': !isContentPanelOpen
           }"
         >
           <!-- Drafts -->
@@ -95,8 +94,8 @@
             <span class="material-icons text-gray-500 text-sm">pending</span>
             <span class="ml-2 text-sm text-black">Review</span>
           </li>
-          <!-- Posts (Expandable Panel) -->
           <li class="flex flex-col">
+            <!-- Toggle Header -->
             <div
               class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
               (click)="togglePostsPanel()"
@@ -114,11 +113,13 @@
                 expand_more
               </span>
             </div>
+
+            <!-- Expandable Content -->
             <ul
-              class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
+              class="pl-8 mt-1 space-y-1 overflow-hidden transition-all duration-300"
               [ngClass]="{
                 'max-h-0': !isPostsPanelOpen,
-                'max-h-fit': isPostsPanelOpen
+                'max-h-screen': isPostsPanelOpen
               }"
             >
               <!-- Posts -->
