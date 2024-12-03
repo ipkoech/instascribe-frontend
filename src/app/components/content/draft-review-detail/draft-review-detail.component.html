@@ -261,9 +261,10 @@
     </div>
 
     <button
-      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded text-xs"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="openAddCollaboratorDialog()"
     >
+      <mat-icon class="mr-2" style="transform: scale(0.7)">person_add</mat-icon>
       Invite to Collaborate
     </button>
   </div>
@@ -278,34 +279,53 @@
   </div>
 
   <div class="w-full flex items-center justify-end mt-4 space-x-2">
-    <button mat-icon-button matTooltip="Copy" (click)="copyEditorContent()">
+    <!-- Copy Button -->
+    <button
+      mat-icon-button
+      matTooltip="Copy"
+      (click)="copyEditorContent()"
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs"
+    >
       <mat-icon style="transform: scale(0.7)">content_copy</mat-icon>
     </button>
+
+    <!-- Save Button -->
     <button
-      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded text-xs"
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="saveDraft(editor.getMarkdown())"
     >
-      Save
+      <mat-icon class="mr-2" style="transform: scale(0.7)">save</mat-icon> Save
     </button>
+
+    <!-- Reject Button -->
     <button
-      class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-4 rounded text-xs"
+      class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="rejectDraft()"
       *ngIf="draft?.status === 'reviewing'"
     >
+      <mat-icon class="mr-2" style="transform: scale(0.7)">cancel</mat-icon>
       Reject
     </button>
+
+    <!-- Approve Button -->
     <button
-      class="bg-black hover:bg-black text-white font-medium py-1 px-4 rounded text-xs"
+      class="bg-black hover:bg-black text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="approveDraft()"
       *ngIf="draft?.status === 'reviewing'"
     >
+      <mat-icon class="mr-2" style="transform: scale(0.7)"
+        >check_circle</mat-icon
+      >
       Approve
     </button>
+
+    <!-- Start Review Button -->
     <button
       mat-icon-button
       matTooltip="Start Review"
       (click)="startReview()"
       *ngIf="draft?.status === 'editing'"
+      class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
     >
       <mat-icon style="transform: scale(0.7)">rate_review</mat-icon>
     </button>
