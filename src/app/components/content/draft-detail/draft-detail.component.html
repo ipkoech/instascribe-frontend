@@ -1,119 +1,147 @@
-
 <head>
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
+  />
 </head>
-<div class="draft-container">
-  <div class="editor-container" #editorElement></div>
-  <div class="side-nav-container">
-    <!-- Draft Actions -->
-    <div class="actions-section">
-      <div class="action-buttons">
-        <button mat-icon-button matTooltip="Save Changes" (click)="saveDraft(editor.getMarkdown())">
-          <mat-icon>save</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Submit for Review" (click)="startReview()" *ngIf="draft?.status === 'editing'">
-          <mat-icon>rate_review</mat-icon>
-        </button>
-        <button matTooltip="Add Collaborator" mat-icon-button (click)="openAddCollaboratorDialog()">
-          <mat-icon>person_add</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Copy" (click)="copyEditorContent()">
-          <mat-icon>content_copy</mat-icon>
-        </button>
-      </div>
-
-      <!-- Collaborators Section -->
-      <div class="collaborators-section">
-        <h3>Collaborators</h3>
-        <div class="collaborator-list">
-          <div class="collaborator-item" *ngFor="let collaborator of draft?.collaborators">
-            <mat-icon>person</mat-icon>
-            <span>{{collaborator?.f_name}} {{collaborator?.l_name}}</span>
-            <button mat-icon-button (click)="removeCollaborator(collaborator.id)">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Draft Info -->
-      <div class="info-section">
-        <h3>Information</h3>
-        <div class="info-item">
-          <span>Status:</span>
-          <span class="status-badge" [ngClass]="draft?.status">{{draft?.status}}</span>
-        </div>
-        <div class="info-item">
-          <span>Created:</span>
-          <span>{{draft?.created_at | date}}</span>
-        </div>
-        <div class="info-item">
-          <span>Last Updated:</span>
-          <span>{{draft?.updated_at | date}}</span>
-        </div>
-      </div>
+<div class="flex flex-col items-start p-6 bg-white shadow-md rounded-md">
+  <div class="flex items-center justify-between w-full mb-4">
+    <div>
+      <p class="text-md font-medium">
+        {{ draft?.title }}
+      </p>
+      <p class="text-gray-500 text-sm">Author: John Doe</p>
+      <p class="text-gray-500 text-sm">
+        Submitted: {{ draft?.created_at | date }}
+      </p>
+      <p class="text-gray-500 text-sm">
+        Updated: {{ draft?.updated_at | date }}
+      </p>
+      <p class="text-gray-500 text-sm" [ngClass]="draft?.status">
+        Status: {{ draft?.status }}
+      </p>
     </div>
 
-    <ng-template #collaboratorDialog>
-      <h2 mat-dialog-title>Add Collaborator</h2>
-      <mat-dialog-content>
-        <form [formGroup]="collaboratorForm">
-          
-          <!-- User Selection: Multiple users can be selected -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Select Collaborators</mat-label>
-            <mat-select multiple formControlName="userIds">
-              <!-- Loop through the users data and create an option for each user -->
-              <mat-option *ngFor="let user of users?.data" [value]="user.id" [disabled]="user.id === draft?.author?.id">
-                {{ user.f_name }} {{ user.l_name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-    
-          <!-- Access Level Selection: Select between Viewer, Editor, or Admin -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Access Level</mat-label>
-            <mat-select formControlName="accessLevel">
-              <mat-option value="viewer">Viewer</mat-option>
-              <mat-option value="editor">Editor</mat-option>
-              <mat-option value="admin">Admin</mat-option>
-            </mat-select>
-          </mat-form-field>
-    
-          <!-- Reason Input: A text area for the user to provide a reason -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Reason</mat-label>
-            <textarea matInput formControlName="reason" placeholder="Why are you adding this collaborator?"></textarea>
-          </mat-form-field>
-    
-        </form>
-      </mat-dialog-content>
-      <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button [mat-dialog-close]="true" [disabled]="!collaboratorForm.valid" color="primary">Add</button>
-      </mat-dialog-actions>
-    </ng-template>
-    
-    
-
-    <ng-template #confirmationDialog let-data>
-      <div class="dialog-container">
-        <h2 mat-dialog-title>{{ data.title }}</h2>
-        <mat-dialog-content>
-          <p>{{ data.message }}</p>
-          <mat-form-field class="full-width" *ngIf="data.showReason">
-            <mat-label>Reason</mat-label>
-            <textarea matInput [(ngModel)]="data.reason" placeholder="Please provide a reason"></textarea>
-          </mat-form-field>
-        </mat-dialog-content>
-        <mat-dialog-actions align="end">
-          <button mat-button mat-dialog-close>Cancel</button>
-          <button mat-button [mat-dialog-close]="true" color="primary">
-            Confirm
-          </button>
-        </mat-dialog-actions>
-      </div>
-    </ng-template>
-
+    <button
+      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
+      (click)="openAddCollaboratorDialog()"
+    >
+      <mat-icon class="mr-2" style="transform: scale(0.7)">person_add</mat-icon>
+      Invite to Collaborate
+    </button>
   </div>
+
+  <!-- Toast UI Editor Section -->
+  <div class="w-full mb-4">
+    <div
+      #editorElement
+      id="editorElement"
+      class="toast-editor-container bg-white border border-gray-300 rounded-lg"
+    ></div>
+  </div>
+
+  <div class="w-full flex items-center justify-end mt-4 space-x-2">
+    <!-- Copy Button -->
+    <button
+      mat-icon-button
+      matTooltip="Copy"
+      (click)="copyEditorContent()"
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs"
+    >
+      <mat-icon style="transform: scale(0.7)">content_copy</mat-icon>
+    </button>
+
+    <!-- Save Button -->
+    <button
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs flex items-center"
+      (click)="saveDraft(editor.getMarkdown())"
+    >
+      <mat-icon class="mr-2" style="transform: scale(0.7)">save</mat-icon> Save
+    </button>
+
+    <!-- Start Review Button -->
+    <button
+      mat-icon-button
+      matTooltip="Start Review"
+      (click)="startReview()"
+      *ngIf="draft?.status === 'editing'"
+      class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+    >
+      <mat-icon style="transform: scale(0.7)">rate_review</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- collaborator dialog  -->
+<ng-template #collaboratorDialog>
+  <h2 mat-dialog-title>Add Collaborator</h2>
+  <mat-dialog-content>
+    <form [formGroup]="collaboratorForm">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Select Collaborators</mat-label>
+        <mat-select multiple formControlName="userIds">
+          <mat-option
+            *ngFor="let user of users?.data"
+            [value]="user.id"
+            [disabled]="user.id === draft?.author?.id"
+          >
+            {{ user.f_name }} {{ user.l_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Access Level</mat-label>
+        <mat-select formControlName="accessLevel">
+          <mat-option value="viewer">Viewer</mat-option>
+          <mat-option value="editor">Editor</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Reason</mat-label>
+        <textarea
+          matInput
+          formControlName="reason"
+          placeholder="Why are you adding this collaborator?"
+        ></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+      mat-button
+      [mat-dialog-close]="true"
+      [disabled]="!collaboratorForm.valid"
+      color="primary"
+    >
+      Add
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- confirmation dialog  -->
+<ng-template #confirmationDialog let-data>
+  <div class="dialog-container">
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+      <mat-form-field class="full-width" *ngIf="data.showReason">
+        <mat-label>Reason</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="data.reason"
+          placeholder="Please provide a reason"
+        ></textarea>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true" color="primary">
+        Confirm
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
