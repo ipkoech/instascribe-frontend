@@ -64,7 +64,7 @@ export class DraftsComponent implements OnInit {
   //new pagination code
   paginatedDrafts: any[] = []; // To store drafts for the current page
   currentPage = 1; // Current page number
-  pageSize = 5; // Number of drafts per page
+  pageSize = 3; // Number of drafts per page
   totalPages = 1; // Total pages available
 
   updatePagination() {

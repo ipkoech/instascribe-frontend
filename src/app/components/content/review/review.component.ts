@@ -49,7 +49,7 @@ export class ReviewComponent {
   drafts: any[] = [];
   paginatedDrafts: any[] = []; // Stores drafts for the current page
   currentPage = 1; // Current page number
-  pageSize = 5; // Number of drafts per page
+  pageSize = 3; // Number of drafts per page
   totalPages = 1; // Total pages available
 
   loadDrafts() {
