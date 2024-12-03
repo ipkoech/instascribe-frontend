@@ -9,7 +9,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { DraftService } from '../services/draft.service';
 import { HttpResponse } from '@angular/common/http';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-drafts',
@@ -23,32 +23,70 @@ import { RouterLink, RouterModule } from '@angular/router';
     MatIconModule,
     MatChipsModule,
     MatMenuModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './drafts.component.html',
-  styleUrl: './drafts.component.scss'
+  styleUrl: './drafts.component.scss',
 })
 export class DraftsComponent implements OnInit {
-  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at'];
+  displayedColumns = [
+    'title',
+    'status',
+    'author',
+    'collaborators',
+    'created_at',
+  ];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private draftService: DraftService) { }
+  constructor(private draftService: DraftService) {}
 
   ngOnInit() {
     this.loadDrafts();
   }
 
   loadDrafts() {
-    this.draftService.fetchDrafts({'filter[status]': '!reviewing'}).subscribe({
-      next: (response: HttpResponse<any>) => {
-        this.dataSource = response.body;
-        if (this.paginator) {
-          this.paginator.length = response.body.length;
-          this.dataSource.sort = this.sort;
-        }
-      }
-    });
+    this.draftService
+      .fetchDrafts({ 'filter[status]': '!reviewing' })
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          this.dataSource = response.body;
+          if (this.paginator) {
+            this.paginator.length = response.body.length;
+            this.dataSource.sort = this.sort;
+          }
+          this.updatePagination();
+        },
+      });
+  }
+
+  //new pagination code
+  paginatedDrafts: any[] = []; // To store drafts for the current page
+  currentPage = 1; // Current page number
+  pageSize = 5; // Number of drafts per page
+  totalPages = 1; // Total pages available
+
+  updatePagination() {
+    const data = this.dataSource.data;
+    this.totalPages = Math.ceil(data.length / this.pageSize);
+    this.paginatedDrafts = data.slice(
+      (this.currentPage - 1) * this.pageSize,
+      this.currentPage * this.pageSize
+    );
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
   }
 }

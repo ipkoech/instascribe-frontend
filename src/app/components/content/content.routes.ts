@@ -17,10 +17,7 @@ export const CONTENT_ROUTES: Routes = [
       { path: 'drafts/:id', component: DraftDetailComponent },
       { path: 'review', component: ReviewComponent },
       { path: 'review/:id', component: DraftReviewDetailComponent },
-      {
-        path: 'posts',
-        component: PostsComponent,
-      },
+      { path: 'posts', component: PostsComponent },
       { path: 'collaboration', component: CollaborationComponent },
     ],
   },

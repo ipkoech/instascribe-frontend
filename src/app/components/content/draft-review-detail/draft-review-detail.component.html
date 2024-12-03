@@ -1,5 +1,8 @@
 <head>
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
+  />
 </head>
 <div class="draft-container">
   <div class="editor-container" #editorElement></div>
@@ -7,19 +10,42 @@
     <!-- Draft Actions -->
     <div class="actions-section">
       <div class="action-buttons">
-        <button mat-icon-button matTooltip="Save Changes" (click)="saveDraft(editor.getMarkdown())">
+        <button
+          mat-icon-button
+          matTooltip="Save Changes"
+          (click)="saveDraft(editor.getMarkdown())"
+        >
           <mat-icon>save</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Start Review" (click)="startReview()" *ngIf="draft?.status === 'editing'">
+        <button
+          mat-icon-button
+          matTooltip="Start Review"
+          (click)="startReview()"
+          *ngIf="draft?.status === 'editing'"
+        >
           <mat-icon>rate_review</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Approve" (click)="approveDraft()" *ngIf="draft?.status === 'reviewing'">
+        <button
+          mat-icon-button
+          matTooltip="Approve"
+          (click)="approveDraft()"
+          *ngIf="draft?.status === 'reviewing'"
+        >
           <mat-icon>check_circle</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Reject" (click)="rejectDraft()" *ngIf="draft?.status === 'reviewing'">
+        <button
+          mat-icon-button
+          matTooltip="Reject"
+          (click)="rejectDraft()"
+          *ngIf="draft?.status === 'reviewing'"
+        >
           <mat-icon>cancel</mat-icon>
         </button>
-        <button matTooltip="Add Collaborator" mat-icon-button (click)="openAddCollaboratorDialog()">
+        <button
+          matTooltip="Add Collaborator"
+          mat-icon-button
+          (click)="openAddCollaboratorDialog()"
+        >
           <mat-icon>person_add</mat-icon>
         </button>
         <button mat-icon-button matTooltip="Copy" (click)="copyEditorContent()">
@@ -31,15 +57,20 @@
       <div class="collaborators-section">
         <h3>Collaborators</h3>
         <div class="collaborator-list">
-          <div class="collaborator-item" *ngFor="let collaborator of draft?.collaborators">
+          <div
+            class="collaborator-item"
+            *ngFor="let collaborator of draft?.collaborators"
+          >
             <mat-icon>person</mat-icon>
-            <span>{{collaborator?.f_name}} {{collaborator?.l_name}}</span>
-            <button mat-icon-button (click)="removeCollaborator(collaborator.id)">
+            <span>{{ collaborator?.f_name }} {{ collaborator?.l_name }}</span>
+            <button
+              mat-icon-button
+              (click)="removeCollaborator(collaborator.id)"
+            >
               <mat-icon>close</mat-icon>
             </button>
           </div>
         </div>
-
       </div>
 
       <!-- Draft Info -->
@@ -47,15 +78,17 @@
         <h3>Information</h3>
         <div class="info-item">
           <span>Status:</span>
-          <span class="status-badge" [ngClass]="draft?.status">{{draft?.status}}</span>
+          <span class="status-badge" [ngClass]="draft?.status">{{
+            draft?.status
+          }}</span>
         </div>
         <div class="info-item">
           <span>Created:</span>
-          <span>{{draft?.created_at | date}}</span>
+          <span>{{ draft?.created_at | date }}</span>
         </div>
         <div class="info-item">
           <span>Last Updated:</span>
-          <span>{{draft?.updated_at | date}}</span>
+          <span>{{ draft?.updated_at | date }}</span>
         </div>
       </div>
     </div>
@@ -64,20 +97,22 @@
       <h2 mat-dialog-title>Add Collaborator</h2>
       <mat-dialog-content>
         <form [formGroup]="collaboratorForm">
-          
           <!-- User Selection: Multiple users can be selected -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Select Collaborators</mat-label>
             <mat-select multiple formControlName="userIds">
               <!-- Loop through the users data and create an option for each user -->
-              <mat-option *ngFor="let user of users?.data" [value]="user.id" 
-              [disabled]="isAuthor(user.id) || isCollaborator(user.id)"
-              [matTooltip]="getTooltip(user.id)">
+              <mat-option
+                *ngFor="let user of users?.data"
+                [value]="user.id"
+                [disabled]="isAuthor(user.id) || isCollaborator(user.id)"
+                [matTooltip]="getTooltip(user.id)"
+              >
                 {{ user.f_name }} {{ user.l_name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-    
+
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Access Level</mat-label>
             <mat-select formControlName="accessLevel">
@@ -89,13 +124,24 @@
 
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Reason</mat-label>
-            <textarea matInput formControlName="reason" placeholder="Why are you adding this collaborator?"></textarea>
+            <textarea
+              matInput
+              formControlName="reason"
+              placeholder="Why are you adding this collaborator?"
+            ></textarea>
           </mat-form-field>
         </form>
       </mat-dialog-content>
       <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button  (click)="addCollaborator()" [disabled]="!collaboratorForm.valid" color="primary">Add</button>
+        <button
+          mat-button
+          (click)="addCollaborator()"
+          [disabled]="!collaboratorForm.valid"
+          color="primary"
+        >
+          Add
+        </button>
       </mat-dialog-actions>
     </ng-template>
 
@@ -106,7 +152,11 @@
           <p>{{ data.message }}</p>
           <mat-form-field class="full-width" *ngIf="data.showReason">
             <mat-label>Reason</mat-label>
-            <textarea matInput [(ngModel)]="data.reason" placeholder="Please provide a reason"></textarea>
+            <textarea
+              matInput
+              [(ngModel)]="data.reason"
+              placeholder="Please provide a reason"
+            ></textarea>
           </mat-form-field>
         </mat-dialog-content>
         <mat-dialog-actions align="end">
@@ -117,5 +167,5 @@
         </mat-dialog-actions>
       </div>
     </ng-template>
-
   </div>
+</div>
