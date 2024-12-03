@@ -14,7 +14,6 @@ export class SettingsComponent {
   tabs = [
     { key: 'general', label: 'General' },
     { key: 'content', label: 'Content' },
-    { key: 'userManagement', label: 'User Management' },
     { key: 'aiConfig', label: 'AI Configuration' },
     { key: 'integrations', label: 'Integrations' },
     { key: 'workflow', label: 'Workflow' },
@@ -97,8 +96,8 @@ export class SettingsComponent {
 
   // State for Content Approval Process
   contentApproval = {
-    requireApproval: false, // Default state for toggle
-    approvalStages: 'single', // Default value for approval stages
+    requireApproval: false,
+    approvalStages: 'single',
   };
 
   // Function to save content approval settings
@@ -107,12 +106,6 @@ export class SettingsComponent {
       'Content Approval Process Settings Saved:',
       this.contentApproval
     );
-
-    // Add logic to send the `contentApproval` data to your backend or service
-    // Example:
-    // this.settingsService.saveContentApproval(this.contentApproval).subscribe(response => {
-    //   console.log('Settings saved successfully!', response);
-    // });
   }
 
   //user
@@ -125,8 +118,7 @@ export class SettingsComponent {
   addUser() {
     if (this.newUser.name && this.newUser.email && this.newUser.role) {
       console.log('User Added:', this.newUser);
-      // Logic to save the user (e.g., API call)
-      this.newUser = { name: '', email: '', role: '' }; // Reset the form
+      this.newUser = { name: '', email: '', role: '' };
     } else {
       console.log('All fields are required.');
     }
@@ -140,7 +132,6 @@ export class SettingsComponent {
 
   editUser(user: any) {
     console.log('Edit User:', user);
-    // Logic to edit the user
   }
 
   deleteUser(user: any) {
@@ -150,15 +141,15 @@ export class SettingsComponent {
 
   // ai config
   aiConfig = {
-    model: 'GPT-4', // Default AI model
-    apiKey: '', // Placeholder for the API key
-    useCustomPrompts: false, // Whether custom prompts are enabled
+    model: 'GPT-4',
+    apiKey: '',
+    useCustomPrompts: false,
   };
 
   contentGenerationSettings = {
-    temperature: 0.7, // Default slider value
-    maxTokens: 2048, // Default max tokens value
-    useKeywordOptimization: false, // Default toggle state
+    temperature: 0.7,
+    maxTokens: 2048,
+    useKeywordOptimization: false,
   };
 
   aiTraining = {
@@ -174,12 +165,10 @@ export class SettingsComponent {
       return;
     }
     console.log('AI Training started with:', this.aiTraining);
-    // Logic to initiate training
   }
 
   saveAISettings() {
     console.log('AI Settings saved.');
-    // Logic for saving AI settings can be added here
   }
 
   //integrations
@@ -191,7 +180,6 @@ export class SettingsComponent {
 
   saveIntegrations() {
     console.log('Saved integrations:', this.integrations);
-    // Add logic to handle integration toggles
   }
 
   cmsIntegrations = {
@@ -211,20 +199,17 @@ export class SettingsComponent {
   };
 
   saveIntegrationSettings() {
-    // Logic to save all the integration settings
     console.log('Integration settings saved!');
-    // Add your API or state update logic here
   }
 
   //workflow
   workflowSettings = {
-    enableApprovalWorkflow: false, // Toggle state
-    approvalStages: '2 Stages', // Default dropdown value
+    enableApprovalWorkflow: false,
+    approvalStages: '2 Stages',
   };
 
   saveWorkflowSettings() {
     console.log('Workflow Settings:', this.workflowSettings);
-    // Add logic to handle the save operation (e.g., API call)
   }
 
   autoSchedulingSettings = {
@@ -235,7 +220,6 @@ export class SettingsComponent {
 
   saveAutoSchedulingSettings() {
     console.log('Auto-scheduling Settings:', this.autoSchedulingSettings);
-    // Add your logic to save the settings here
   }
 
   contentRecyclingSettings = {
@@ -245,16 +229,14 @@ export class SettingsComponent {
 
   saveContentRecyclingSettings() {
     console.log('Content Recycling Settings:', this.contentRecyclingSettings);
-    // Add logic to save the settings here
   }
   collaborationSettings = {
     enableCollaboration: false,
-    preferredTool: 'internalComments', // Default selection
+    preferredTool: 'internalComments',
   };
 
   saveCollaborationSettings() {
     console.log('Collaboration Settings:', this.collaborationSettings);
-    // Add logic to save the settings here
   }
 
   //analytics
@@ -265,15 +247,15 @@ export class SettingsComponent {
   };
 
   reportingSettings = {
-    frequency: 'weekly', // Default to 'weekly'
+    frequency: 'weekly',
     recipients: '',
   };
   customEvents = {
-    enableTracking: false, // Default to disabled
-    eventName: '', // Empty by default
+    enableTracking: false,
+    eventName: '',
   };
   dataRetention = {
-    period: '12 Months', // Default retention period
+    period: '12 Months',
   };
 
   retentionOptions = [
@@ -282,10 +264,9 @@ export class SettingsComponent {
     '6 Months',
     '12 Months',
     '24 Months',
-  ]; // Retention period options
+  ];
 
   saveAnalyticsSettings() {
-    // Logic to save analytics settings
     console.log('Analytics settings saved!');
   }
 }

@@ -94,55 +94,25 @@
             <span class="material-icons text-gray-500 text-sm">pending</span>
             <span class="ml-2 text-sm text-black">Review</span>
           </li>
-          <li class="flex flex-col">
-            <!-- Toggle Header -->
-            <div
-              class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-              (click)="togglePostsPanel()"
-            >
-              <div class="flex items-center">
-                <span class="material-icons text-gray-500 text-sm"
-                  >article</span
-                >
-                <span class="ml-2 text-sm text-black">Posts</span>
-              </div>
-              <span
-                class="material-icons text-gray-400 text-sm transition-transform duration-300"
-                [ngClass]="{ 'rotate-180': isPostsPanelOpen }"
-              >
-                expand_more
-              </span>
-            </div>
 
-            <!-- Expandable Content -->
-            <ul
-              class="pl-8 mt-1 space-y-1 overflow-hidden transition-all duration-300"
-              [ngClass]="{
-                'max-h-0': !isPostsPanelOpen,
-                'max-h-screen': isPostsPanelOpen
-              }"
-            >
-              <!-- Posts -->
-              <li
-                class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-                routerLink="content/posts"
-                routerLinkActive="bg-gray-100"
-              >
-                <span class="material-icons text-gray-500 text-sm"
-                  >article</span
-                >
-                <span class="ml-2 text-sm text-black">Posts</span>
-              </li>
-              <!-- Collaboration -->
-              <li
-                class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-                routerLink="content/collaboration"
-                routerLinkActive="bg-gray-100"
-              >
-                <span class="material-icons text-gray-500 text-sm">groups</span>
-                <span class="ml-2 text-sm text-black">Collaboration</span>
-              </li>
-            </ul>
+          <!-- Posts -->
+          <li
+            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="content/posts"
+            routerLinkActive="bg-gray-100"
+          >
+            <span class="material-icons text-gray-500 text-sm">article</span>
+            <span class="ml-2 text-sm text-black">Posts</span>
+          </li>
+
+          <!-- Collaboration -->
+          <li
+            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="content/collaboration"
+            routerLinkActive="bg-gray-100"
+          >
+            <span class="material-icons text-gray-500 text-sm">groups</span>
+            <span class="ml-2 text-sm text-black">Collaboration</span>
           </li>
         </ul>
       </li>
@@ -176,7 +146,7 @@
       <div
         routerLink="/profile"
         *ngIf="userService.user"
-        class="flex items-center justify-center w-7 h-7 bg-blue-500 text-white rounded-full cursor-pointer"
+        class="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
       >
         <span class="material-icons text-md">account_circle</span>
       </div>
@@ -201,7 +171,7 @@
       (click)="userService.logout()"
       class="ml-6"
     >
-      <span class="material-icons text-gray-500">logout</span>
+      <span class="material-icons text-red-500">logout</span>
     </button>
   </div>
 </div>
