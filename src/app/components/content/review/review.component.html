@@ -10,7 +10,9 @@
     >
       <!-- Title and Review Button -->
       <div class="flex justify-between items-center">
-        <p class="text-sm font-medium text-gray-900">{{ draft.title }}</p>
+        <p class="text-sm font-medium text-gray-900">
+          Title : {{ draft.title }}
+        </p>
         <!-- Reduced font size here -->
         <button
           class="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-md border hover:bg-gray-200 transition"
@@ -32,23 +34,47 @@
     </div>
   </div>
 
-  <!-- Pagination Controls -->
-  <div class="mt-6 flex justify-center items-center">
+  <div class="mt-4 flex justify-center items-center space-x-4">
+    <!-- First Button -->
     <button
-      class="cursor-pointer px-3 py-1 mx-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
+      [disabled]="currentPage === 1"
+      (click)="goToFirstPage()"
+    >
+      <mat-icon class="text-sm">first_page</mat-icon> <span>First</span>
+    </button>
+
+    <!-- Previous Button -->
+    <button
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
       [disabled]="currentPage === 1"
       (click)="previousPage()"
     >
-      Previous
+      <mat-icon class="text-sm">chevron_left</mat-icon> <span>Previous</span>
     </button>
-    <p class="text-xs mx-2">Page {{ currentPage }} of {{ totalPages }}</p>
-    <!-- Reduced font size here -->
+
+    <!-- Page Information -->
+    <p class="text-xs text-gray-600">
+      Page <span class="font-medium text-gray-900">{{ currentPage }}</span> of
+      <span class="font-medium text-gray-900">{{ totalPages }}</span>
+    </p>
+
+    <!-- Next Button -->
     <button
-      class="cursor-pointer px-3 py-1 mx-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
       [disabled]="currentPage === totalPages"
       (click)="nextPage()"
     >
-      Next
+      <span>Next</span> <mat-icon class="text-sm">chevron_right</mat-icon>
+    </button>
+
+    <!-- Last Button -->
+    <button
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
+      [disabled]="currentPage === totalPages"
+      (click)="goToLastPage()"
+    >
+      <span>Last</span> <mat-icon class="text-sm">last_page</mat-icon>
     </button>
   </div>
 </div>

@@ -7,7 +7,9 @@
       class="p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
     >
       <div class="flex justify-between items-center">
-        <p class="text-base font-medium text-gray-900">{{ draft.title }}</p>
+        <p class="text-base font-medium text-gray-900">
+          Title : {{ draft.title }}
+        </p>
         <div class="flex space-x-2">
           <button
             class="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
@@ -36,39 +38,50 @@
             {{ draft.status }}
           </span>
         </p>
-        <p>
-          <span class="font-medium">Author:</span> {{ draft.author.f_name }}
-        </p>
-        <p>
-          <span class="font-medium">Collaborators:</span>
-        </p>
-        <div class="flex flex-wrap gap-1 mt-1">
-          <span
-            *ngFor="let collaborator of draft.collaborators"
-            class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-md"
-          >
-            {{ collaborator.f_name ? collaborator.f_name : "N/A" }}
-          </span>
-        </div>
       </div>
     </div>
   </div>
-
-  <div class="mt-4 flex justify-center items-center">
+  <div class="mt-4 flex justify-center items-center space-x-4">
+    <!-- First Button -->
     <button
-      class="cursor-pointer px-2 py-1 mx-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
+      [disabled]="currentPage === 1"
+      (click)="goToFirstPage()"
+    >
+      <mat-icon class="text-sm">first_page</mat-icon> <span>First</span>
+    </button>
+
+    <!-- Previous Button -->
+    <button
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
       [disabled]="currentPage === 1"
       (click)="previousPage()"
     >
-      Previous
+      <mat-icon class="text-sm">chevron_left</mat-icon> <span>Previous</span>
     </button>
-    <p class="text-xs mx-2">Page {{ currentPage }} of {{ totalPages }}</p>
+
+    <!-- Page Information -->
+    <p class="text-xs text-gray-600">
+      Page <span class="font-medium text-gray-900">{{ currentPage }}</span> of
+      <span class="font-medium text-gray-900">{{ totalPages }}</span>
+    </p>
+
+    <!-- Next Button -->
     <button
-      class="cursor-pointer px-2 py-1 mx-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
       [disabled]="currentPage === totalPages"
       (click)="nextPage()"
     >
-      Next
+      <span>Next</span> <mat-icon class="text-sm">chevron_right</mat-icon>
+    </button>
+
+    <!-- Last Button -->
+    <button
+      class="cursor-pointer px-3 py-1 text-xs font-medium bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition ease-in-out duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
+      [disabled]="currentPage === totalPages"
+      (click)="goToLastPage()"
+    >
+      <span>Last</span> <mat-icon class="text-sm">last_page</mat-icon>
     </button>
   </div>
 </div>

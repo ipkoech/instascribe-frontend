@@ -90,4 +90,14 @@ export class ReviewComponent {
       this.updatePagination();
     }
   }
+
+  goToFirstPage() {
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  goToLastPage() {
+    this.currentPage = this.totalPages;
+    this.updatePagination();
+  }
 }

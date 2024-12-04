@@ -4,26 +4,11 @@
     href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
   />
 </head>
+
 <div class="flex flex-col items-start p-6 bg-white shadow-md rounded-md">
   <div class="flex items-center justify-between w-full mb-4">
-    <div>
-      <p class="text-md font-medium">
-        {{ draft?.title }}
-      </p>
-      <p class="text-gray-500 text-sm">Author: John Doe</p>
-      <p class="text-gray-500 text-sm">
-        Submitted: {{ draft?.created_at | date }}
-      </p>
-      <p class="text-gray-500 text-sm">
-        Updated: {{ draft?.updated_at | date }}
-      </p>
-      <p class="text-gray-500 text-sm" [ngClass]="draft?.status">
-        Status: {{ draft?.status }}
-      </p>
-    </div>
-
     <button
-      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center ml-auto"
       (click)="openAddCollaboratorDialog()"
     >
       <mat-icon class="mr-2" style="transform: scale(0.7)">person_add</mat-icon>
@@ -41,7 +26,19 @@
   </div>
 
   <div class="w-full flex items-center justify-end mt-4 space-x-2">
-    <!-- Copy Button -->
+    <div class="w-full sm:w-2/3 space-y-2">
+      <p class="text-md font-medium">Title : {{ draft?.title }}</p>
+      <p class="text-gray-500 text-sm">Author: John Doe</p>
+      <p class="text-gray-500 text-sm">
+        Submitted: {{ draft?.created_at | date }}
+      </p>
+      <p class="text-gray-500 text-sm">
+        Updated: {{ draft?.updated_at | date }}
+      </p>
+      <p class="text-gray-500 text-sm" [ngClass]="draft?.status">
+        Status: {{ draft?.status }}
+      </p>
+    </div>
     <button
       mat-icon-button
       matTooltip="Copy"
@@ -50,16 +47,12 @@
     >
       <mat-icon style="transform: scale(0.7)">content_copy</mat-icon>
     </button>
-
-    <!-- Save Button -->
     <button
       class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="saveDraft(editor.getMarkdown())"
     >
       <mat-icon class="mr-2" style="transform: scale(0.7)">save</mat-icon> Save
     </button>
-
-    <!-- Start Review Button -->
     <button
       mat-icon-button
       matTooltip="Start Review"
