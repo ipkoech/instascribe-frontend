@@ -247,7 +247,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   ConfirmationDialogComponent!: TemplateRef<any>;
   openAddCollaboratorDialog() {
     const dialogRef = this.dialog.open(this.collaboratorDialog, {
-      width: '350px',
+      width: '400px',
       hasBackdrop: true,
     });
 
