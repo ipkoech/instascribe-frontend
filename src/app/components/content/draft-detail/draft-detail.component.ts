@@ -248,7 +248,6 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   openAddCollaboratorDialog() {
     const dialogRef = this.dialog.open(this.collaboratorDialog, {
       width: '400px',
-      // height: '500px',
       hasBackdrop: true,
     });
 
@@ -310,10 +309,10 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       }
     );
   }
-
-  selectedOption: string = 'Viewer'; // Default selected option
-  dropdownOpen: boolean = false; // Flag to track dropdown state
-  options: string[] = ['Viewer', 'Editor', 'Admin']; // Dropdown options
+  //collaborator dialog additonal declarations
+  selectedOption: string = 'Viewer';
+  dropdownOpen: boolean = false;
+  options: string[] = ['Viewer', 'Editor', 'Admin'];
 
   // Toggles the visibility of the dropdown
   toggleDropdown() {
@@ -323,6 +322,6 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   // Updates the selected option and closes the dropdown
   selectOption(option: string) {
     this.selectedOption = option;
-    this.dropdownOpen = false; // Close dropdown after selection
+    this.dropdownOpen = false;
   }
 }
