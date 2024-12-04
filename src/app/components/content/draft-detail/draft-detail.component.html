@@ -54,85 +54,149 @@
       <mat-icon class="mr-2" style="transform: scale(0.7)">save</mat-icon> Save
     </button>
     <button
-      mat-icon-button
-      matTooltip="Start Review"
+      class="bg-black hover:bg-black text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="startReview()"
       *ngIf="draft?.status === 'editing'"
-      class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
     >
-      <mat-icon style="transform: scale(0.7)">rate_review</mat-icon>
+      <mat-icon class="mr-2" style="transform: scale(0.7)"
+        >check_circle</mat-icon
+      >
+      Start Review
     </button>
   </div>
 </div>
 
 <!-- collaborator dialog  -->
 <ng-template #collaboratorDialog>
-  <h2 mat-dialog-title>Add Collaborator</h2>
-  <mat-dialog-content>
-    <form [formGroup]="collaboratorForm">
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Select Collaborators</mat-label>
-        <mat-select multiple formControlName="userIds">
-          <mat-option
-            *ngFor="let user of users?.data"
-            [value]="user.id"
-            [disabled]="user.id === draft?.author?.id"
-          >
-            {{ user.f_name }} {{ user.l_name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Access Level</mat-label>
-        <mat-select formControlName="accessLevel">
-          <mat-option value="viewer">Viewer</mat-option>
-          <mat-option value="editor">Editor</mat-option>
-          <mat-option value="admin">Admin</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Reason</mat-label>
-        <textarea
-          matInput
-          formControlName="reason"
-          placeholder="Why are you adding this collaborator?"
-        ></textarea>
-      </mat-form-field>
-    </form>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button
-      mat-button
-      [mat-dialog-close]="true"
-      [disabled]="!collaboratorForm.valid"
-      color="primary"
+  <div class="bg-white p-2 rounded-md shadow-md">
+    <p
+      style="font-size: 20px !important; display: flex; justify-content: center"
+      mat-dialog-title
+      class="text-md flex justify-center font-medium text-gray-900"
     >
-      Add
-    </button>
-  </mat-dialog-actions>
+      Add Collaborator
+    </p>
+    <mat-dialog-content>
+      <form [formGroup]="collaboratorForm" class="space-y-4">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label style="font-size: 14px !important" class="text-sm"
+            >Select Collaborators</mat-label
+          >
+          <mat-select multiple formControlName="userIds" class="text-sm">
+            <mat-option
+              style="font-size: 14px !important"
+              *ngFor="let user of users?.data"
+              [value]="user.id"
+              [disabled]="user.id === draft?.author?.id"
+            >
+              {{ user.f_name }} {{ user.l_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label class="text-sm">Access Level</mat-label>
+          <mat-select
+            formControlName="accessLevel"
+            class="text-sm"
+            style="font-size: 14px !important"
+          >
+            <mat-option
+              style="font-size: 14px !important"
+              value="viewer"
+              class="text-xs"
+              >Viewer</mat-option
+            >
+            <mat-option
+              style="font-size: 14px !important"
+              value="editor"
+              class="text-xs"
+              >Editor</mat-option
+            >
+            <mat-option
+              style="font-size: 14px !important"
+              value="admin"
+              class="text-xs"
+              >Admin</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label class="text-sm">Reason</mat-label>
+          <textarea
+            style="font-size: 14px !important"
+            matInput
+            formControlName="reason"
+            placeholder="Why are you adding this collaborator?"
+            rows="4"
+            class="resize-none text-xs"
+          ></textarea>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="space-x-2">
+      <button
+        mat-button
+        mat-dialog-close
+        class="text-gray-600 hover:text-gray-800 text-xs"
+      >
+        Cancel
+      </button>
+      <button
+        mat-button
+        [mat-dialog-close]="true"
+        [disabled]="!collaboratorForm.valid"
+        color="primary"
+        class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-2 px-4 rounded-md"
+      >
+        Add
+      </button>
+    </mat-dialog-actions>
+  </div>
 </ng-template>
 
 <!-- confirmation dialog  -->
 <ng-template #confirmationDialog let-data>
-  <div class="dialog-container">
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <mat-dialog-content>
-      <p>{{ data.message }}</p>
-      <mat-form-field class="full-width" *ngIf="data.showReason">
-        <mat-label>Reason</mat-label>
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <p
+      mat-dialog-title
+      class="text-xl font-semibold text-gray-900 text-center mb-4"
+    >
+      {{ data.title }}
+    </p>
+
+    <mat-dialog-content class="space-y-4">
+      <p class="text-sm text-gray-600">{{ data.message }}</p>
+
+      <mat-form-field class="w-full" *ngIf="data.showReason">
+        <mat-label class="text-sm">Reason</mat-label>
         <textarea
           matInput
           [(ngModel)]="data.reason"
           placeholder="Please provide a reason"
+          rows="4"
+          class="resize-none text-sm font-light"
         ></textarea>
       </mat-form-field>
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button [mat-dialog-close]="true" color="primary">
+
+    <mat-dialog-actions align="end" class="space-x-4 mt-4">
+      <button
+        mat-button
+        mat-dialog-close
+        class="text-gray-600 text-sm hover:text-gray-800"
+      >
+        Cancel
+      </button>
+      <button
+        mat-button
+        [mat-dialog-close]="true"
+        color="primary"
+        [disabled]="!data.reason && data.showReason"
+        class="text-white text-sm font-medium py-2 px-4 rounded-md"
+      >
         Confirm
       </button>
     </mat-dialog-actions>
