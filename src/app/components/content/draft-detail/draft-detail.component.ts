@@ -248,6 +248,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   openAddCollaboratorDialog() {
     const dialogRef = this.dialog.open(this.collaboratorDialog, {
       width: '400px',
+      // height: '500px',
       hasBackdrop: true,
     });
 
@@ -308,5 +309,20 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
         this.snackBarService.error('Failed to copy content: ' + err);
       }
     );
+  }
+
+  selectedOption: string = 'Viewer'; // Default selected option
+  dropdownOpen: boolean = false; // Flag to track dropdown state
+  options: string[] = ['Viewer', 'Editor', 'Admin']; // Dropdown options
+
+  // Toggles the visibility of the dropdown
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  // Updates the selected option and closes the dropdown
+  selectOption(option: string) {
+    this.selectedOption = option;
+    this.dropdownOpen = false; // Close dropdown after selection
   }
 }

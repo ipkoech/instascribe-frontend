@@ -402,4 +402,19 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       }
     );
   }
+
+  selectedOption: string = 'Viewer'; // Default selected option
+  dropdownOpen: boolean = false; // Flag to track dropdown state
+  options: string[] = ['Viewer', 'Editor', 'Admin']; // Dropdown options
+
+  // Toggles the visibility of the dropdown
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  // Updates the selected option and closes the dropdown
+  selectOption(option: string) {
+    this.selectedOption = option;
+    this.dropdownOpen = false; // Close dropdown after selection
+  }
 }

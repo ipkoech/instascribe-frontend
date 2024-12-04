@@ -6,7 +6,7 @@
 </head>
 
 <!-- add collaborator dialog  -->
-<ng-template #collaboratorDialog>
+<!-- <ng-template #collaboratorDialog>
   <div class="bg-white p-2 rounded-md shadow-md">
     <p
       style="font-size: 20px !important; display: flex; justify-content: center"
@@ -93,6 +93,115 @@
         Add
       </button>
     </mat-dialog-actions>
+  </div>
+</ng-template> -->
+<ng-template #collaboratorDialog>
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <p
+      style="font-size: 18px !important"
+      class="text-md font-medium text-center text-gray-900 mb-6"
+    >
+      Add Collaborator
+    </p>
+
+    <form [formGroup]="collaboratorForm" class="space-y-6">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label style="font-size: 14px !important" class="text-sm"
+          >Select Collaborators</mat-label
+        >
+        <mat-select multiple formControlName="userIds" class="text-sm">
+          <mat-option
+            style="font-size: 14px !important"
+            *ngFor="let user of users?.data"
+            [value]="user.id"
+            [disabled]="user.id === draft?.author?.id"
+          >
+            {{ user.f_name }} {{ user.l_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="relative">
+        <label for="accessLevel" class="text-sm font-medium text-gray-700">
+          Access Level <span class="text-red-500">*</span>
+        </label>
+
+        <div
+          class="relative mt-1 rounded-lg"
+          [ngClass]="{
+            'border-gray-500': dropdownOpen,
+            'border-gray-300': !dropdownOpen
+          }"
+          [ngStyle]="{ 'border-width': '1px' }"
+        >
+          <button
+            class="block w-full px-3 py-2 text-sm border rounded-md bg-white focus:outline-none text-left"
+            (click)="toggleDropdown()"
+          >
+            <span>{{ selectedOption }}</span>
+            <span
+              class="material-icons text-sm absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              arrow_drop_down
+            </span>
+          </button>
+
+          <div
+            *ngIf="dropdownOpen"
+            class="absolute left-0 w-full mt-1 bg-white border border-gray-300 shadow-lg z-10"
+          >
+            <div
+              *ngFor="let option of options"
+              (click)="selectOption(option)"
+              class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+            >
+              <span
+                *ngIf="option === selectedOption"
+                class="material-icons text-sm mr-2"
+                >check</span
+              >
+              <span>{{ option }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <label for="reason" class="text-sm font-medium text-gray-700"
+          >Reason <span class="text-red-500">*</span></label
+        >
+        <textarea
+          id="reason"
+          formControlName="reason"
+          placeholder="Why are you adding this collaborator?"
+          rows="4"
+          class="resize-none block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none text-sm"
+        ></textarea>
+      </div>
+    </form>
+
+    <div class="mt-6 flex justify-end space-x-4">
+      <button
+        mat-dialog-close
+        class="text-gray-600 hover:text-gray-800 text-xs font-medium py-2 px-4 rounded-md border-gray-300"
+      >
+        Cancel
+      </button>
+
+      <button
+        [mat-dialog-close]="true"
+        [disabled]="!collaboratorForm.valid"
+        color="primary"
+        class="text-xs font-medium py-2 px-4 rounded-md cursor-pointer"
+        [ngClass]="{
+          'bg-black text-white': collaboratorForm.valid,
+          'bg-gray-400 text-gray-700 cursor-not-allowed':
+            !collaboratorForm.valid
+        }"
+      >
+        Add
+      </button>
+    </div>
   </div>
 </ng-template>
 
