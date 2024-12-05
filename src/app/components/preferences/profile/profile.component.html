@@ -1,89 +1,50 @@
 <ng-template [ngIf]="userService.user$ | async">
-  <div style="padding-bottom: 16px; padding-top: 16px">
-    <mat-card style="max-width: 700px; border-radius: 0; margin: auto">
-      <div style="display: flex; gap: 16px; padding: 16px; padding-bottom: 0">
-        <mat-chip-listbox
-          (change)="theme.setTheme($event.value)"
-          class="m-3"
-          [value]="theme.getTheme() | async"
-          style="margin-inline-start: auto"
-          aria-label="Notification status"
-        >
-          <!-- <mat-chip-option
-            color="accent"
-            [selectable]="(theme.getTheme() | async) === 'dark'"
-            [value]="'light'"
+  <div class="py-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
+      <div class="flex justify-between items-center p-4 border-b">
+        <div class="flex items-center gap-4">
+          <mat-chip-listbox
+            (change)="theme.setTheme($event.value)"
+            class="m-3"
+            [value]="theme.getTheme() | async"
+            aria-label="Notification status"
           >
-            <mat-icon matChipTrailingIcon>light_mode</mat-icon>
-          </mat-chip-option>
-          <mat-chip-option
-            color="accent"
-            [selectable]="(theme.getTheme() | async) === 'light'"
-            [value]="'dark'"
-          >
-            <mat-icon matChipTrailingIcon>dark_mode</mat-icon>
-          </mat-chip-option> -->
-        </mat-chip-listbox>
-        <div *ngIf="!userService.user?.otp_enabled">
+          </mat-chip-listbox>
+        </div>
+        <div>
           <button
-            mat-button
-            (click)="enable2Fa()"
             *ngIf="!userService.user?.otp_enabled"
+            (click)="enable2Fa()"
+            class="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-md"
           >
             Enable 2FA
           </button>
-        </div>
-        <div *ngIf="userService.user?.otp_enabled">
           <button
-            mat-button
-            (click)="disable2Fa()"
             *ngIf="userService.user?.otp_enabled"
+            (click)="disable2Fa()"
+            class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             Disable 2FA
           </button>
         </div>
       </div>
-      <mat-divider></mat-divider>
-      <div
-        style="
-          display: flex;
-          gap: 16px;
-          justify-content: center;
-          padding-bottom: 0;
-        "
-      >
-        <div
-          style="
-            max-width: 100%;
-            width: 100%;
-            border-radius: 0;
-            padding-bottom: 0;
-          "
-        >
-          <div
-            style="
-              padding: 8px 16px;
-              display: flex;
-              gap: 16px;
-              justify-content: space-between;
-            "
-          >
-            <div style="display: flex; flex-direction: column">
-              <div class="mat-headline-4" style="margin: 0">
-                {{ (userService.user$ | async)?.f_name | uppercase }}
-              </div>
-              <div class="mat-headline-6" style="margin: 0">
-                {{ (userService.user$ | async)?.email }}
-              </div>
-              <div class="mat-caption">
-                Joined
-                {{ (userService.user$ | async)?.created_at | date : "medium" }}
-              </div>
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex flex-col">
+            <div class="text-lg font-medium text-gray-900">
+              {{ (userService.user$ | async)?.f_name | uppercase }}
+            </div>
+            <div class="text-sm text-gray-600">
+              {{ (userService.user$ | async)?.email }}
+            </div>
+            <div class="text-xs text-gray-500">
+              Joined
+              {{ (userService.user$ | async)?.created_at | date : "medium" }}
             </div>
           </div>
         </div>
+        <hr class="border-gray-200 my-4" />
       </div>
-      <mat-divider></mat-divider>
-    </mat-card>
+    </div>
   </div>
 </ng-template>
