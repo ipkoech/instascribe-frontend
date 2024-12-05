@@ -39,17 +39,16 @@ export class NotificationsComponent {
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
   ) {
-
     this.userId = this.userService.user?.id;
-          console.log(this.userId);
-          
+    console.log(this.userId);
+
     if (!this.userId) {
       this.userService.user$.subscribe((user) => {
         if (user) {
           this.userId = user.id;
           if (this.userId) {
             this.subscribeToChannels(this.userId);
-    this.getNotifications(`${this.api.base_uri}notifications`);
+            this.getNotifications(`${this.api.base_uri}notifications`);
           }
         }
       });
@@ -77,52 +76,90 @@ export class NotificationsComponent {
   subscribeToChannels(user_id: string) {
     this.websocketService.subscribeAndListenToChannel(
       'NotificationChannel',
-      { user_id: user_id},
+      { user_id: user_id },
       this.handleReadNotifications.bind(this)
     );
 
     this.cdr.detectChanges();
   }
 
-  getNotifications(url: string, pageEvent?: PageEvent) {
-    let params = new HttpParams()
-    .set('per_page', pageEvent ? pageEvent.pageSize.toString() : '10')
-    .set('page', pageEvent ? (pageEvent.pageIndex + 1).toString() : '1')
-    .set('q[s]', 'created_at desc')
-    .set('q[recipient_id_eq]', this.userId);
-  
-
-    this.http
-      .get(url, { params, withCredentials: true, observe: 'response' })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
-          this.notifications = response.body;
-
-          this.unreadNotificationIds = this.notifications?.data
-            .filter((notification: any) => !notification.read_at) // Get only unread notifications
-            .map((notification: any) => notification.id); // Extract their IDs
-          this.markAsReadSubject.next();
-
-          if (pageEvent) {
-            this.pageEvent = pageEvent;
-          }
-        },
-        complete: () => {},
-        error: (err) => {},
-      });
-  }
-
   handleReadNotifications() {
     // Update local notifications list and mark them as read
     this.notifications?.data.forEach((notification: any) => {
-      notification.read_at = new Date(); // Mark as read locally
+      notification.read_at = new Date();
     });
 
     // Update unread notification count
     this.notificationService.updateUnreadCount();
   }
 
-  paginate($event: PageEvent) {
-    this.getNotifications(`${this.api.base_uri}notifications`, $event);
+  //pagination logic
+  currentPage: number = 1;
+  totalPages: number = 1;
+  perPage: number = 10;
+
+  getNotifications(url: string, pageEvent?: PageEvent) {
+    let params = new HttpParams()
+      .set(
+        'per_page',
+        pageEvent ? pageEvent.pageSize.toString() : this.perPage.toString()
+      )
+      .set(
+        'page',
+        pageEvent
+          ? (pageEvent.pageIndex + 1).toString()
+          : this.currentPage.toString()
+      )
+      .set('q[s]', 'created_at desc')
+      .set('q[recipient_id_eq]', this.userId);
+
+    this.http
+      .get(url, { params, withCredentials: true, observe: 'response' })
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          this.notifications = response.body;
+          this.totalPages = Math.ceil(this.notifications?.total / this.perPage);
+          this.unreadNotificationIds = this.notifications?.data
+            .filter((notification: any) => !notification.read_at)
+            .map((notification: any) => notification.id);
+          this.markAsReadSubject.next();
+          if (pageEvent) {
+            this.pageEvent = pageEvent;
+          }
+        },
+        error: (err) => {
+          console.error('Error fetching notifications', err);
+        },
+      });
+  }
+
+  paginate(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.perPage = event.pageSize;
+    this.getNotifications(`${this.api.base_uri}notifications`, event);
+  }
+
+  goToFirstPage() {
+    this.currentPage = 1;
+    this.getNotifications(`${this.api.base_uri}notifications`);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getNotifications(`${this.api.base_uri}notifications`);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getNotifications(`${this.api.base_uri}notifications`);
+    }
+  }
+
+  goToLastPage() {
+    this.currentPage = this.totalPages;
+    this.getNotifications(`${this.api.base_uri}notifications`);
   }
 }
