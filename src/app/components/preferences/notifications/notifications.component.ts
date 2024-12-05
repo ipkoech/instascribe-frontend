@@ -66,6 +66,10 @@ export class NotificationsComponent {
       });
   }
 
+  ngOnInit() {
+    this.getNotifications(`${this.api.base_uri}notifications`);
+  }
+
   notifications: any | undefined;
   displayedColumns: string[] = ['index', 'title', 'body', 'read_at'];
   pageEvent: PageEvent = new PageEvent();
