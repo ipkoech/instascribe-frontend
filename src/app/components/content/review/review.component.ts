@@ -23,32 +23,81 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatChipsModule,
     MatMenuModule,
-    RouterModule],
+    RouterModule,
+  ],
   templateUrl: './review.component.html',
-  styleUrl: './review.component.scss'
+  styleUrl: './review.component.scss',
 })
 export class ReviewComponent {
-
-  displayedColumns = ['title', 'status', 'author', 'collaborators', 'created_at'];
+  displayedColumns = [
+    'title',
+    'status',
+    'author',
+    'collaborators',
+    'created_at',
+  ];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private draftService: DraftService) { }
+  constructor(private draftService: DraftService) {}
 
   ngOnInit() {
     this.loadDrafts();
   }
 
+  drafts: any[] = [];
+  paginatedDrafts: any[] = []; // Stores drafts for the current page
+  currentPage = 1; // Current page number
+  pageSize = 3; // Number of drafts per page
+  totalPages = 1; // Total pages available
+
   loadDrafts() {
     this.draftService.fetchDrafts({ 'filter[status]': 'reviewing' }).subscribe({
       next: (response: HttpResponse<any>) => {
-        this.dataSource = response.body;
-        if (this.paginator) {
-          this.paginator.length = response.body.length;
-          this.dataSource.sort = this.sort;
-        }
-      }
+        // Check if the response body contains the array, otherwise default to an empty array
+        this.drafts = Array.isArray(response.body)
+          ? response.body
+          : response.body?.data || [];
+        this.updatePagination();
+      },
+      error: (err) => {
+        console.error('Failed to load drafts:', err);
+        this.drafts = []; // Fallback to an empty array in case of an error
+        this.updatePagination();
+      },
     });
+  }
+
+  updatePagination() {
+    this.totalPages = Math.ceil(this.drafts.length / this.pageSize);
+    this.paginatedDrafts = this.drafts.slice(
+      (this.currentPage - 1) * this.pageSize,
+      this.currentPage * this.pageSize
+    );
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  goToFirstPage() {
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  goToLastPage() {
+    this.currentPage = this.totalPages;
+    this.updatePagination();
   }
 }

@@ -14,7 +14,6 @@ export class SettingsComponent {
   tabs = [
     { key: 'general', label: 'General' },
     { key: 'content', label: 'Content' },
-    { key: 'userManagement', label: 'User Management' },
     { key: 'aiConfig', label: 'AI Configuration' },
     { key: 'integrations', label: 'Integrations' },
     { key: 'workflow', label: 'Workflow' },
@@ -97,8 +96,8 @@ export class SettingsComponent {
 
   // State for Content Approval Process
   contentApproval = {
-    requireApproval: false, // Default state for toggle
-    approvalStages: 'single', // Default value for approval stages
+    requireApproval: false,
+    approvalStages: 'single',
   };
 
   // Function to save content approval settings
@@ -107,12 +106,6 @@ export class SettingsComponent {
       'Content Approval Process Settings Saved:',
       this.contentApproval
     );
-
-    // Add logic to send the `contentApproval` data to your backend or service
-    // Example:
-    // this.settingsService.saveContentApproval(this.contentApproval).subscribe(response => {
-    //   console.log('Settings saved successfully!', response);
-    // });
   }
 
   //user
@@ -125,8 +118,7 @@ export class SettingsComponent {
   addUser() {
     if (this.newUser.name && this.newUser.email && this.newUser.role) {
       console.log('User Added:', this.newUser);
-      // Logic to save the user (e.g., API call)
-      this.newUser = { name: '', email: '', role: '' }; // Reset the form
+      this.newUser = { name: '', email: '', role: '' };
     } else {
       console.log('All fields are required.');
     }
@@ -140,11 +132,141 @@ export class SettingsComponent {
 
   editUser(user: any) {
     console.log('Edit User:', user);
-    // Logic to edit the user
   }
 
   deleteUser(user: any) {
     console.log('Delete User:', user);
     this.users = this.users.filter((u) => u !== user);
+  }
+
+  // ai config
+  aiConfig = {
+    model: 'GPT-4',
+    apiKey: '',
+    useCustomPrompts: false,
+  };
+
+  contentGenerationSettings = {
+    temperature: 0.7,
+    maxTokens: 2048,
+    useKeywordOptimization: false,
+  };
+
+  aiTraining = {
+    enableCustomTraining: false,
+    trainingDataSource: '',
+  };
+
+  trainingDataSources = ['Data Source 1', 'Data Source 2', 'Data Source 3'];
+
+  startTraining() {
+    if (!this.aiTraining.trainingDataSource) {
+      alert('Please select a training data source.');
+      return;
+    }
+    console.log('AI Training started with:', this.aiTraining);
+  }
+
+  saveAISettings() {
+    console.log('AI Settings saved.');
+  }
+
+  //integrations
+  integrations = {
+    facebook: false,
+    twitter: false,
+    linkedin: false,
+  };
+
+  saveIntegrations() {
+    console.log('Saved integrations:', this.integrations);
+  }
+
+  cmsIntegrations = {
+    enableWordPress: false,
+    wordpressURL: '',
+    wordpressAPIKey: '',
+  };
+
+  emailMarketingIntegrations = {
+    mailchimpEnabled: false,
+    mailchimpApiKey: '',
+  };
+
+  analyticsIntegrations = {
+    googleAnalyticsEnabled: false,
+    googleAnalyticsID: '',
+  };
+
+  saveIntegrationSettings() {
+    console.log('Integration settings saved!');
+  }
+
+  //workflow
+  workflowSettings = {
+    enableApprovalWorkflow: false,
+    approvalStages: '2 Stages',
+  };
+
+  saveWorkflowSettings() {
+    console.log('Workflow Settings:', this.workflowSettings);
+  }
+
+  autoSchedulingSettings = {
+    enableAutoScheduling: false,
+    maxPostsPerDay: 5,
+    optimalPostingTime: 'Morning (8 AM - 12 PM)',
+  };
+
+  saveAutoSchedulingSettings() {
+    console.log('Auto-scheduling Settings:', this.autoSchedulingSettings);
+  }
+
+  contentRecyclingSettings = {
+    enableRecycling: false,
+    minInterval: 30,
+  };
+
+  saveContentRecyclingSettings() {
+    console.log('Content Recycling Settings:', this.contentRecyclingSettings);
+  }
+  collaborationSettings = {
+    enableCollaboration: false,
+    preferredTool: 'internalComments',
+  };
+
+  saveCollaborationSettings() {
+    console.log('Collaboration Settings:', this.collaborationSettings);
+  }
+
+  //analytics
+  performanceMetrics = {
+    trackPageViews: false,
+    trackUserEngagement: false,
+    trackConversions: false,
+  };
+
+  reportingSettings = {
+    frequency: 'weekly',
+    recipients: '',
+  };
+  customEvents = {
+    enableTracking: false,
+    eventName: '',
+  };
+  dataRetention = {
+    period: '12 Months',
+  };
+
+  retentionOptions = [
+    '1 Month',
+    '3 Months',
+    '6 Months',
+    '12 Months',
+    '24 Months',
+  ];
+
+  saveAnalyticsSettings() {
+    console.log('Analytics settings saved!');
   }
 }

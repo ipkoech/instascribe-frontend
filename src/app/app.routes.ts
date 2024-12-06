@@ -9,7 +9,7 @@ import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
 import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
 import { TeamManagementComponent } from './components/content/team-management/team-management.component';
-import { SettingsComponent } from './components/preferences/settings/settings.component';
+import { SettingsComponent } from './components/content/settings/settings.component';
 
 export const routes: Routes = [
   {

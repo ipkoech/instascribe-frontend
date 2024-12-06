@@ -19,8 +19,6 @@
       font-weight: 500;
     }
 
-
-
     .actions-section,
     .collaborators-section,
     .info-section {
@@ -83,15 +81,72 @@
     width: 100%;
   }
 }
-  .action-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px;
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
 
-    button {
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
+  button {
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
     }
   }
+}
+
+// new code
+
+// .toast-editor-container {
+//   height: 400px;
+//   max-width: 100%;
+//   margin-bottom: 20px;
+// }
+
+/* Overall Toolbar Styling */
+.toast-editor-container .toastui-editor-toolbar {
+  background-color: #f4f7fa; /* Light background for a clean, modern look */
+  border: 1px solid #e0e0e0; /* Soft border to make the toolbar stand out */
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+/* Toolbar button styling */
+.toast-editor-container .toastui-editor-toolbar button {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.toast-editor-container .toastui-editor-toolbar button:hover {
+  background-color: #e0e0e0; /* Slightly darker background when hovering */
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.toast-editor-container .toastui-editor-toolbar button:focus {
+  outline: none;
+  border-color: #6c63ff; /* Add focus outline to enhance accessibility */
+}
+
+/* Active/Selected buttons */
+.toast-editor-container .toastui-editor-toolbar button.active {
+  background-color: #6c63ff; /* Highlight active buttons with a color */
+  color: white;
+}
+
+/* Customize icons if necessary */
+.toast-editor-container .toastui-editor-toolbar button i {
+  font-size: 18px;
+  color: #4b4b4b; /* Default icon color */
+}
+
+/* Spacing between buttons */
+.toast-editor-container .toastui-editor-toolbar button + button {
+  margin-left: 8px;
+}
