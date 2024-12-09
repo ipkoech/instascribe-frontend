@@ -1,5 +1,8 @@
 <head>
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
+  />
 </head>
 <div class="editor-container">
   <div #editorElement class="monaco-editor"></div>
@@ -10,10 +13,18 @@
     <button mat-icon-button (click)="saveChanges()" matTooltip="Save changes">
       <mat-icon>save</mat-icon>
     </button>
-    <button mat-icon-button (click)="saveChangesAsDraft()" matTooltip="Save as a Draft">
+    <button
+      mat-icon-button
+      (click)="saveChangesAsDraft()"
+      matTooltip="Save as a Draft"
+    >
       <mat-icon>rate_review</mat-icon>
     </button>
-    <button mat-icon-button (click)="copyEditorContent()" matTooltip="Copy to clipboard">
+    <button
+      mat-icon-button
+      (click)="copyEditorContent()"
+      matTooltip="Copy to clipboard"
+    >
       <mat-icon>content_copy</mat-icon>
     </button>
   </div>
@@ -21,21 +32,32 @@
 
 <ng-template #saveDraftDialog>
   <div class="save-draft-dialog">
-    <h2 mat-dialog-title>Save Draft</h2>
+    <p mat-dialog-title style="font-size: 18px !important">Save Draft</p>
     <mat-dialog-content>
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Draft Title</mat-label>
-        <input matInput [formControl]="draftTitleControl" placeholder="Enter a title for your draft">
+        <mat-label style="font-size: 12px !important">Draft Title</mat-label>
+        <input
+          matInput
+          [formControl]="draftTitleControl"
+          placeholder="Enter a title for your draft"
+          style="font-size: 12px !important"
+        />
         <mat-error *ngIf="draftTitleControl.hasError('required')">
           Title is required
         </mat-error>
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-button [mat-dialog-close]="draftTitleControl.value"
-              [disabled]="!draftTitleControl.valid"
-              color="primary">
+      <button mat-button mat-dialog-close style="font-size: 12px !important">
+        Cancel
+      </button>
+      <button
+        mat-button
+        [mat-dialog-close]="draftTitleControl.value"
+        [disabled]="!draftTitleControl.valid"
+        color="primary"
+        style="font-size: 12px !important"
+      >
         Save Draft
       </button>
     </mat-dialog-actions>

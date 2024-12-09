@@ -1,9 +1,14 @@
 <div class="flex flex-col min-w-[500px]">
   <!-- Header -->
   <div class="flex items-center justify-between p-4 border-b">
-    <h2 class="text-xl font-semibold">Add New Role</h2>
-    <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" [mat-dialog-close]="true">
-      <mat-icon>close</mat-icon>
+    <h2 class="text-xl font-semibold" style="font-size: 20px !important">
+      Add New Role
+    </h2>
+    <button
+      class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+      [mat-dialog-close]="true"
+    >
+      <mat-icon style="transform: scale(0.9)">close</mat-icon>
     </button>
   </div>
 
@@ -13,28 +18,56 @@
       <!-- Role Name -->
       <div class="form-group">
         <mat-form-field class="w-full" appearance="fill">
-          <mat-label class="text-gray-600">Role Name</mat-label>
-          <input class="w-full rounded-lg" formControlName="name" matInput required placeholder="Enter role name">
+          <mat-label class="text-gray-600" style="font-size: 14px !important"
+            >Role Name</mat-label
+          >
+          <input
+            class="w-full rounded-lg"
+            formControlName="name"
+            matInput
+            required
+            placeholder="Enter role name"
+            style="font-size: 14px !important"
+          />
         </mat-form-field>
       </div>
 
       <!-- Description -->
       <div class="form-group">
         <mat-form-field class="w-full" appearance="fill">
-          <mat-label class="text-gray-600">Description</mat-label>
-          <textarea class="w-full rounded-lg" formControlName="description" matInput
-                    placeholder="Add description" rows="3"></textarea>
+          <mat-label class="text-gray-600" style="font-size: 14px !important"
+            >Description</mat-label
+          >
+          <textarea
+            class="w-full rounded-lg"
+            formControlName="description"
+            matInput
+            placeholder="Add description"
+            rows="3"
+            style="font-size: 14px !important"
+          ></textarea>
         </mat-form-field>
       </div>
 
       <!-- Permissions -->
       <div class="form-group">
         <mat-form-field class="w-full" appearance="fill">
-          <mat-label class="text-gray-600">Select Permissions</mat-label>
-          <mat-select multiple formControlName="permission_ids" class="w-full">
-            <mat-option *ngFor="let permission of permissions?.data" [value]="permission.id"
-                       class="hover:bg-gray-50">
-              {{permission.name}}
+          <mat-label class="text-gray-600" style="font-size: 14px !important"
+            >Select Permissions</mat-label
+          >
+          <mat-select
+            style="font-size: 14px !important"
+            multiple
+            formControlName="permission_ids"
+            class="w-full"
+          >
+            <mat-option
+              *ngFor="let permission of permissions?.data"
+              [value]="permission.id"
+              class="hover:bg-gray-50"
+              style="font-size: 14px !important"
+            >
+              {{ permission.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -44,14 +77,20 @@
 
   <!-- Footer -->
   <div class="flex justify-end gap-3 p-4 bg-gray-50 border-t">
-    <button mat-stroked-button
-            class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            [mat-dialog-close]="true">
+    <button
+      mat-stroked-button
+      class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+      [mat-dialog-close]="true"
+      style="font-size: 12px !important"
+    >
       Cancel
     </button>
-    <button mat-flat-button
-            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
-            (click)="on_submit()">
+    <button
+      mat-flat-button
+      class="px-6 py-2 bg-primary rounded-lg hover:bg-primary-dark transition-colors"
+      (click)="on_submit()"
+      style="font-size: 12px !important"
+    >
       Add Role
     </button>
   </div>
