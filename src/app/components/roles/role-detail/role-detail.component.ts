@@ -135,7 +135,7 @@ export class RoleDetailComponent {
               url: '/team-management',
               icon: 'group',
             },
-            { label: 'Roles', url: '/team-management/roles', icon: 'security' },
+            // { label: 'Roles', url: '/team-management/roles', icon: 'security' },
             { label: this.role.name, url: '', icon: 'lock' }, // Current role (not a link)
           ]);
         }
