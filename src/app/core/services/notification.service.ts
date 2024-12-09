@@ -41,7 +41,15 @@ export class NotificationService {
             this.new_notifications.push(data['notification']);
             this.unreadCount++; // Increment unread count when a new notification is received
           }
-        }
+          if(data.action ==='create'){
+            console.log('Created');
+            
+            this.handleCreateNotification(data.notification);
+          }
+          if(data.action === 'update'){
+            this.handleCreateNotification(data.notification);
+          }
+        } 
       );
     };
 
@@ -56,6 +64,13 @@ export class NotificationService {
         }
       });
     }
+  }
+
+  handleCreateNotification(notification: Notification) {
+    this.new_notifications.push(notification);
+    console.log(notification);
+    
+    this.unreadCount++; // Increment unread count when a new notification is received
   }
 
   // Fetch notifications and update unread count

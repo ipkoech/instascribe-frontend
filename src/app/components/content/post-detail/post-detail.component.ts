@@ -12,6 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-post-detail',
@@ -22,6 +24,7 @@ import { SnackBarService } from '../../../core/services/snack-bar.service';
        MatIconModule,
         MarkdownPipe,
     MatProgressSpinnerModule,
+    BreadCrumbComponent
   ],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss'
@@ -37,7 +40,8 @@ export class PostDetailComponent {
     private route: ActivatedRoute,
     private postService: DraftService,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.loadDraft();
   }
@@ -51,6 +55,12 @@ export class PostDetailComponent {
         next: (response: HttpResponse<any>) => {
           this.draft = response.body;
           this.isLoading = false;
+
+          this.breadcrumbService.setBreadcrumbs([
+            { label: 'Posts', url: '/content/posts', icon: 'article' },
+            { label: this.draft.title, url: `/content/posts/${this.draft.id}` }
+          ]);
+
         },
         error: (error) => {
           console.error('Error loading draft:', error);

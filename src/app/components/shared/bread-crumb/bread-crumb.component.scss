@@ -1,0 +1,8 @@
+
+:host {
+  display: block;
+}
+
+.group:hover .group-hover\:text-primary {
+  @apply text-primary;
+}

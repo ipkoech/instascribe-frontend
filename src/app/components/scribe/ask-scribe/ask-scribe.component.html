@@ -1,6 +1,6 @@
 <div class="ask-chat-container">
   <!-- Header Section -->
-  <div
+  <div *ngIf="conversation?.chats?.length === 0" 
     class="flex flex-col items-center justify-center py-1 text-center bg-white shadow-md sticky top-0 z-1000"
   >
     <div
