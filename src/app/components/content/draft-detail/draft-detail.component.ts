@@ -324,4 +324,11 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.selectedOption = option;
     this.dropdownOpen = false;
   }
+
+  // Is user a collaborator
+  isCollaborator(userId: string): boolean {
+    return this.draft?.collaborators!.some(
+      (collaborator) => collaborator.id === userId
+    );
+  }
 }

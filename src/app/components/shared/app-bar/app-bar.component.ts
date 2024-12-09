@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -51,49 +51,19 @@ import { ApiService } from '../../../core/services/api.service';
   styleUrl: './app-bar.component.scss',
 })
 export class AppBarComponent {
-  userId!: any
+  @Input() sidenav!: MatSidenav;
+  unreadNotitications: any
   constructor(
     public notificationsService: NotificationService,
     public theme: ThemeService,
     public userService: UserService,
+    public notificationService: NotificationService,
     public http: HttpClient,
     public api: ApiService,
+    public cdr: ChangeDetectorRef,
   ) {
-
-    this.userId =this.userService.user?.id
-
-    if(this.userId){
-    this.get_notifications(this.userId)
-    }
-    else{
-    this.userService.user$.subscribe((user) => {
-      if (user) {
-        this.userId = user.id;
-        this.get_notifications(this.userId)
-      }
-    });
-    }
-
+    this.unreadNotitications = this.notificationService.unreadCount;
   }
-  @Input() sidenav!: MatSidenav;
-  unreadNotitications: any
-// get user notifications
-get_notifications(user_id: any) {
-  return this.http.get<any>(this.api.base_uri_api + `users/${user_id}/notifications`, {
-    withCredentials: true,
-    observe: 'body',
-  }).subscribe({
-    next: (response: HttpResponse<any>) => {
-      // Filter the notifications where read_at is null (unread notifications)
-      this.unreadNotitications = response.body?.data.filter((notification: any) => notification.read_at === null);
-      console.log(this.unreadNotitications);
-      
-    },
-    error: (err) => {
-      console.error('Error fetching notifications', err);
-    }
-  });
-}
 
   // Method to open settings
   openSettings(): void {

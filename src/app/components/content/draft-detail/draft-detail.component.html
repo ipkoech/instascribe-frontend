@@ -56,7 +56,7 @@
     <button
       class="bg-black hover:bg-black text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
       (click)="startReview()"
-      *ngIf="draft?.status === 'editing'"
+      *ngIf="draft?.status === 'editing' || draft?.status === 'rejected'"
     >
       <mat-icon class="mr-2" style="transform: scale(0.7)"
         >check_circle</mat-icon
@@ -86,7 +86,7 @@
             style="font-size: 14px !important"
             *ngFor="let user of users?.data"
             [value]="user.id"
-            [disabled]="user.id === draft?.author?.id"
+            [disabled]="user.id === draft?.author?.id||isCollaborator(user.id)"
           >
             {{ user.f_name }} {{ user.l_name }}
           </mat-option>

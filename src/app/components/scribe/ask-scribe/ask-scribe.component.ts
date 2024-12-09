@@ -36,6 +36,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditResponseComponent } from '../edit-response/edit-response.component';
 import { SidenavService } from '../services/sidenav.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ConversationModel } from '../../../core/interfaces/conversation.model';
 
 interface SaveDraftDialogData {
   chat: ChatModel;
@@ -99,6 +100,7 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       }
       if (newConversationId) {
         this.conversation_id = newConversationId;
+        this.loadConversation(newConversationId); // Load the conversation details
         this.subscribeToChatUpdates(newConversationId); // Subscribing to updates for the new conversation
         this.currentChannelSubscription = newConversationId;
         this.loadChats(); // Load the existing chats for the conversation
@@ -106,7 +108,7 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.scrollToBottom();
@@ -114,6 +116,16 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       'scroll',
       this.onScroll.bind(this)
     );
+  }
+conversation!: ConversationModel
+
+  loadConversation(id: string) {
+    this.chatService.fetchConversation(id).subscribe({
+      next: (response: HttpResponse<any>) => {
+        // 
+        this.conversation = response.body;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -219,6 +231,8 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
         },
         complete: () => {
           this.isLoading = false;
+          this.scrollToBottom();
+          this.loadConversation(this.conversation_id);
         },
       });
   }
