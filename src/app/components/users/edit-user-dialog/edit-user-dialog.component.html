@@ -5,17 +5,17 @@
 <mat-dialog-content>
     <form style="display: flex;flex-direction: column; gap: 8px;padding: 4px;" [formGroup]="editUserForm">
         <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
-            appearance="outline" style="width: 100%;">
+            appearance="fill" style="width: 100%;">
             <mat-label>Name</mat-label>
             <input formControlName="f_name" type="text" matInput>
         </mat-form-field>
         <mat-form-field  [color]="((theme.getTheme()|async)==='light')?'primary':'accent'" subscriptSizing="dynamic"
-            appearance="outline" style="width: 100%;">
+            appearance="fill" style="width: 100%;">
             <mat-label>Email</mat-label>
             <mat-hint>If changed, you'll need to verify the new email.</mat-hint>
             <input formControlName="email" type="text" matInput>
         </mat-form-field>
-        <mat-form-field style="width: 100%;">
+        <mat-form-field style="width: 100%;" appearance="fill">
             <label for="userGroup">Select a Role</label>
             <mat-select multiple="true" formControlName="role_ids">
                 <mat-option *ngFor="let role of roles?.data" [value]="role.id">{{role.name}}</mat-option>

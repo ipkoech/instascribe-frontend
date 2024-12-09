@@ -10,6 +10,7 @@ export interface DraftModel {
   status: string;
   active: boolean;
   user_id: string;
+  access_level: string;
   created_at: Date;
   updated_at: Date;
   author?: UserModel;

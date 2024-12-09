@@ -18,7 +18,7 @@
         <p class="location">{{user.last_sign_in_at | date:'mediumDate'}}</p>
       </div>
     </div>
-    <div *ngIf="!user?.otp_enabled">
+    <!-- <div *ngIf="!user?.otp_enabled">
       <button
         mat-raised-button
         (click)="openEnable2FaDialog()"
@@ -35,7 +35,7 @@
       >
         Disable 2FA
       </button>
-    </div>
+    </div> -->
     <button (click)="edit_user(user)" mat-stroked-button class="edit-button">
       Edit <mat-icon>edit</mat-icon>
     </button>
@@ -88,7 +88,7 @@
       </button>
     </mat-dialog-actions>
   </ng-template>
-  
+
   <!-- Confirmation Dialog for Disabling 2FA -->
   <ng-template #disable2FaDialog>
     <h2 style="font-size: 1.5em" mat-dialog-title>

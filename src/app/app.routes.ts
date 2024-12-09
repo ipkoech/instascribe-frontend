@@ -10,6 +10,8 @@ import { NotificationsComponent } from './components/preferences/notifications/n
 import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
 import { TeamManagementComponent } from './components/content/team-management/team-management.component';
 import { SettingsComponent } from './components/content/settings/settings.component';
+import { UserDetailComponent } from './components/users/user-detail/user-detail.component';
+import { RoleDetailComponent } from './components/roles/role-detail/role-detail.component';
 
 export const routes: Routes = [
   {
@@ -75,6 +77,8 @@ export const routes: Routes = [
       { path: 'notifications', component: NotificationsComponent },
       { path: 'library-management', component: LibraryManagementComponent },
       { path: 'team-management', component: TeamManagementComponent },
+      { path: 'team-management/users/:id', component: UserDetailComponent },
+      { path: 'team-management/roles/:id', component: RoleDetailComponent },
       { path: 'settings', component: SettingsComponent },
     ],
   },

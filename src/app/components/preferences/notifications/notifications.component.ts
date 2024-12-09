@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -30,7 +30,7 @@ import { WebSocketService } from '../../../core/services/web-socket.service';
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss',
 })
-export class NotificationsComponent {
+export class NotificationsComponent implements AfterViewInit {
   constructor(
     private http: HttpClient,
     private api: ApiService,
@@ -40,35 +40,25 @@ export class NotificationsComponent {
     private cdr: ChangeDetectorRef
   ) {
     this.userId = this.userService.user?.id;
-    console.log(this.userId);
-
-    if (!this.userId) {
+    if (this.userId) {
+      this.subscribeToChannels(this.userId);
+      this.getNotifications(`${this.api.base_uri}notifications`);
+    } else {
       this.userService.user$.subscribe((user) => {
         if (user) {
           this.userId = user.id;
-          if (this.userId) {
-            this.subscribeToChannels(this.userId);
-            this.getNotifications(`${this.api.base_uri}notifications`);
-          }
+          this.subscribeToChannels(this.userId);
+          this.getNotifications(`${this.api.base_uri}notifications`);
         }
       });
     }
 
     this.markAsReadSubject
-      .pipe(debounceTime(300)) // Debounce for 1 second
-      .subscribe(() => {
-        if (this.unreadNotificationIds.length > 0) {
-          this.websocketService.sendMessage('NotificationChannel', {
-            action: 'bulk_read',
-            notification_ids: this.unreadNotificationIds,
-          });
-        }
-      });
+      .pipe(debounceTime(300))
+      .subscribe(() => this.markNotificationsAsRead());
   }
 
-  ngOnInit() {
-    this.getNotifications(`${this.api.base_uri}notifications`);
-  }
+  ngAfterViewInit(): void {}
 
   notifications: any | undefined;
   displayedColumns: string[] = ['index', 'title', 'body', 'read_at'];
@@ -76,6 +66,9 @@ export class NotificationsComponent {
   userId: any;
   private markAsReadSubject = new Subject<void>();
   unreadNotificationIds: string[] = [];
+  currentPage: number = 1;
+  totalPages: number = 1;
+  perPage: number = 10;
 
   subscribeToChannels(user_id: string) {
     this.websocketService.subscribeAndListenToChannel(
@@ -83,37 +76,20 @@ export class NotificationsComponent {
       { user_id: user_id },
       this.handleReadNotifications.bind(this)
     );
-
-    this.cdr.detectChanges();
   }
 
   handleReadNotifications() {
-    // Update local notifications list and mark them as read
     this.notifications?.data.forEach((notification: any) => {
       notification.read_at = new Date();
     });
-
-    // Update unread notification count
     this.notificationService.updateUnreadCount();
+    this.cdr.detectChanges();
   }
-
-  //pagination logic
-  currentPage: number = 1;
-  totalPages: number = 1;
-  perPage: number = 10;
 
   getNotifications(url: string, pageEvent?: PageEvent) {
     let params = new HttpParams()
-      .set(
-        'per_page',
-        pageEvent ? pageEvent.pageSize.toString() : this.perPage.toString()
-      )
-      .set(
-        'page',
-        pageEvent
-          ? (pageEvent.pageIndex + 1).toString()
-          : this.currentPage.toString()
-      )
+      .set('per_page', pageEvent ? pageEvent.pageSize.toString() : this.perPage.toString())
+      .set('page', pageEvent ? (pageEvent.pageIndex + 1).toString() : this.currentPage.toString())
       .set('q[s]', 'created_at desc')
       .set('q[recipient_id_eq]', this.userId);
 
@@ -126,7 +102,7 @@ export class NotificationsComponent {
           this.unreadNotificationIds = this.notifications?.data
             .filter((notification: any) => !notification.read_at)
             .map((notification: any) => notification.id);
-          this.markAsReadSubject.next();
+          this.markAsReadSubject.next(); // Trigger mark as read when notifications are loaded
           if (pageEvent) {
             this.pageEvent = pageEvent;
           }
@@ -135,6 +111,23 @@ export class NotificationsComponent {
           console.error('Error fetching notifications', err);
         },
       });
+  }
+
+  markNotificationsAsRead() {
+    if (this.unreadNotificationIds.length > 0) {
+      this.websocketService.sendMessage('NotificationChannel', {
+        action: 'bulk_read',
+        notification_ids: this.unreadNotificationIds,
+      });
+      // Optionally update the local list to reflect read status
+      this.notifications?.data.forEach((notification: any) => {
+        if (this.unreadNotificationIds.includes(notification.id)) {
+          notification.read_at = new Date();
+        }
+      });
+      this.notificationService.updateUnreadCount();
+      this.cdr.detectChanges();
+    }
   }
 
   paginate(event: PageEvent) {

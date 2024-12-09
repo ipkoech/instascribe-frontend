@@ -48,9 +48,8 @@ export class DraftsComponent implements OnInit {
 
   loadDrafts() {
     this.draftService
-      .fetchDrafts({ 'filter[status]': '!reviewing' })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
+      .fetchDrafts({ 'filter[status]': '!reviewing,approved' })
+      .subscribe({        next: (response: HttpResponse<any>) => {
           this.dataSource = response.body;
           if (this.paginator) {
             this.paginator.length = response.body.length;

@@ -12,6 +12,7 @@ import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.co
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../../../core/services/user.service';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
@@ -30,31 +31,50 @@ export class UserDetailComponent {
   @ViewChild('enable2FaDialog') enable2FaDialog!: TemplateRef<any>;
   @ViewChild('disable2FaDialog') disable2FaDialog!: TemplateRef<any>;
 
-  constructor(private activateRoute: ActivatedRoute, private fb: FormBuilder, private http: HttpClient, private api: ApiService,private dialog:MatDialog,
+  constructor(private activateRoute: ActivatedRoute, private fb: FormBuilder, private http: HttpClient, private api: ApiService, private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private userService: UserService,
 
   ) {
-    this.activateRoute.data.subscribe(({ user }) => {
-      this.user = user;
-      if (this.user) {
-        this.refresh(user)
+    // this.activateRoute.data.subscribe(({ user }) => {
+    //   console.log(user);
+
+    //   this.user = user;
+    //   if (this.user) {
+    //     this.refresh(user)
+    //   }
+    // }),
+
+    (this.accountForm = this.fb.group({
+      username: [''],
+      email: [''],
+      firstName: [''],
+      lastName: [''],
+      job: [''],
+      aboutMe: [''],
+    }));
+
+
+    this.route.params.subscribe((params) => {
+      this.user_id = params['id'];
+      if (this.user_id) {
+        this.http.get(`${this.api.base_uri}users/${this.user_id}`, { withCredentials: true, observe: 'response' }).subscribe({
+          next: (response: HttpResponse<any>) => {
+            this.user = response.body;
+          },
+          error: (error: HttpErrorResponse) => {
+            this.snackbarService.info(error.error.message);
+          }
+        });
       }
-    }),
-      (this.accountForm = this.fb.group({
-        username: [''],
-        email: [''],
-        firstName: [''],
-        lastName: [''],
-        job: [''],
-        aboutMe: [''],
-      }));
+    });
 
   }
   accountForm: FormGroup;
-
+  user_id!: string;
   user: UserModel | undefined;
 
   profileImageUrl!: string;
@@ -66,8 +86,8 @@ export class UserDetailComponent {
       formData.append('profile_image', file);
       this.http.post(`${this.api.base_uri}users/${this.user?.id}/profile-image`, formData, { withCredentials: true, observe: 'response' })
         .subscribe((response: HttpResponse<any>) => {
-          if(response.ok)
-          this.profileImageUrl = response.body.data.profile_image_url;
+          if (response.ok)
+            this.profileImageUrl = response.body.data.profile_image_url;
 
         });
     }
@@ -84,8 +104,8 @@ export class UserDetailComponent {
       hasBackdrop: true,
     });
     dialogef.afterClosed().subscribe((result) => {
-      if(result){
-      this.refresh(user);
+      if (result) {
+        this.refresh(user);
       }
     });
   }
@@ -107,7 +127,7 @@ export class UserDetailComponent {
 
           this.cdr.detectChanges();
         },
-        complete: () => {},
+        complete: () => { },
         error: (err) => {
           this.snackbarService.show(
             'Invalid or expired verification code. Please try again.',
@@ -137,7 +157,7 @@ export class UserDetailComponent {
         next: (response: HttpResponse<any>) => {
           this.user = response.body;
         },
-        error: (error: HttpErrorResponse) => {},
+        error: (error: HttpErrorResponse) => { },
       });
   }
 

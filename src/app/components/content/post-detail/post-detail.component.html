@@ -1,0 +1,74 @@
+<div class="post-detail-container">
+  <!-- Loading and Error states remain the same -->
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && !error && draft" class="preview-container">
+    <mat-tab-group>
+      <!-- Twitter Preview -->
+      <mat-tab label="Twitter">
+        <div class="twitter-preview preview-card">
+          <button mat-icon-button class="copy-button" (click)="copyContent()" matTooltip="Copy content">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+
+          <div class="user-info">
+            <!-- <img class="avatar" src="assets/default-avatar.png"> -->
+            <div class="user-details">
+              <div class="name">{{draft.author?.f_name}}</div>
+              <div class="handle">{{draft.author?.f_name?.toLowerCase()}}</div>
+            </div>
+          </div>
+          <div class="content" [innerHTML]="draft.content | markdown"></div>
+          <div class="timestamp">{{draft.created_at | date}}</div>
+        </div>
+      </mat-tab>
+
+      <!-- LinkedIn Preview -->
+      <mat-tab label="LinkedIn">
+        <div class="linkedin-preview preview-card">
+          <button mat-icon-button class="copy-button" (click)="copyContent()" matTooltip="Copy content">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+
+          <div class="user-info">
+            <!-- <img class="avatar" src="assets/default-avatar.png"> -->
+            <div class="user-details">
+              <div class="name">{{draft.author?.f_name}}</div>
+              <div class="title">Content Creator</div>
+            </div>
+          </div>
+          <div class="content" [innerHTML]="draft.content | markdown"></div>
+        </div>
+      </mat-tab>
+
+      <!-- Facebook Preview -->
+      <mat-tab label="Facebook">
+        <div class="facebook-preview preview-card">
+          <button mat-icon-button class="copy-button" (click)="copyContent()" matTooltip="Copy content">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+
+          <div class="user-info">
+            <!-- <img class="avatar" src="assets/default-avatar.png"> -->
+            <div class="name">{{draft.author?.f_name}}</div>
+          </div>
+          <div class="content" [innerHTML]="draft.content | markdown"></div>
+          <div class="timestamp">{{draft.created_at | date}}</div>
+        </div>
+      </mat-tab>
+
+      <!-- Blog Preview -->
+      <mat-tab label="Blog">
+        <div class="blog-preview preview-card">
+          <button mat-icon-button class="copy-button" (click)="copyContent()" matTooltip="Copy content">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+          <h1 class="title">{{draft.title}}</h1>
+          <div class="author">By {{draft.author?.f_name}}</div>
+          <div class="date">{{draft.created_at | date:'mediumDate'}}</div>
+          <div class="content" [innerHTML]="draft.content | markdown"></div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

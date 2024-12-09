@@ -94,5 +94,13 @@ export class DraftService {
     );
   }
 
+  // Fetch Shared drafts
+  fetcSharedDrafts(params: any = {}): Observable<any> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach(key => {
+      httpParams = httpParams.append(key, params[key]);
+    });
+    return this.http.get(`${this.api.base_uri}drafts/shared-drafts`, { params: httpParams, withCredentials: true, observe: 'response' });
+  }
 }
 

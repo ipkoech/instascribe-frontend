@@ -120,6 +120,7 @@ export class UserService {
       observe: 'body',
     });
   }
+
 }
 
 export const userResolver: ResolveFn<UserModel> = (

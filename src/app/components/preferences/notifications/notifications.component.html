@@ -32,9 +32,9 @@
         >
           <td class="px-6 py-4">{{ index + 1 }}</td>
           <td class="px-6 py-4">{{ element.data?.title }}</td>
-          <td class="px-6 py-4">{{ element.body }}</td>
+          <td class="px-6 py-4">{{ element.data?.description }}</td>
           <td class="px-6 py-4">
-            {{ element.data.read_at | date : "medium" }}
+            {{ element.read_at | date : "short" }}
           </td>
         </tr>
       </tbody>

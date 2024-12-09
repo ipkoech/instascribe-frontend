@@ -1,43 +1,58 @@
-<mat-dialog-content>
-  <div class="header">
-    <h3 style="font-size: 1em">ADD NEW ROLE</h3>
-    <mat-icon style="cursor: pointer" [mat-dialog-close]="true">close</mat-icon>
+<div class="flex flex-col min-w-[500px]">
+  <!-- Header -->
+  <div class="flex items-center justify-between p-4 border-b">
+    <h2 class="text-xl font-semibold">Add New Role</h2>
+    <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" [mat-dialog-close]="true">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
-  <div class="content">
-    <form class="user-information" [formGroup]="roleForm">
-      <div class="form-field">
-        <label for="role">Role*</label>
-        <input
-          type="text"
-          id="role"
-          placeholder="Role"
-          formControlName="name"
-        />
+
+  <!-- Form Content -->
+  <div class="p-6">
+    <form class="flex flex-col space-y-4" [formGroup]="roleForm">
+      <!-- Role Name -->
+      <div class="form-group">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label class="text-gray-600">Role Name</mat-label>
+          <input class="w-full rounded-lg" formControlName="name" matInput required placeholder="Enter role name">
+        </mat-form-field>
       </div>
-      <mat-form-field style="width: 100%">
-        <mat-label>Enter Role Description</mat-label>
-        <textarea
-          matInput
-          placeholder="Add Description"
-          formControlName="description"
-        ></textarea>
-      </mat-form-field>
-      <mat-form-field style="width: 100%">
-        <label for="permissions">Select a Permission*</label>
-        <mat-select multiple="true" formControlName="permission_ids">
-          <mat-option
-            *ngFor="let permission of permissions?.data"
-            [value]="permission.id"
-            >{{ permission.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+
+      <!-- Description -->
+      <div class="form-group">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label class="text-gray-600">Description</mat-label>
+          <textarea class="w-full rounded-lg" formControlName="description" matInput
+                    placeholder="Add description" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Permissions -->
+      <div class="form-group">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label class="text-gray-600">Select Permissions</mat-label>
+          <mat-select multiple formControlName="permission_ids" class="w-full">
+            <mat-option *ngFor="let permission of permissions?.data" [value]="permission.id"
+                       class="hover:bg-gray-50">
+              {{permission.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </form>
-    <div class="actions">
-      <button class="add-new-user-button" (click)="on_submit()">
-        Add Role
-      </button>
-      <button class="cancel-button" [mat-dialog-close]="true">Cancel</button>
-    </div>
   </div>
-</mat-dialog-content>
+
+  <!-- Footer -->
+  <div class="flex justify-end gap-3 p-4 bg-gray-50 border-t">
+    <button mat-stroked-button
+            class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            [mat-dialog-close]="true">
+      Cancel
+    </button>
+    <button mat-flat-button
+            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+            (click)="on_submit()">
+      Add Role
+    </button>
+  </div>
+</div>
