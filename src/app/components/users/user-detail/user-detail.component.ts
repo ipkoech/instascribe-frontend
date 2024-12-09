@@ -22,6 +22,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../core/services/user.service';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
@@ -33,6 +35,7 @@ import { UserService } from '../../../core/services/user.service';
     EditUserDialogComponent,
     MatDialogModule,
     RouterModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
@@ -51,7 +54,8 @@ export class UserDetailComponent {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private snackbarService: SnackBarService,
-    private userService: UserService
+    private userService: UserService,
+    private breadcrumbService: BreadcrumbService
   ) {
     // this.activateRoute.data.subscribe(({ user }) => {
     //   console.log(user);
@@ -82,6 +86,19 @@ export class UserDetailComponent {
           .subscribe({
             next: (response: HttpResponse<any>) => {
               this.user = response.body;
+              // Update breadcrumbs once user data is fetched
+              this.breadcrumbService.setBreadcrumbs([
+                {
+                  label: 'Team Management',
+                  url: '/team-management',
+                  icon: 'group',
+                },
+                {
+                  label: `${this.user?.f_name} ${this.user?.l_name}`,
+                  url: '',
+                  icon: 'person',
+                },
+              ]);
             },
             error: (error: HttpErrorResponse) => {
               this.snackbarService.info(error.error.message);

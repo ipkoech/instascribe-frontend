@@ -41,6 +41,8 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { ApiService } from '../../../core/services/api.service';
 import { UserModelsResponse } from '../../../core/interfaces/user.model';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-draft-review-detail',
@@ -55,6 +57,7 @@ import { UserModelsResponse } from '../../../core/interfaces/user.model';
     MatDialogModule,
     MatButtonModule,
     MatTooltipModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './draft-review-detail.component.html',
   styleUrl: './draft-review-detail.component.scss',
@@ -79,7 +82,8 @@ export class DraftReviewDetailComponent implements AfterViewInit {
     private dialog: MatDialog,
     private fb: FormBuilder,
     private http: HttpClient,
-    private api: ApiService
+    private api: ApiService,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
@@ -164,6 +168,10 @@ export class DraftReviewDetailComponent implements AfterViewInit {
     this.draftService.fetchDraft(id).subscribe({
       next: (response: HttpResponse<any>) => {
         this.draft = response.body;
+        this.breadcrumbService.setBreadcrumbs([
+          { label: 'Review', url: '/content/review', icon: 'article' },
+          { label: this.draft.title, url: `/content/review/${this.draft.id}` },
+        ]);
         this.collaboratorIds.clear();
         // Populate the Set with collaborator IDs
         if (this.draft.collaborators) {

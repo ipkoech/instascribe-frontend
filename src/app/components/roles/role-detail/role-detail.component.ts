@@ -29,6 +29,8 @@ import {
 import { RoleModel } from '../../../core/interfaces/role.model';
 import { ApiService } from '../../../core/services/api.service';
 import { RoleService } from '../../../core/services/role.service';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-role-detail',
@@ -49,6 +51,7 @@ import { RoleService } from '../../../core/services/role.service';
     FormsModule,
     MatDialogModule,
     MatCheckboxModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './role-detail.component.html',
   styleUrl: './role-detail.component.scss',
@@ -74,7 +77,8 @@ export class RoleDetailComponent {
     private api: ApiService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.activateRoute.params.subscribe((params) => {
       this.role_id = params['id'];
@@ -123,6 +127,18 @@ export class RoleDetailComponent {
     this.roleService.fetchRole(role_id).subscribe({
       next: (response: HttpResponse<any>) => {
         this.role = response.body;
+        // Set breadcrumbs
+        if (this.role) {
+          this.breadcrumbService.setBreadcrumbs([
+            {
+              label: 'Team Management',
+              url: '/team-management',
+              icon: 'group',
+            },
+            { label: 'Roles', url: '/team-management/roles', icon: 'security' },
+            { label: this.role.name, url: '', icon: 'lock' }, // Current role (not a link)
+          ]);
+        }
       },
       error: (err) => {},
     });

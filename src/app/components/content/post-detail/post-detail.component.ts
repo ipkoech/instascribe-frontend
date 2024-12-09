@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
@@ -18,16 +17,17 @@ import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.compon
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [CommonModule,
-     MatCardModule,
-      MatTabsModule,
-       MatIconModule,
-        MarkdownPipe,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatTabsModule,
+    MatIconModule,
+    MarkdownPipe,
     MatProgressSpinnerModule,
-    BreadCrumbComponent
+    BreadCrumbComponent,
   ],
   templateUrl: './post-detail.component.html',
-  styleUrl: './post-detail.component.scss'
+  styleUrl: './post-detail.component.scss',
 })
 export class PostDetailComponent {
   selectedPlatform: string = 'twitter';
@@ -46,11 +46,11 @@ export class PostDetailComponent {
     this.loadDraft();
   }
 
-   loadDraft() {
+  loadDraft() {
     this.isLoading = true;
     this.error = null;
 
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.postService.fetchDraft(params['id']).subscribe({
         next: (response: HttpResponse<any>) => {
           this.draft = response.body;
@@ -58,16 +58,15 @@ export class PostDetailComponent {
 
           this.breadcrumbService.setBreadcrumbs([
             { label: 'Posts', url: '/content/posts', icon: 'article' },
-            { label: this.draft.title, url: `/content/posts/${this.draft.id}` }
+            { label: this.draft.title, url: `/content/posts/${this.draft.id}` },
           ]);
-
         },
         error: (error) => {
           console.error('Error loading draft:', error);
           this.error = 'Failed to load post';
           this.isLoading = false;
           this.router.navigate(['../']);
-        }
+        },
       });
     });
   }
@@ -82,5 +81,4 @@ export class PostDetailComponent {
       this.snackBarService.info('Content copied to clipboard', 300);
     });
   }
-
 }

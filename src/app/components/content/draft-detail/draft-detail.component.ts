@@ -39,6 +39,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { ApiService } from '../../../core/services/api.service';
 import { UserModelsResponse } from '../../../core/interfaces/user.model';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 @Component({
   selector: 'app-draft-detail',
   standalone: true,
@@ -52,6 +54,7 @@ import { UserModelsResponse } from '../../../core/interfaces/user.model';
     MatDialogModule,
     MatButtonModule,
     MatTooltipModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './draft-detail.component.html',
   styleUrl: './draft-detail.component.scss',
@@ -76,7 +79,8 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     private dialog: MatDialog,
     private fb: FormBuilder,
     private api: ApiService,
-    private http: HttpClient
+    private http: HttpClient,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
@@ -169,6 +173,10 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.draftService.fetchDraft(id).subscribe({
       next: (response: HttpResponse<any>) => {
         this.draft = response.body;
+        this.breadcrumbService.setBreadcrumbs([
+          { label: 'Drafts', url: '/content/drafts', icon: 'article' },
+          { label: this.draft.title, url: `/content/drafts/${this.draft.id}` },
+        ]);
         this.draftService.subscribeToDraftChannel(this.draft);
         if (this.editor && this.draft.content) {
           this.editor.setMarkdown(this.draft.content);
