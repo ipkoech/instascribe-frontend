@@ -76,7 +76,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     private dialog: MatDialog,
     private fb: FormBuilder,
     private api: ApiService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
@@ -118,7 +118,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       },
     };
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
-      next: (response: HttpResponse<any>) => {},
+      next: (response: HttpResponse<any>) => { },
     });
   }
 
@@ -142,7 +142,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
             this.users = response.body;
           }
         },
-        error: (errorResponse: HttpErrorResponse) => {},
+        error: (errorResponse: HttpErrorResponse) => { },
       });
   }
 

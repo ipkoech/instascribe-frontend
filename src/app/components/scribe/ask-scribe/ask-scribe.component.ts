@@ -37,6 +37,7 @@ import { EditResponseComponent } from '../edit-response/edit-response.component'
 import { SidenavService } from '../services/sidenav.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ConversationModel } from '../../../core/interfaces/conversation.model';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 interface SaveDraftDialogData {
   chat: ChatModel;
@@ -59,6 +60,7 @@ interface SaveDraftDialogData {
     MatProgressSpinnerModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatProgressBarModule
   ],
   templateUrl: './ask-scribe.component.html',
   styleUrl: './ask-scribe.component.scss',
@@ -139,7 +141,18 @@ conversation!: ConversationModel
   launchContentEditor(message: ChatModel) {
     this.sidenavService.toggleEditSidenav(message);
   }
-
+  getFileFormat(contentType: any): string {
+    const formats: { [key: string]: string } = {
+      'application/pdf': 'PDF',
+      'application/msword': 'DOC',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+      'text/plain': 'TXT',
+      'application/vnd.ms-excel': 'XLS',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX'
+    };
+    return formats[contentType] || 'FILE';
+  }
+  
   onScroll(): void {
     if (this.messagesContainer) {
       const element = this.messagesContainer.nativeElement;
@@ -191,7 +204,6 @@ conversation!: ConversationModel
       if (this.selectedFile) {
         this.fileName = this.selectedFile.name;
         this.fileType = this.selectedFile.type;
-        console.log(this.fileName);
       }
     }
   }
@@ -216,7 +228,8 @@ conversation!: ConversationModel
   sendChatMessage(userInput: string, file?: File): void {
     this.isLoading = true;
     const conversationId = this.conversation_id;
-
+    this.isUploading = true;
+    this.uploadProgress = 0;
     this.chatService
       .sendChatMessage(conversationId, userInput, file)
       .subscribe({
@@ -228,11 +241,12 @@ conversation!: ConversationModel
         error: (error) => {
           console.error('Error sending message:', error);
           this.isLoading = false;
+          this.loadChats();
         },
         complete: () => {
           this.isLoading = false;
-          this.scrollToBottom();
           this.loadConversation(this.conversation_id);
+          this.scrollToBottom();
         },
       });
   }
@@ -395,6 +409,21 @@ conversation!: ConversationModel
         this.loadChats(); // Refresh the chat list
         this.scrollToBottom(); // Scroll to the bottom
       }
+      if (data.action === 'file_attached') {
+        // File upload completed
+        this.isUploading = false;
+        this.uploadProgress = 100;
+        
+        // Update chat with file information
+        const messageIndex = this.chats?.data.findIndex(msg => msg.id === data.chat_id);
+        if (messageIndex !== -1) {
+          // this.chats!.data[messageIndex!].file_url = data.file_url;
+          // this.chats!.data[messageIndex!].file_name = data.file_name;
+        }
+      }
     }
   }
+  uploadProgress: number = 0;
+  isUploading: boolean = false;
+
 }
