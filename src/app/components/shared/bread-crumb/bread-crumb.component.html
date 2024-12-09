@@ -1,21 +1,42 @@
 <nav class="bg-white rounded-lg shadow-sm px-4 py-3 mb-4">
-  <ol class="flex items-center flex-wrap">
-    <li *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last" 
-        class="flex items-center">
-      <a [routerLink]="breadcrumb.url"
-         class="flex items-center group">
-        <mat-icon *ngIf="breadcrumb.icon"  style="transform: scale(0.8);"
-                  class="h-4 w-4 mr-2 text-gray-500 group-hover:text-primary transition-colors">
-          {{breadcrumb.icon}}
+  <ol class="flex items-center space-x-2">
+    <li
+      *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last"
+      class="flex items-center"
+    >
+      <!-- Link or Label -->
+      <a
+        *ngIf="!last"
+        [routerLink]="breadcrumb.url"
+        class="text-sm font-medium text-gray-500 hover:text-primary flex items-center"
+      >
+        <mat-icon
+          *ngIf="breadcrumb.icon"
+          style="transform: scale(0.8)"
+          class="h-4 w-4 mr-1"
+        >
+          {{ breadcrumb.icon }}
         </mat-icon>
-        <span class="text-sm font-medium" 
-              [class.text-gray-500]="!last"
-              [class.text-primary]="last"
-              [class.hover:text-primary]="!last">
-          {{breadcrumb.label}}
-        </span>
+        {{ breadcrumb.label }}
       </a>
-      <span *ngIf="!last" class="mx-2 text-gray-400">
+
+      <!-- Current Breadcrumb (No Link) -->
+      <span
+        *ngIf="last"
+        class="text-sm font-medium text-primary flex items-center"
+      >
+        <mat-icon
+          *ngIf="breadcrumb.icon"
+          style="transform: scale(0.8)"
+          class="h-4 w-4 mr-1"
+        >
+          {{ breadcrumb.icon }}
+        </mat-icon>
+        {{ breadcrumb.label }}
+      </span>
+
+      <!-- Separator -->
+      <span *ngIf="!last" class="text-gray-400 flex items-center">
         <mat-icon class="h-4 w-4">chevron_right</mat-icon>
       </span>
     </li>

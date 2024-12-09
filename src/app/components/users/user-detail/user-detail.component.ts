@@ -1,18 +1,29 @@
-import { ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { UserModel } from '../../../core/interfaces/user.model';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { ApiService } from '../../../core/services/api.service';
 import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../core/services/user.service';
+import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
@@ -22,22 +33,29 @@ import { UserService } from '../../../core/services/user.service';
     MatIconModule,
     MatDividerModule,
     EditUserDialogComponent,
-    MatDialogModule
+    MatDialogModule,
+    RouterModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  styleUrl: './user-detail.component.scss',
 })
 export class UserDetailComponent {
   @ViewChild('enable2FaDialog') enable2FaDialog!: TemplateRef<any>;
   @ViewChild('disable2FaDialog') disable2FaDialog!: TemplateRef<any>;
 
-  constructor(private activateRoute: ActivatedRoute, private fb: FormBuilder, private http: HttpClient, private api: ApiService, private dialog: MatDialog,
+  constructor(
+    private activateRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private api: ApiService,
+    private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private snackbarService: SnackBarService,
     private userService: UserService,
-
+    private breadcrumbService: BreadcrumbService
   ) {
     // this.activateRoute.data.subscribe(({ user }) => {
     //   console.log(user);
@@ -48,30 +66,46 @@ export class UserDetailComponent {
     //   }
     // }),
 
-    (this.accountForm = this.fb.group({
+    this.accountForm = this.fb.group({
       username: [''],
       email: [''],
       firstName: [''],
       lastName: [''],
       job: [''],
       aboutMe: [''],
-    }));
-
+    });
 
     this.route.params.subscribe((params) => {
       this.user_id = params['id'];
       if (this.user_id) {
-        this.http.get(`${this.api.base_uri}users/${this.user_id}`, { withCredentials: true, observe: 'response' }).subscribe({
-          next: (response: HttpResponse<any>) => {
-            this.user = response.body;
-          },
-          error: (error: HttpErrorResponse) => {
-            this.snackbarService.info(error.error.message);
-          }
-        });
+        this.http
+          .get(`${this.api.base_uri}users/${this.user_id}`, {
+            withCredentials: true,
+            observe: 'response',
+          })
+          .subscribe({
+            next: (response: HttpResponse<any>) => {
+              this.user = response.body;
+              // Update breadcrumbs once user data is fetched
+              this.breadcrumbService.setBreadcrumbs([
+                {
+                  label: 'Team Management',
+                  url: '/team-management',
+                  icon: 'group',
+                },
+                {
+                  label: `${this.user?.f_name} ${this.user?.l_name}`,
+                  url: '',
+                  icon: 'person',
+                },
+              ]);
+            },
+            error: (error: HttpErrorResponse) => {
+              this.snackbarService.info(error.error.message);
+            },
+          });
       }
     });
-
   }
   accountForm: FormGroup;
   user_id!: string;
@@ -84,11 +118,15 @@ export class UserDetailComponent {
     if (file) {
       const formData = new FormData();
       formData.append('profile_image', file);
-      this.http.post(`${this.api.base_uri}users/${this.user?.id}/profile-image`, formData, { withCredentials: true, observe: 'response' })
+      this.http
+        .post(
+          `${this.api.base_uri}users/${this.user?.id}/profile-image`,
+          formData,
+          { withCredentials: true, observe: 'response' }
+        )
         .subscribe((response: HttpResponse<any>) => {
           if (response.ok)
             this.profileImageUrl = response.body.data.profile_image_url;
-
         });
     }
   }
@@ -127,7 +165,7 @@ export class UserDetailComponent {
 
           this.cdr.detectChanges();
         },
-        complete: () => { },
+        complete: () => {},
         error: (err) => {
           this.snackbarService.show(
             'Invalid or expired verification code. Please try again.',
@@ -157,7 +195,7 @@ export class UserDetailComponent {
         next: (response: HttpResponse<any>) => {
           this.user = response.body;
         },
-        error: (error: HttpErrorResponse) => { },
+        error: (error: HttpErrorResponse) => {},
       });
   }
 

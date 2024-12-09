@@ -1,8 +1,13 @@
 <div class="flex flex-col">
   <!-- Header -->
   <div class="flex items-center justify-between p-4">
-    <span class="text-lg font-medium">ADD NEW USER</span>
-    <mat-icon class="cursor-pointer" [mat-dialog-close]="true">close</mat-icon>
+    <span class="text-sm font-medium">ADD NEW USER</span>
+    <mat-icon
+      class="cursor-pointer"
+      [mat-dialog-close]="true"
+      style="transform: scale(0.9)"
+      >close</mat-icon
+    >
   </div>
 
   <div class="h-px bg-gray-200"></div>
@@ -11,38 +16,78 @@
   <div class="p-4">
     <form class="flex flex-col space-y-4" [formGroup]="addUserForm">
       <!-- First Name -->
-      <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'"
-                      class="w-full"
-                      appearance="fill">
-        <mat-label>First Name</mat-label>
-        <input formControlName="f_name" type="text" matInput required>
-        <mat-error>{{addUserForm.controls.f_name.errors?.['backend']}}</mat-error>
+      <mat-form-field
+        [color]="(theme.getTheme() | async) === 'light' ? 'primary' : 'accent'"
+        class="w-full"
+        appearance="fill"
+      >
+        <mat-label style="font-size: 14px !important">First Name</mat-label>
+        <input
+          formControlName="f_name"
+          type="text"
+          matInput
+          required
+          style="font-size: 14px !important"
+        />
+        <mat-error
+          >{{addUserForm.controls.f_name.errors?.['backend']}}</mat-error
+        >
       </mat-form-field>
 
       <!-- Last Name -->
-      <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'"
-                      class="w-full"
-                      appearance="fill">
-        <mat-label>Last Name</mat-label>
-        <input formControlName="l_name" type="text" matInput required>
-        <mat-error>{{addUserForm.controls.l_name.errors?.['backend']}}</mat-error>
+      <mat-form-field
+        [color]="(theme.getTheme() | async) === 'light' ? 'primary' : 'accent'"
+        class="w-full"
+        appearance="fill"
+      >
+        <mat-label style="font-size: 14px !important">Last Name</mat-label>
+        <input
+          formControlName="l_name"
+          type="text"
+          matInput
+          required
+          style="font-size: 14px !important"
+        />
+        <mat-error
+          >{{addUserForm.controls.l_name.errors?.['backend']}}</mat-error
+        >
       </mat-form-field>
 
       <!-- Email -->
-      <mat-form-field [color]="((theme.getTheme()|async)==='light')?'primary':'accent'"
-                      class="w-full"
-                      appearance="fill">
-        <mat-label>Email</mat-label>
-        <input formControlName="email" type="text" matInput required>
-        <mat-error>{{addUserForm.controls.email.errors?.['backend']}}</mat-error>
+      <mat-form-field
+        [color]="(theme.getTheme() | async) === 'light' ? 'primary' : 'accent'"
+        class="w-full"
+        appearance="fill"
+      >
+        <mat-label style="font-size: 14px !important">Email</mat-label>
+        <input
+          formControlName="email"
+          type="text"
+          matInput
+          required
+          style="font-size: 14px !important"
+        />
+        <mat-error
+          >{{addUserForm.controls.email.errors?.['backend']}}</mat-error
+        >
       </mat-form-field>
 
       <!-- Role Selection -->
       <mat-form-field class="w-full">
-        <mat-label>Select Role(s)*</mat-label>
-        <mat-select multiple formControlName="role_ids">
-          <mat-option *ngFor="let role of roles?.data" [value]="role.id">
-            {{role.name}}
+        <mat-label style="font-size: 14px !important"
+          >Select Role(s)*</mat-label
+        >
+        <mat-select
+          style="font-size: 14px !important"
+          multiple
+          formControlName="role_ids"
+        >
+          <mat-option
+            style="font-size: 14px !important"
+            *ngFor="let role of roles?.data"
+            [value]="role.id"
+          >
+            {{ role.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -51,7 +96,21 @@
 
   <!-- Footer -->
   <div class="flex justify-end space-x-2 p-4 bg-gray-50">
-    <button mat-stroked-button color="accent" [mat-dialog-close]="true">Cancel</button>
-    <button mat-flat-button color="primary" (click)="add_user()">ADD</button>
+    <button
+      mat-stroked-button
+      color="accent"
+      [mat-dialog-close]="true"
+      style="font-size: 12px !important"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="add_user()"
+      style="font-size: 12px !important"
+    >
+      ADD
+    </button>
   </div>
 </div>

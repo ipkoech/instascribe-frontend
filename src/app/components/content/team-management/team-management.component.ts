@@ -1,11 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpParams, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpParams,
+  HttpResponse,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { debounceTime } from 'rxjs';
-import { UserModel, UserModelsResponse } from '../../../core/interfaces/user.model';
+import {
+  UserModel,
+  UserModelsResponse,
+} from '../../../core/interfaces/user.model';
 import { ApiService } from '../../../core/services/api.service';
 import { UserService } from '../../../core/services/user.service';
 import { AddUserDialogComponent } from '../../users/add-user-dialog/add-user-dialog.component';
@@ -16,69 +29,127 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { EditUserDialogComponent } from '../../users/edit-user-dialog/edit-user-dialog.component';
 import { RouterModule } from '@angular/router';
+import { UserSearchPipe } from '../pipes/user-search.pipe';
 
 @Component({
   selector: 'app-team-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    UserSearchPipe,
+  ],
   templateUrl: './team-management.component.html',
   styleUrl: './team-management.component.scss',
 })
 export class TeamManagementComponent {
+  roleSearch = new FormControl('');
+
   activeTab: string = 'overview'; // Default active tab
 
   setActiveTab(tabName: string): void {
     this.activeTab = tabName;
   }
 
-
   roles: RolesResponse | undefined;
   permissions: PermissionsResponse | undefined;
 
   searchQuery = '';
-  displayedColumns = ['select', 'user', 'access', 'lastActive', 'dateAdded', 'actions'];
-  pageEevent: PageEvent = new PageEvent()
-  users: UserModelsResponse | undefined
-  userSearch = new FormControl('')
+  displayedColumns = [
+    'select',
+    'user',
+    'access',
+    'lastActive',
+    'dateAdded',
+    'actions',
+  ];
+  pageEevent: PageEvent = new PageEvent();
+  users: UserModelsResponse | undefined;
+  userSearch = new FormControl('');
   private debounceTime = 800;
 
-
   paginate($event: PageEvent) {
-    this.get_users(this.api.base_uri_api + `users?page=${$event.pageIndex + 1}&pageSize=${$event.pageSize}`, $event)
+    this.get_users(
+      this.api.base_uri_api +
+        `users?page=${$event.pageIndex + 1}&pageSize=${$event.pageSize}`,
+      $event
+    );
   }
 
-  constructor(private api: ApiService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef, private snack: MatSnackBar, private snackService: SnackBarService, private userService: UserService) {
-    this.get_users(this.api.base_uri_api + 'users')
+  constructor(
+    private api: ApiService,
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    private snack: MatSnackBar,
+    private snackService: SnackBarService,
+    private userService: UserService
+  ) {
+    this.roleSearch.valueChanges
+      .pipe(debounceTime(this.debounceTime))
+      .subscribe((value) => {
+        this.searchTerm = value || '';
+        this.filterRoles();
+      });
+
+    this.get_users(this.api.base_uri_api + 'users');
     this.get_roles(`${this.api.base_uri}roles`);
-    this.get_permissions(`${this.api.base_uri}permissions`)
-    this.userSearch.valueChanges.pipe(debounceTime(this.debounceTime)).subscribe(value => {
-      this.get_users(this.api.base_uri_api + 'users')
-    })
+    this.get_permissions(`${this.api.base_uri}permissions`);
+    this.userSearch.valueChanges
+      .pipe(debounceTime(this.debounceTime))
+      .subscribe((value) => {
+        this.get_users(this.api.base_uri_api + 'users');
+      });
   }
-
-
 
   getPendingInvitations() {
-
     const users = this.users;
     if (!users) {
       return [];
     }
-    const pendingInvitations = users.data.filter((user) => user.last_seen_at === null);
+    const pendingInvitations = users.data.filter(
+      (user) => user.last_seen_at === null
+    );
     return pendingInvitations;
   }
 
   deleteRole(_t143: RoleModel) {
-    this.http.delete(this.api.base_uri + 'roles/' + _t143.id, { withCredentials: true }).subscribe({
-      next: (response: any) => {
-        this.get_roles(`${this.api.base_uri}roles`)
-        this.snackService.info('Role deleted successfully',);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.snackService.info(error.error.message);
+    const snackBarRef = this.snack.open(
+      'Are you sure you want to delete this role?',
+      'Confirm',
+      {
+        duration: 5000,
       }
+    );
+
+    snackBarRef.onAction().subscribe(() => {
+      // User clicked the "Confirm" button
+      this.http
+        .delete(this.api.base_uri + 'roles/' + _t143.id, {
+          withCredentials: true,
+        })
+        .subscribe({
+          next: (response: any) => {
+            this.get_roles(`${this.api.base_uri}roles`);
+            this.snack.open('Role deleted successfully', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'right',
+            });
+          },
+          error: (error: HttpErrorResponse) => {
+            this.snack.open(`Error: ${error.error.message}`, 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'right',
+            });
+          },
+        });
     });
   }
+
   editRole(_t143: RoleModel) {
     throw new Error('Method not implemented.');
   }
@@ -92,20 +163,26 @@ export class TeamManagementComponent {
     throw new Error('Method not implemented.');
   }
   get_users(url: string, pageEvent?: PageEvent) {
-    this.http.get(url, { withCredentials: true, observe: 'response', params: new HttpParams().append('include', 'roles').append('filter[f_name]', `${this.userSearch.value}`) }).subscribe({
-      next: (response: HttpResponse<any>) => {
-        if (response.ok) {
-          this.users = response.body
-          if (this.users) {
-            this.getPendingInvitations()
+    this.http
+      .get(url, {
+        withCredentials: true,
+        observe: 'response',
+        params: new HttpParams()
+          .append('include', 'roles')
+          .append('filter[f_name]', `${this.userSearch.value}`),
+      })
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response.ok) {
+            this.users = response.body;
+            if (this.users) {
+              this.getPendingInvitations();
+            }
+            if (pageEvent) this.pageEevent = pageEvent;
           }
-          if (pageEvent)
-            this.pageEevent = pageEvent
-        }
-      }, error: (errorResponse: HttpErrorResponse) => {
-
-      }
-    })
+        },
+        error: (errorResponse: HttpErrorResponse) => {},
+      });
   }
 
   add_new_user() {
@@ -117,7 +194,6 @@ export class TeamManagementComponent {
       this.get_users(`${this.api.base_uri}users`);
     });
   }
-
 
   get_roles(url: string) {
     this.http
@@ -178,7 +254,7 @@ export class TeamManagementComponent {
         }
       )
       .subscribe({
-        next: (response: HttpResponse<any>) => { },
+        next: (response: HttpResponse<any>) => {},
       });
   }
 
@@ -237,24 +313,21 @@ export class TeamManagementComponent {
 
   searchTerm: string = '';
   filteredRoles: RoleModel[] = [];
+
   filterRoles() {
     if (this.roles) {
       const searchTermLower = this.searchTerm.toLowerCase();
 
-      // Filter the roles based on the search term
       this.filteredRoles = this.roles.data.filter((role) =>
         role.name.toLowerCase().includes(searchTermLower)
       );
 
-      // Reset pagination to the first page
       this.currentPage = 0;
-
-      // Update the paginated roles based on the filtered roles
       this.setPaginatedRoles();
     }
   }
 
-  user!: UserModel
+  user!: UserModel;
   refresh(user: UserModel) {
     this.user = user;
   }

@@ -15,6 +15,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { UserService } from '../../../core/services/user.service';
 import { UserModel } from '../../../core/interfaces/user.model';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
+import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +30,7 @@ import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
     RouterModule,
     MatButtonModule,
     MatDialogModule,
+    BreadCrumbComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

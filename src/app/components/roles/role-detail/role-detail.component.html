@@ -1,11 +1,6 @@
+<app-bread-crumb></app-bread-crumb>
 <div class="role-detail-container" *ngIf="role">
   <div style="width: 100%; display: flex; margin-bottom: 8px">
-    <!-- Back Button -->
-    <button mat-button routerLink="/team-management">
-      <mat-icon>arrow_back</mat-icon>
-      Back
-    </button>
-
     <!-- Add Users Button -->
     <button
       style="margin-inline-start: auto"
@@ -89,7 +84,9 @@
 
 <!-- Add Users Dialog -->
 <ng-template #addUsersDialog>
-  <span mat-dialog-title>Add Users to {{ role?.name | titlecase }}</span>
+  <span mat-dialog-title style="font-size: 19px !important"
+    >Add Users to {{ role?.name | titlecase }}</span
+  >
   <mat-dialog-content>
     <!-- Users List -->
     <mat-selection-list
