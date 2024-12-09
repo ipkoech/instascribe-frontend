@@ -29,15 +29,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { EditUserDialogComponent } from '../../users/edit-user-dialog/edit-user-dialog.component';
 import { RouterModule } from '@angular/router';
+import { UserSearchPipe } from '../pipes/user-search.pipe';
 
 @Component({
   selector: 'app-team-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    UserSearchPipe,
+  ],
   templateUrl: './team-management.component.html',
   styleUrl: './team-management.component.scss',
 })
 export class TeamManagementComponent {
+  roleSearch = new FormControl('');
+
   activeTab: string = 'overview'; // Default active tab
 
   setActiveTab(tabName: string): void {
@@ -78,6 +87,13 @@ export class TeamManagementComponent {
     private snackService: SnackBarService,
     private userService: UserService
   ) {
+    this.roleSearch.valueChanges
+      .pipe(debounceTime(this.debounceTime))
+      .subscribe((value) => {
+        this.searchTerm = value || '';
+        this.filterRoles();
+      });
+
     this.get_users(this.api.base_uri_api + 'users');
     this.get_roles(`${this.api.base_uri}roles`);
     this.get_permissions(`${this.api.base_uri}permissions`);
@@ -104,7 +120,7 @@ export class TeamManagementComponent {
       'Are you sure you want to delete this role?',
       'Confirm',
       {
-        duration: 5000, // Snackbar stays for 5 seconds
+        duration: 5000,
       }
     );
 
@@ -297,19 +313,16 @@ export class TeamManagementComponent {
 
   searchTerm: string = '';
   filteredRoles: RoleModel[] = [];
+
   filterRoles() {
     if (this.roles) {
       const searchTermLower = this.searchTerm.toLowerCase();
 
-      // Filter the roles based on the search term
       this.filteredRoles = this.roles.data.filter((role) =>
         role.name.toLowerCase().includes(searchTermLower)
       );
 
-      // Reset pagination to the first page
       this.currentPage = 0;
-
-      // Update the paginated roles based on the filtered roles
       this.setPaginatedRoles();
     }
   }

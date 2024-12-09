@@ -85,16 +85,6 @@
             class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
             [(ngModel)]="searchQuery"
           />
-          <!-- <select
-            class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none cursor-pointer"
-          >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </select> -->
         </div>
         <button
           class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none"
@@ -122,7 +112,7 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let user of users?.data"
+              *ngFor="let user of users?.data ?? [] | userSearch : searchQuery"
               class="text-xs text-gray-700 hover:bg-blue-50"
             >
               <td class="py-2 px-3">
@@ -167,7 +157,7 @@
             type="text"
             placeholder="Search roles..."
             class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none"
-            (input)="filterRoles()"
+            [formControl]="roleSearch"
           />
           <button
             class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none"
@@ -181,7 +171,7 @@
       <!-- Roles Grid -->
       <div class="grid grid-cols-3 gap-4">
         <div
-          *ngFor="let role of roles?.data"
+          *ngFor="let role of paginatedRoles"
           class="bg-blue-50 p-4 rounded-lg shadow-sm border border-blue-100"
         >
           <p class="text-md text-blue-900 mb-2">{{ role.name }}</p>
