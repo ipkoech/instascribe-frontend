@@ -1,59 +1,43 @@
 <div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-200 p-4"
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-700 to-green-400"
 >
-  <div class="bg-white shadow-lg rounded-2xl p-6 max-w-sm w-full">
-    <div class="text-center mb-6">
-      <div class="flex justify-center items-center mb-3">
-        <!-- <span class="material-icons text-blue-600 text-xl"> login </span> -->
-        <span class="text-blue-600 text-xl">Instacribe</span>
-      </div>
-      <h5 class="text-xs font-medium text-gray-800">Sign in with email</h5>
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+    <p class="text-2xl font-medium text-gray-800 text-center mb-1">
+      Instacribe
+    </p>
+    <p class="text-sm text-gray-600 text-center mb-6">
+      Sign in to your account to continue
+    </p>
+    <div
+      *ngIf="general_form_error"
+      class="text-red-500 text-sm mb-4 flex justify-center items-center"
+    >
+      {{ general_form_error }}
     </div>
 
-    <form [formGroup]="loginForm" class="space-y-4">
-      <!-- General Error Message -->
-      <div
-        *ngIf="general_form_error"
-        class="text-red-500 text-xs text-center mb-2"
-      >
-        {{ general_form_error }}
-      </div>
+    <!-- Form -->
+    <form [formGroup]="loginForm">
       <!-- Email Field -->
-      <div class="relative">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2"
+          >Email</label
+        >
         <input
           type="email"
           formControlName="email"
-          placeholder="Email"
-          class="w-full pl-10 pr-2 h-10 border border-gray-300 rounded-md focus:outline-none text-sm"
-          [ngClass]="{
-            'border-gray-300 focus:ring-2 focus:ring-blue-500':
-              loginForm.get('email')?.valid || !loginForm.get('email')?.touched,
-            'border-red-500 focus:ring-0':
-              loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-          }"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
+          placeholder="Enter your email"
         />
-        <span
-          class="material-icons absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400 text-base"
-        >
-          mail_outline
-        </span>
-        <!-- Email Error Messages -->
         <div
           *ngIf="
             loginForm.get('email')?.invalid && loginForm.get('email')?.touched
           "
-          class="text-red-500 text-xs mt-1"
+          class="text-red-500 text-sm mt-1"
         >
-          <div *ngIf="loginForm.get('email')?.errors?.['required']">
-            Email is required
-          </div>
-          <div *ngIf="loginForm.get('email')?.errors?.['email']">
-            Invalid email address
-          </div>
+          Please enter a valid email.
         </div>
       </div>
 
-      <!-- Password Field -->
       <div class="relative">
         <input
           [type]="hidePassword ? 'password' : 'text'"
@@ -100,25 +84,27 @@
         </div>
       </div>
 
-      <!-- Forgot Password Link -->
-      <div class="flex justify-end">
-        <a
-          routerLink="/auth/forgot-password"
-          class="text-blue-600 hover:underline text-xs"
-        >
-          Forgot password?
-        </a>
-      </div>
-
-      <!-- Sign In Button -->
       <button
         (click)="onSubmit()"
-        type="button"
-        class="w-full py-1.5 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 text-sm disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
         [disabled]="loginForm.invalid"
+        [ngClass]="{
+          'bg-blue-500 hover:bg-blue-600 text-white': !loginForm.invalid,
+          'bg-gray-300 text-gray-500 cursor-not-allowed': loginForm.invalid
+        }"
+        class="w-full font-medium py-2 rounded-md text-sm transition duration-300 mt-4"
       >
-        Sign in
+        Sign In
       </button>
+
+      <!-- Forgot Password Link -->
+      <div class="text-center mt-4">
+        <a
+          routerLink="/forgot-password"
+          class="text-sm text-blue-600 hover:underline"
+        >
+          Forgot your password?
+        </a>
+      </div>
     </form>
   </div>
 </div>
