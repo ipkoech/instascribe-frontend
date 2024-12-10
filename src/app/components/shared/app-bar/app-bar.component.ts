@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -22,6 +22,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { UserService } from '../../../core/services/user.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ApiService } from '../../../core/services/api.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-app-bar',
@@ -52,28 +53,9 @@ import { ApiService } from '../../../core/services/api.service';
 })
 export class AppBarComponent {
   @Input() sidenav!: MatSidenav;
-  unreadNotitications: any
-  constructor(
-    public notificationsService: NotificationService,
-    public theme: ThemeService,
-    public userService: UserService,
-    public notificationService: NotificationService,
-    public http: HttpClient,
-    public api: ApiService,
-    public cdr: ChangeDetectorRef,
-  ) {
-    this.unreadNotitications = this.notificationService.unreadCount;
-  }
+  unreadCount$: Observable<number>;
 
-  // Method to open settings
-  openSettings(): void {
-    console.log('Settings clicked');
-    // Implement your logic to open settings here
-  }
-
-  // Method to show notifications
-  showNotifications(): void {
-    console.log('Notifications clicked');
-    // Implement your logic to display notifications here
+  constructor(private notificationService: NotificationService) {
+    this.unreadCount$ = this.notificationService.unreadCount$;
   }
 }

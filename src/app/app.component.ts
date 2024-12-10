@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NotificationService } from './core/services/notification.service';
+import { UserService } from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +11,8 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'instascribe-frontend';
+  title = 'Instant Impact';
+
+  constructor(private userService: UserService, private notificationService: NotificationService) { }
+
 }
