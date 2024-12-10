@@ -13,10 +13,10 @@ export class SettingsComponent {
   // Define tabs for navigation
   tabs = [
     { key: 'general', label: 'General' },
-    { key: 'content', label: 'Content' },
-    { key: 'aiConfig', label: 'AI Configuration' },
-    { key: 'integrations', label: 'Integrations' },
-    { key: 'workflow', label: 'Workflow' },
+    // { key: 'content', label: 'Content' },
+    // { key: 'aiConfig', label: 'AI Configuration' },
+    // { key: 'integrations', label: 'Integrations' },
+    // { key: 'workflow', label: 'Workflow' },
     { key: 'analytics', label: 'Analytics' },
   ];
 

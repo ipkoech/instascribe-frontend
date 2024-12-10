@@ -53,7 +53,7 @@
       </form>
     </div>
     <!-- System Preferences -->
-    <div class="bg-white p-4 rounded-lg shadow mt-2">
+    <!-- <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-sm font-medium mb-3">System Preferences</p>
       <div class="mb-3">
         <label
@@ -107,7 +107,7 @@
           ></div>
         </label>
       </div>
-    </div>
+    </div> -->
 
     <!-- Notifications -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
@@ -161,7 +161,7 @@
     </div>
   </div>
 
-  <div *ngIf="activeTab === 'content'" class="bg-white p-3 rounded-lg shadow">
+  <!-- <div *ngIf="activeTab === 'content'" class="bg-white p-3 rounded-lg shadow">
     <div class="bg-white p-4 rounded-lg shadow">
       <p class="text-md font-medium mb-3">Content Types</p>
       <form>
@@ -225,7 +225,6 @@
       </form>
     </div>
 
-    <!-- Content Guidelines Card -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium mb-3">Content Guidelines</p>
       <form>
@@ -281,7 +280,6 @@
       </form>
     </div>
 
-    <!-- Content Approval Process Card -->
     <div class="bg-white p-4 rounded-lg shadow mt-4">
       <p class="text-md font-medium mb-4">Content Approval Process</p>
       <form>
@@ -321,7 +319,6 @@
       </form>
     </div>
 
-    <!-- Save Changes Button -->
     <div class="bg-black p-1 rounded-lg shadow">
       <button
         class="text-white w-full text-center text-xs font-medium focus:outline-none"
@@ -330,14 +327,12 @@
         Save Changes
       </button>
     </div>
-  </div>
+  </div> -->
 
-  <div *ngIf="activeTab === 'aiConfig'" class="bg-white p-3 rounded-lg shadow">
-    <!-- AI Model Configuration Card -->
+  <!-- <div *ngIf="activeTab === 'aiConfig'" class="bg-white p-3 rounded-lg shadow">
     <div class="bg-white p-4 rounded-lg shadow">
       <p class="text-md mb-4 font-medium">AI Model Configuration</p>
 
-      <!-- AI Model Selection -->
       <div class="mb-4">
         <label for="aiModel" class="block text-xs font-medium text-gray-700"
           >AI Model</label
@@ -353,7 +348,6 @@
         </select>
       </div>
 
-      <!-- API Key -->
       <div class="mb-4">
         <label for="apiKey" class="block text-xs font-medium text-gray-700"
           >API Key</label
@@ -367,7 +361,6 @@
         />
       </div>
 
-      <!-- Use Custom Prompts -->
       <div class="flex items-center justify-between mb-4">
         <label for="useCustomPrompts" class="text-xs font-medium text-gray-700">
           Use Custom Prompts
@@ -386,12 +379,11 @@
       </div>
     </div>
 
-    <!-- Content Generation Settings Card -->
     <div class="bg-white p-6 rounded-lg shadow mt-6">
       <p class="text-md font-medium text-gray-800 mb-4">
         Content Generation Settings
       </p>
-      <!-- Temperature Slider -->
+
       <div class="mb-4">
         <label
           for="temperature"
@@ -412,7 +404,7 @@
           Value: {{ contentGenerationSettings.temperature }}
         </p>
       </div>
-      <!-- Max Tokens -->
+
       <div class="mb-4">
         <label for="maxTokens" class="block text-xs font-medium text-gray-700">
           Max Tokens
@@ -425,7 +417,7 @@
           placeholder="Enter max tokens"
         />
       </div>
-      <!-- Use Keyword Optimization -->
+
       <div class="flex items-center justify-between mb-4">
         <label
           for="useKeywordOptimization"
@@ -449,7 +441,7 @@
         </label>
       </div>
     </div>
-    <!-- AI Training -->
+
     <div class="bg-white p-4 rounded-lg shadow mb-4 mt-6">
       <p class="text-md font-medium mb-4">AI Training</p>
       <div class="flex items-center justify-between mb-4">
@@ -501,7 +493,6 @@
       </button>
     </div>
 
-    <!-- Save AI Settings Button -->
     <div class="bg-black text-center py-1 rounded-lg shadow mt-4">
       <button
         class="text-white text-xs font-medium focus:outline-none"
@@ -510,19 +501,17 @@
         Save AI Settings
       </button>
     </div>
-  </div>
+  </div> -->
 
-  <div
+  <!-- <div
     *ngIf="activeTab === 'integrations'"
     class="bg-white p-3 rounded-lg shadow"
   >
-    <!-- Social Media Integrations Card -->
     <div class="bg-white p-4 rounded-lg shadow">
       <p class="text-md font-medium text-gray-800 mb-4">
         Social Media Integrations
       </p>
       <div class="space-y-3">
-        <!-- Facebook -->
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">Facebook</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -539,7 +528,7 @@
             ></span>
           </label>
         </div>
-        <!-- Twitter -->
+
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">Twitter</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -556,7 +545,7 @@
             ></span>
           </label>
         </div>
-        <!-- LinkedIn -->
+
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">LinkedIn</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -576,11 +565,9 @@
       </div>
     </div>
 
-    <!-- CMS Integrations Card -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">CMS Integrations</p>
 
-      <!-- WordPress Integration -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">WordPress</p>
@@ -600,7 +587,6 @@
           </label>
         </div>
 
-        <!-- WordPress URL -->
         <div>
           <label
             for="wordpressURL"
@@ -616,7 +602,6 @@
           />
         </div>
 
-        <!-- WordPress API Key -->
         <div>
           <label
             for="wordpressAPIKey"
@@ -634,15 +619,12 @@
       </div>
     </div>
 
-    <!-- Email Marketing Integrations Card -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">
         Email Marketing Integrations
       </p>
 
-      <!-- Mailchimp Integration -->
       <div class="space-y-3">
-        <!-- Mailchimp Toggle -->
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">Mailchimp</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -661,7 +643,6 @@
           </label>
         </div>
 
-        <!-- Mailchimp API Key -->
         <div>
           <label
             for="mailchimpAPIKey"
@@ -681,15 +662,12 @@
       </div>
     </div>
 
-    <!-- Analytics Integrations Card -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">
         Analytics Integrations
       </p>
 
-      <!-- Google Analytics -->
       <div class="space-y-3">
-        <!-- Google Analytics Toggle -->
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-700">Google Analytics</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -708,7 +686,6 @@
           </label>
         </div>
 
-        <!-- Google Analytics ID -->
         <div>
           <label
             for="googleAnalyticsID"
@@ -727,7 +704,7 @@
         </div>
       </div>
     </div>
-    <!-- Save Integration Settings Button -->
+
     <div class="mt-2">
       <button
         class="bg-black text-white text-xs px-6 py-2 w-full rounded shadow hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-300"
@@ -736,16 +713,14 @@
         Save Integration Settings
       </button>
     </div>
-  </div>
+  </div> -->
 
-  <div *ngIf="activeTab === 'workflow'">
-    <!-- Content Approval Workflow Card -->
+  <!-- <div *ngIf="activeTab === 'workflow'">
     <div class="bg-white p-4 rounded-lg shadow">
       <p class="text-sm font-medium text-gray-800 mb-3">
         Content Approval Workflow
       </p>
 
-      <!-- Enable Approval Workflow Toggle -->
       <div class="flex items-center justify-between mb-3">
         <label
           for="enableApprovalWorkflow"
@@ -769,7 +744,6 @@
         </label>
       </div>
 
-      <!-- Number of Approval Stages Dropdown -->
       <div>
         <label
           for="approvalStages"
@@ -788,11 +762,10 @@
         </select>
       </div>
     </div>
-    <!-- Auto-scheduling Card -->
+
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-sm font-medium text-gray-800 mb-3">Auto-scheduling</p>
 
-      <!-- Enable Auto-scheduling Toggle -->
       <div class="flex items-center justify-between mb-3">
         <label
           for="enableAutoScheduling"
@@ -816,7 +789,6 @@
         </label>
       </div>
 
-      <!-- Maximum Posts Per Day -->
       <div class="mb-3">
         <label
           for="maxPostsPerDay"
@@ -833,7 +805,6 @@
         />
       </div>
 
-      <!-- Optimal Posting Time Dropdown -->
       <div>
         <label
           for="optimalPostingTime"
@@ -854,11 +825,10 @@
         </select>
       </div>
     </div>
-    <!-- Content Recycling Card -->
+
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-sm font-medium text-gray-800 mb-3">Content Recycling</p>
 
-      <!-- Enable Content Recycling Toggle -->
       <div class="flex items-center justify-between mb-3">
         <label
           for="enableContentRecycling"
@@ -882,7 +852,6 @@
         </label>
       </div>
 
-      <!-- Minimum Recycling Interval -->
       <div>
         <label
           for="minRecyclingInterval"
@@ -899,11 +868,10 @@
         />
       </div>
     </div>
-    <!-- Collaboration Card -->
+
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-sm font-medium text-gray-800 mb-3">Collaboration</p>
 
-      <!-- Enable Team Collaboration Toggle -->
       <div class="flex items-center justify-between mb-3">
         <label
           for="enableCollaboration"
@@ -927,7 +895,6 @@
         </label>
       </div>
 
-      <!-- Preferred Collaboration Tool -->
       <div>
         <label
           for="preferredCollaborationTool"
@@ -946,7 +913,7 @@
         </select>
       </div>
     </div>
-    <!-- Save Workflow Settings Button -->
+
     <div class="mt-2">
       <button
         class="w-full bg-gray-900 text-white text-xs py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-700"
@@ -955,13 +922,12 @@
         Save Workflow Settings
       </button>
     </div>
-  </div>
+  </div> -->
 
   <div *ngIf="activeTab === 'analytics'">
-    <div class="bg-white p-4 rounded-lg shadow mt-4">
+    <!-- <div class="bg-white p-4 rounded-lg shadow mt-4">
       <p class="text-md font-medium text-gray-800 mb-4">Performance Metrics</p>
       <div class="space-y-3">
-        <!-- Track Page Views -->
         <div class="flex items-center justify-between">
           <p class="text-xs text-gray-700">Track Page Views</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -979,7 +945,6 @@
           </label>
         </div>
 
-        <!-- Track User Engagement -->
         <div class="flex items-center justify-between">
           <p class="text-xs text-gray-700">Track User Engagement</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -997,7 +962,6 @@
           </label>
         </div>
 
-        <!-- Track Conversions -->
         <div class="flex items-center justify-between">
           <p class="text-xs text-gray-700">Track Conversions</p>
           <label class="relative inline-flex items-center cursor-pointer">
@@ -1015,7 +979,7 @@
           </label>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">Reporting</p>
 
@@ -1055,10 +1019,9 @@
         />
       </div>
     </div>
-    <div class="bg-white p-4 rounded-lg shadow mt-2">
+    <!-- <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">Custom Events</p>
 
-      <!-- Enable Custom Event Tracking -->
       <div class="flex items-center justify-between mb-4">
         <label
           for="customEventTracking"
@@ -1082,7 +1045,6 @@
         </label>
       </div>
 
-      <!-- Custom Event Name -->
       <div>
         <label
           for="customEventName"
@@ -1099,10 +1061,10 @@
           [disabled]="!customEvents.enableTracking"
         />
       </div>
-    </div>
-    <div class="bg-white p-4 rounded-lg shadow mt-2">
+    </div> -->
+    <!-- <div class="bg-white p-4 rounded-lg shadow mt-2">
       <p class="text-md font-medium text-gray-800 mb-4">Data Retention</p>
-      <!-- Data Retention Period -->
+
       <div>
         <label
           for="dataRetentionPeriod"
@@ -1120,7 +1082,7 @@
           </option>
         </select>
       </div>
-    </div>
+    </div> -->
     <div class="mt-2">
       <button
         class="w-full bg-gray-900 text-white text-xs py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-700"

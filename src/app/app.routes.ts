@@ -12,6 +12,7 @@ import { TeamManagementComponent } from './components/content/team-management/te
 import { SettingsComponent } from './components/content/settings/settings.component';
 import { UserDetailComponent } from './components/users/user-detail/user-detail.component';
 import { RoleDetailComponent } from './components/roles/role-detail/role-detail.component';
+import { InstaAiLandingPageComponent } from './components/scribe/insta-ai-landing-page/insta-ai-landing-page.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
     path: '',
     component: NavigationComponent,
     children: [
+      { path: '', redirectTo: 'ask', pathMatch: 'full' },
       {
         path: 'users',
         loadChildren: () =>
