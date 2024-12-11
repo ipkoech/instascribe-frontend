@@ -31,7 +31,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,6 +41,9 @@ import { ApiService } from '../../../core/services/api.service';
 import { UserModelsResponse } from '../../../core/interfaces/user.model';
 import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MarkdownPipe } from "../../../core/pipes/markdown.pipe";
 @Component({
   selector: 'app-draft-detail',
   standalone: true,
@@ -55,12 +58,16 @@ import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
     MatButtonModule,
     MatTooltipModule,
     BreadCrumbComponent,
+    MatChipsModule,
+    MatSidenavModule,
+    MarkdownPipe
   ],
   templateUrl: './draft-detail.component.html',
   styleUrl: './draft-detail.component.scss',
 })
 export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('editorElement') editorElement!: ElementRef;
+  @ViewChild('versionElement') versionElement!: ElementRef;
   @Output() onChange = new EventEmitter<string>();
 
   draftId!: string;
@@ -125,6 +132,78 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       next: (response: HttpResponse<any>) => { },
     });
   }
+  versionHistory: any;
+  loadVersionHistory() {
+    this.draftService.getDraftVersionHistory(this.draftId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        this.versionHistory = response.body.filter((version: any) => {
+          const contentChangesStr = version.content_changes;
+          console.log(contentChangesStr);
+
+
+          // Check if content_changes is present and not empty
+          if (!contentChangesStr || contentChangesStr.trim() === '' || contentChangesStr.trim() === '{}') {
+            return false;
+          }
+
+          return contentChangesStr
+            && contentChangesStr.trim() !== ''
+            && contentChangesStr.trim() !== '{}';
+        });
+
+      },
+      error: (error) => {
+        this.snackBarService.error('Failed to load version history');
+      }
+    });
+  }
+
+  formatContentChanges(changes: string): string {
+    if (!changes || changes.trim() === '{}') {
+      return 'No changes';
+    }
+
+    // Step 1: Convert Ruby hash-like syntax to JSON-like syntax
+    // Replace '=>' with ':'
+    let jsonLike = changes.replace(/=>/g, ':');
+
+    // Replace symbol-like keys (:removed, :added) with string keys
+    jsonLike = jsonLike.replace(/:removed/g, '"removed"');
+    jsonLike = jsonLike.replace(/:added/g, '"added"');
+
+    // Wrap unquoted numeric keys with quotes to make it valid JSON
+    // e.g. {5:{...}} becomes {"5":{...}}
+    jsonLike = jsonLike.replace(/(\{|,\s*)(\d+):/g, '$1"$2":');
+
+    try {
+      const parsed = JSON.parse(jsonLike);
+
+      const results: string[] = [];
+
+      // parsed is now an object like { "5": { removed:[], added:[""] }, "6": {...} }
+      for (const line in parsed) {
+        const { removed, added } = parsed[line];
+        const lineChanges: string[] = [];
+
+        if (removed && removed.length > 0 && !(removed.length === 1 && removed[0] === '')) {
+          lineChanges.push(`Removed: ${removed.join(', ')}`);
+        }
+
+        if (added && added.length > 0 && !(added.length === 1 && added[0] === '')) {
+          lineChanges.push(`Added: ${added.join(', ')}`);
+        }
+
+        if (lineChanges.length > 0) {
+          results.push(`Line ${line}: ${lineChanges.join('; ')}`);
+        }
+      }
+
+      return results.length > 0 ? results.join('<br>') : 'No changes';
+    } catch (e) {
+      return 'Could not parse changes';
+    }
+  }
+
 
   ngAfterViewInit() {
     this.initializeEditor();
@@ -249,6 +328,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   @ViewChild('collaboratorDialog') collaboratorDialog!: TemplateRef<any>;
+  @ViewChild('versionDialog') versionDialog!: TemplateRef<any>;
   selectedUserIds: string[] = [];
 
   @ViewChild('confirmationDialog')
@@ -338,5 +418,23 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     return this.draft?.collaborators!.some(
       (collaborator) => collaborator.id === userId
     );
+  }
+  dialogRef!: MatDialogRef<any>;
+  showVersions() {
+    // load history versions
+    this.loadVersionHistory();
+    this.dialogRef = this.dialog.open(this.versionDialog, {
+      width: '500px',
+      hasBackdrop: true,
+      height: '700px',
+      position: { top: '50px', right: '20px', bottom: '20px' },
+    });
+  }
+
+  restoreVersion(index: number) {
+    const version = this.versionHistory[index];
+    this.editor.setMarkdown(version.content);
+    this.saveDraft(version.content);
+    this.dialogRef.close();
   }
 }

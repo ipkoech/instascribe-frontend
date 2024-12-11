@@ -113,4 +113,33 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.perPage = event.pageSize;
     this.loadNotifications(this.currentPage, this.perPage);
   }
+
+  goToFirstPage() {
+    if (this.currentPage !== 1) {
+      this.currentPage = 1;
+      this.notificationService.getNotifications();
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.notificationService.getNotifications();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.notificationService.getNotifications();
+    }
+  }
+
+  goToLastPage() {
+    if (this.currentPage !== this.totalPages) {
+      this.currentPage = this.totalPages;
+      this.notificationService.getNotifications();
+    }
+  }
+
 }

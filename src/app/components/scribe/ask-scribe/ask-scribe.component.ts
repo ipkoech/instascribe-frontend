@@ -119,12 +119,12 @@ export class AskScribeComponent implements AfterViewInit, OnInit, OnDestroy {
       this.onScroll.bind(this)
     );
   }
-conversation!: ConversationModel
+  conversation!: ConversationModel
 
   loadConversation(id: string) {
     this.chatService.fetchConversation(id).subscribe({
       next: (response: HttpResponse<any>) => {
-        // 
+        //
         this.conversation = response.body;
       }
     });
@@ -152,7 +152,7 @@ conversation!: ConversationModel
     };
     return formats[contentType] || 'FILE';
   }
-  
+
   onScroll(): void {
     if (this.messagesContainer) {
       const element = this.messagesContainer.nativeElement;
@@ -246,6 +246,7 @@ conversation!: ConversationModel
         complete: () => {
           this.isLoading = false;
           this.loadConversation(this.conversation_id);
+          this.loadChats();
           this.scrollToBottom();
         },
       });
@@ -413,7 +414,7 @@ conversation!: ConversationModel
         // File upload completed
         this.isUploading = false;
         this.uploadProgress = 100;
-        
+
         // Update chat with file information
         const messageIndex = this.chats?.data.findIndex(msg => msg.id === data.chat_id);
         if (messageIndex !== -1) {

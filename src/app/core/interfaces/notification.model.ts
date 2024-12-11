@@ -3,6 +3,7 @@ export interface NotificationModel {
   user_id: string;
   title: string;
   body: string;
+  data: any;
   read_at: Date | null;
   created_at: Date;
   updated_at: Date;

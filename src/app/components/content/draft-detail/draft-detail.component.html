@@ -1,38 +1,44 @@
 <head>
-  <link
-    rel="stylesheet"
-    href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
-  />
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <app-bread-crumb></app-bread-crumb>
 
-<div class="flex flex-col items-start p-6 bg-white shadow-md rounded-md">
+<div style="max-width: 1000px;margin-inline: auto;" class="flex flex-col items-start p-6 bg-white shadow-md rounded-md"
+  *ngIf="draftId">
   <div class="flex items-center justify-between w-full mb-4">
+    <div style="display: flex;gap: 2px;">
+      <!-- Display the collaborators here -->
+      <mat-chip-set aria-label="Collaborators">
+        <mat-chip *ngFor="let collaborator of draft?.collaborators" [removable]="true"
+          (removed)="removeCollaborator(collaborator.id)">
+          {{ collaborator?.email }}
+          <button mat-icon-button matChipRemove aria-label="Remove collaborator">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-set>
+    </div>
     <button
       class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center ml-auto"
-      (click)="openAddCollaboratorDialog()"
-    >
+      (click)="openAddCollaboratorDialog()">
       <mat-icon class="mr-2" style="transform: scale(0.7)">person_add</mat-icon>
-      Invite to Collaborate
+      Collaborators
+    </button>
+    <button class="ml-2" mat-icon-button matTooltip="Show Versions" (click)="showVersions()">
+      <mat-icon>history</mat-icon>
     </button>
   </div>
 
   <!-- Toast UI Editor Section -->
   <div class="w-full mb-4">
-    <div
-      #editorElement
-      id="editorElement"
-      class="toast-editor-container bg-white border border-gray-300 rounded-lg"
-    ></div>
+    <div #editorElement id="editorElement" class="toast-editor-container bg-white border border-gray-300 rounded-lg">
+    </div>
   </div>
 
   <div class="w-full flex items-center justify-end mt-4 space-x-2">
     <div class="w-full sm:w-2/3 space-y-2">
       <p class="text-md font-medium">Title : {{ draft?.title }}</p>
-      <p class="text-gray-500 text-sm">Author: John Doe</p>
-      <p class="text-gray-500 text-sm">
-        Submitted: {{ draft?.created_at | date }}
-      </p>
+      <p class="text-gray-500 text-sm">Author: {{draft?.author?.f_name}}</p>
       <p class="text-gray-500 text-sm">
         Updated: {{ draft?.updated_at | date }}
       </p>
@@ -40,28 +46,18 @@
         Status: {{ draft?.status }}
       </p>
     </div>
-    <button
-      mat-icon-button
-      matTooltip="Copy"
-      (click)="copyEditorContent()"
-      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs"
-    >
+    <button mat-icon-button matTooltip="Copy" (click)="copyEditorContent()"
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-2 rounded-lg text-xs">
       <mat-icon style="transform: scale(0.7)">content_copy</mat-icon>
     </button>
     <button
-      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-4 rounded-lg text-xs flex items-center"
-      (click)="saveDraft(editor.getMarkdown())"
-    >
+      class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-2 rounded-lg text-xs flex items-center"
+      (click)="saveDraft(editor.getMarkdown())">
       <mat-icon class="mr-2" style="transform: scale(0.7)">save</mat-icon> Save
     </button>
-    <button
-      class="bg-black hover:bg-black text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
-      (click)="startReview()"
-      *ngIf="draft?.status === 'editing' || draft?.status === 'rejected'"
-    >
-      <mat-icon class="mr-2" style="transform: scale(0.7)"
-        >check_circle</mat-icon
-      >
+    <button class="bg-black hover:bg-black text-white font-medium py-1 px-2 rounded-lg text-xs flex items-center"
+      (click)="startReview()" *ngIf="draft?.status === 'editing' || draft?.status === 'rejected'">
+      <mat-icon class="mr-2" style="transform: scale(0.7)">check_circle</mat-icon>
       Submit for Review
     </button>
   </div>
@@ -70,27 +66,17 @@
 <!-- collaborator dialog  -->
 <ng-template #collaboratorDialog>
   <div class="bg-white p-6 rounded-lg shadow-lg">
-    <p
-      style="font-size: 18px !important"
-      class="text-md font-medium text-center text-gray-900 mb-6"
-    >
+    <p style="font-size: 18px !important" class="text-md font-medium text-center text-gray-900 mb-6">
       Add Collaborator
     </p>
 
     <form [formGroup]="collaboratorForm" class="space-y-6">
       <mat-form-field appearance="fill" class="w-full">
-        <mat-label style="font-size: 14px !important" class="text-sm"
-          >Select Collaborators</mat-label
-        >
+        <mat-label style="font-size: 14px !important" class="text-sm">Select Collaborators</mat-label>
         <mat-select multiple formControlName="userIds" class="text-sm">
-          <mat-option
-            style="font-size: 14px !important"
-            *ngFor="let user of users?.data"
-            [value]="user.id"
-            [disabled]="
+          <mat-option style="font-size: 14px !important" *ngFor="let user of users?.data" [value]="user.id" [disabled]="
               user.id === draft?.author?.id || isCollaborator(user.id)
-            "
-          >
+            ">
             {{ user.f_name }} {{ user.l_name }}
           </mat-option>
         </mat-select>
@@ -101,40 +87,22 @@
           Access Level <span class="text-red-500">*</span>
         </label>
 
-        <div
-          class="relative mt-1 rounded-lg"
-          [ngClass]="{
+        <div class="relative mt-1 rounded-lg" [ngClass]="{
             'border-gray-500': dropdownOpen,
             'border-gray-300': !dropdownOpen
-          }"
-          [ngStyle]="{ 'border-width': '1px' }"
-        >
-          <button
-            class="block w-full px-3 py-2 text-sm border rounded-md bg-white focus:outline-none text-left"
-            (click)="toggleDropdown()"
-          >
+          }" [ngStyle]="{ 'border-width': '1px' }">
+          <button class="block w-full px-3 py-2 text-sm border rounded-md bg-white focus:outline-none text-left"
+            (click)="toggleDropdown()">
             <span>{{ selectedOption }}</span>
-            <span
-              class="material-icons text-sm absolute right-3 top-1/2 transform -translate-y-1/2"
-            >
+            <span class="material-icons text-sm absolute right-3 top-1/2 transform -translate-y-1/2">
               arrow_drop_down
             </span>
           </button>
 
-          <div
-            *ngIf="dropdownOpen"
-            class="absolute left-0 w-full mt-1 bg-white border border-gray-300 shadow-lg z-10"
-          >
-            <div
-              *ngFor="let option of options"
-              (click)="selectOption(option)"
-              class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              <span
-                *ngIf="option === selectedOption"
-                class="material-icons text-sm mr-2"
-                >check</span
-              >
+          <div *ngIf="dropdownOpen" class="absolute left-0 w-full mt-1 bg-white border border-gray-300 shadow-lg z-10">
+            <div *ngFor="let option of options" (click)="selectOption(option)"
+              class="flex items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
+              <span *ngIf="option === selectedOption" class="material-icons text-sm mr-2">check</span>
               <span>{{ option }}</span>
             </div>
           </div>
@@ -142,38 +110,24 @@
       </div>
 
       <div class="relative">
-        <label for="reason" class="text-sm font-medium text-gray-700"
-          >Reason <span class="text-red-500">*</span></label
-        >
-        <textarea
-          id="reason"
-          formControlName="reason"
-          placeholder="Why are you adding this collaborator?"
-          rows="4"
-          class="resize-none block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none text-sm"
-        ></textarea>
+        <label for="reason" class="text-sm font-medium text-gray-700">Reason <span class="text-red-500">*</span></label>
+        <textarea id="reason" formControlName="reason" placeholder="Why are you adding this collaborator?" rows="4"
+          class="resize-none block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none text-sm"></textarea>
       </div>
     </form>
 
     <div class="mt-6 flex justify-end space-x-4">
-      <button
-        mat-dialog-close
-        class="text-gray-600 hover:text-gray-800 text-xs font-medium py-2 px-4 rounded-md border-gray-300"
-      >
+      <button mat-dialog-close
+        class="text-gray-600 hover:text-gray-800 text-xs font-medium py-2 px-4 rounded-md border-gray-300">
         Cancel
       </button>
 
-      <button
-        [mat-dialog-close]="true"
-        [disabled]="!collaboratorForm.valid"
-        color="primary"
-        class="text-xs font-medium py-2 px-4 rounded-md cursor-pointer"
-        [ngClass]="{
+      <button [mat-dialog-close]="true" [disabled]="!collaboratorForm.valid" color="primary"
+        class="text-xs font-medium py-2 px-4 rounded-md cursor-pointer" [ngClass]="{
           'bg-black text-white': collaboratorForm.valid,
           'bg-gray-400 text-gray-700 cursor-not-allowed':
             !collaboratorForm.valid
-        }"
-      >
+        }">
         Add
       </button>
     </div>
@@ -183,10 +137,7 @@
 <!-- confirmation dialog  -->
 <ng-template #confirmationDialog let-data>
   <div class="bg-white p-4 rounded-md shadow-md">
-    <p
-      mat-dialog-title
-      class="text-xl font-semibold text-gray-900 text-center mb-4"
-    >
+    <p mat-dialog-title class="text-xl font-semibold text-gray-900 text-center mb-4">
       {{ data.title }}
     </p>
 
@@ -195,33 +146,47 @@
 
       <mat-form-field class="w-full" *ngIf="data.showReason">
         <mat-label class="text-sm">Reason</mat-label>
-        <textarea
-          matInput
-          [(ngModel)]="data.reason"
-          placeholder="Please provide a reason"
-          rows="4"
-          class="resize-none text-sm font-light"
-        ></textarea>
+        <textarea matInput [(ngModel)]="data.reason" placeholder="Please provide a reason" rows="4"
+          class="resize-none text-sm font-light"></textarea>
       </mat-form-field>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="space-x-4 mt-4">
-      <button
-        mat-button
-        mat-dialog-close
-        class="text-gray-600 text-sm hover:text-gray-800"
-      >
+      <button mat-button mat-dialog-close class="text-gray-600 text-sm hover:text-gray-800">
         Cancel
       </button>
-      <button
-        mat-button
-        [mat-dialog-close]="true"
-        color="primary"
-        [disabled]="!data.reason && data.showReason"
-        class="text-white text-sm font-medium py-2 px-4 rounded-md"
-      >
+      <button mat-button [mat-dialog-close]="true" color="primary" [disabled]="!data.reason && data.showReason"
+        class="text-white text-sm font-medium py-2 px-4 rounded-md">
         Confirm
       </button>
     </mat-dialog-actions>
+  </div>
+</ng-template>
+
+
+<ng-template #versionDialog>
+  <div style="overflow-y: auto;">
+    <div class="bg-white p-4 rounded-md shadow-md" *ngFor="let version of versionHistory let i =index">
+      <p class="text-sm text-gray-600">Version: {{ i+1}}</p>
+      <p class="text-sm text-gray-600">Author: {{ version.user?.f_name }}</p>
+      <p class="text-sm text-gray-600">Date: {{ version.updated_at | date:'short' }}</p>
+      <div style="display: flex;">
+        <p class="text-sm text-gray-600">Content:</p>
+        <p class="text-sm text-gray-600" [innerHTML]="version.content|markdown"></p>
+      </div>
+      <p class="text-sm text-gray-600">
+        Changes: <span [innerHTML]="formatContentChanges(version.content_changes)"></span>
+      </p>
+
+      <div class="flex justify-end mt-2">
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
+          (click)="restoreVersion(i)">
+          <mat-icon class="mr-2" style="transform: scale(0.7)">history</mat-icon>
+          Restore this version
+        </button>
+      </div>
+      <hr class="my-2" />
+    </div>
   </div>
 </ng-template>

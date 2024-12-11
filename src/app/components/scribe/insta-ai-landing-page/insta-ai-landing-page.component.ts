@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpResponse } from '@angular/common/http';
 import { ChatService } from '../services/chat.service';
 import { ConversationsResponse } from '../../../core/interfaces/conversation.model';
+import { UserService } from '../../../core/services/user.service';
 @Component({
   selector: 'app-insta-ai-landing-page',
   standalone: true,
@@ -79,7 +80,7 @@ export class InstaAiLandingPageComponent {
 
   conversations: ConversationsResponse | undefined;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, public userService: UserService) { }
 
   ngOnInit(): void {
     this.getConversations();

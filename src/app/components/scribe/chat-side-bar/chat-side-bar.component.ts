@@ -8,6 +8,7 @@ import { Router, NavigationStart, RouterModule, NavigationEnd } from '@angular/r
 import { ChatService } from '../services/chat.service';
 import { ConversationsResponse } from '../../../core/interfaces/conversation.model';
 import { HttpResponse } from '@angular/common/http';
+import { WebsocketsService } from '../../../core/services/websockets.service';
 @Component({
   selector: 'app-chat-side-bar',
   standalone: true,
@@ -26,10 +27,11 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private chatService: ChatService,
-    private router: Router
+    private router: Router,
+    private websocketsService: WebsocketsService
   ) {
     this.getConversations();
-   }
+  }
 
   ngOnInit(): void {
     // Listen for router events to track navigation changes
@@ -46,6 +48,7 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
         // Check if the user has navigated away from the previous conversation route
         if (this.previousConversationId && this.previousConversationId !== currentConversationId) {
           this.checkAndDeletePreviousConversation(this.previousConversationId);
+          this.listenToConversationChannels(currentConversationId);
         }
       }
     });
@@ -145,5 +148,17 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  // Listen to chat events to update the conversation list
+  listenToConversationChannels(conversation_id: string | null): void {
+    this.websocketsService.subscribeAndListenToChannel(
+      'ConversationChannel',
+      { conversation_id: conversation_id },
+      (data: any) => {
+        if (data.action === 'new_conversation_title')
+          this.getConversations();
+      }
+    )
   }
 }

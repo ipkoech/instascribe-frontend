@@ -1,6 +1,6 @@
 .ask-chat-container {
   margin-bottom: 24px;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   height: 100%;
 }
@@ -370,6 +370,7 @@ mat-icon {
   border: 1px solid #ccc;
   border-radius: 50%;
 }
+
 .upload-progress {
   display: flex;
   align-items: center;
@@ -412,12 +413,12 @@ mat-icon {
     flex: 1;
     display: flex;
     flex-direction: column;
-    
+
     .file-name {
       font-weight: 500;
       color: #111827;
     }
-    
+
     .file-type {
       font-size: 0.75rem;
       color: #6b7280;
@@ -425,6 +426,7 @@ mat-icon {
     }
   }
 }
+
 .format-badge {
   background: #4f46e5;
   color: white;
@@ -434,4 +436,3 @@ mat-icon {
   font-weight: 300;
   margin-left: 0.5rem;
 }
-
