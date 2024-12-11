@@ -2,10 +2,7 @@
   <!-- Logo Section -->
   <div class="flex items-center p-2 border-b border-gray-300">
     <!-- Logo with background -->
-    <div
-      class="flex items-center justify-center w-8 h-8 rounded-md"
-      style="background-color: #5038ed"
-    >
+    <div class="flex items-center justify-center w-8 h-8 rounded-md" style="background-color: #5038ed">
       <span class="material-icons text-white text-lg">description</span>
     </div>
     <!-- Brand Name -->
@@ -14,11 +11,9 @@
 
   <!-- InstaAI Section -->
   <div class="px-4 mt-6">
-    <button
-      (click)="createConversation()"
+    <button (click)="createConversation()"
       class="flex items-center justify-center w-full text-white text-sm px-6 py-1 rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition duration-300"
-      style="background-color: #5038ed"
-    >
+      style="background-color: #5038ed">
       <span class="material-icons text-base mr-2">add_comment</span>
       InstaAI
     </button>
@@ -27,19 +22,63 @@
   <!-- Recent Chats Section -->
   <div class="mt-6 px-4">
     <p class="text-sm text-gray-500">Recent Chats</p>
-    <div class="mt-2 space-y-1 section-items h-32 overflow-y-auto">
-      <a
-        *ngFor="let chat of conversations?.data"
-        [routerLink]="['/ask', chat.id]"
-        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer chat-item"
-        [class.active]="!chat.archived"
-        (click)="selectChat(chat)"
-      >
-        <mat-icon class="text-gray-500 text-sm">chat_bubble_outline</mat-icon>
-        <span class="ml-2 text-sm text-black item-title">
-          {{ getConversationTitle(chat) }}
-        </span>
-      </a>
+    <div class="mt-2 space-y-1 section-items h-36 overflow-y-auto">
+      <div *ngFor="let chat of conversations?.data" class="flex items-center justify-between">
+        <a [routerLink]="['/ask', chat.id]"
+          class="flex-grow flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer chat-item"
+          [class.active]="!chat.archived" (click)="selectChat(chat)">
+          <mat-icon class="text-gray-500 text-sm">chat_bubble_outline</mat-icon>
+          <span class="ml-2 text-sm text-black item-title">
+            {{ getConversationTitle(chat) }}
+          </span>
+        </a>
+        <button [matMenuTriggerFor]="menu" class="p-1 text-gray-500 hover:text-gray-700 focus:outline-none">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="px-3">
+          <button type="button" mat-menu-item (click)="renameConversation(chat)"
+            class="rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition duration-300">
+            <mat-icon>edit</mat-icon>
+            <span>Rename</span>
+          </button>
+          <button type="button" mat-menu-item (click)="archiveConversation(chat)"
+            class="rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition duration-300">
+            <mat-icon>archived</mat-icon>
+            <span>Archive</span>
+          </button>
+          <button type="button" mat-menu-item (click)="deleteConversation(chat)"
+            class="rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition duration-300">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <p class="text-sm text-gray-500 mt-5">Archived Chats</p>
+      <div *ngFor="let archived of archivedConversations?.data" class="flex items-center justify-between">
+        <a class="flex-grow flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer chat-item"
+          [class.active]="!archived.archived" (click)="selectChat(archived)">
+          <mat-icon class="text-gray-500 text-sm">chat_bubble_outline</mat-icon>
+          <span class="ml-2 text-sm text-black item-title">
+            {{ getConversationTitle(archived) }}
+          </span>
+        </a>
+        <button [matMenuTriggerFor]="menu" class="p-1 text-gray-500 hover:text-gray-700 focus:outline-none">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="px-3">
+          <button type="button" mat-menu-item (click)="unarchiveConversation(archived)"
+            class="rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition duration-300">
+            <mat-icon>unarchived</mat-icon>
+            <span>Unarchive</span>
+          </button>
+          <button type="button" mat-menu-item (click)="deleteConversation(archived)"
+            class="rounded-lg shadow-sm hover:shadow-lg hover:opacity-90 transition duration-300">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
     </div>
   </div>
 
@@ -55,62 +94,42 @@
       <li class="flex flex-col">
         <div
           class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-          (click)="toggleContentPanel()"
-        >
+          (click)="toggleContentPanel()">
           <div class="flex items-center">
-            <span class="material-icons text-gray-500 text-sm"
-              >tips_and_updates</span
-            >
+            <span class="material-icons text-gray-500 text-sm">tips_and_updates</span>
             <span class="ml-2 text-sm text-black">Content</span>
           </div>
-          <span
-            class="material-icons text-gray-400 text-sm transition-transform duration-300"
-            [ngClass]="{ 'rotate-180': isContentPanelOpen }"
-          >
+          <span class="material-icons text-gray-400 text-sm transition-transform duration-300"
+            [ngClass]="{ 'rotate-180': isContentPanelOpen }">
             expand_more
           </span>
         </div>
-        <ul
-          class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden"
-          [ngClass]="{
+        <ul class="pl-8 mt-1 space-y-1 transition-max-h duration-300 overflow-hidden" [ngClass]="{
             'max-h-0': !isContentPanelOpen
-          }"
-        >
+          }">
           <!-- Drafts -->
-          <li
-            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-            routerLink="/content/drafts"
-            routerLinkActive="bg-gray-100"
-          >
+          <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="/content/drafts" routerLinkActive="bg-gray-100">
             <span class="material-icons text-gray-500 text-sm">folder</span>
             <span class="ml-2 text-sm text-black">Drafts</span>
           </li>
           <!-- Review -->
-          <li
-            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-            routerLink="/content/review"
-            routerLinkActive="bg-gray-100"
-          >
+          <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="/content/review" routerLinkActive="bg-gray-100">
             <span class="material-icons text-gray-500 text-sm">pending</span>
             <span class="ml-2 text-sm text-black">Review</span>
           </li>
 
           <!-- Posts -->
-          <li
-            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-            routerLink="content/posts"
-            routerLinkActive="bg-gray-100"
-          >
+          <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="content/posts" routerLinkActive="bg-gray-100">
             <span class="material-icons text-gray-500 text-sm">article</span>
             <span class="ml-2 text-sm text-black">Posts</span>
           </li>
 
           <!-- Collaboration -->
-          <li
-            class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-            routerLink="content/collaboration"
-            routerLinkActive="bg-gray-100"
-          >
+          <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+            routerLink="content/collaboration" routerLinkActive="bg-gray-100">
             <span class="material-icons text-gray-500 text-sm">groups</span>
             <span class="ml-2 text-sm text-black">Collaboration</span>
           </li>
@@ -118,21 +137,15 @@
       </li>
 
       <!-- Library -->
-      <li
-        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-        routerLink="/library-management"
-        routerLinkActive="bg-gray-100"
-      >
+      <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+        routerLink="/library-management" routerLinkActive="bg-gray-100">
         <span class="material-icons text-gray-500 text-sm">library_books</span>
         <span class="ml-2 text-sm text-black">Library</span>
       </li>
 
       <!-- Team -->
-      <li
-        class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
-        routerLink="/team-management"
-        routerLinkActive="bg-gray-100"
-      >
+      <li class="flex items-center py-2 px-3 rounded-lg hover:bg-gray-100 transition duration-200 cursor-pointer"
+        routerLink="/team-management" routerLinkActive="bg-gray-100">
         <span class="material-icons text-gray-500 text-sm">groups</span>
         <span class="ml-2 text-sm text-black">Team</span>
       </li>
@@ -143,11 +156,8 @@
   <div class="mt-auto px-4 py-3 border-t border-gray-300 flex items-center">
     <div *ngIf="user$ | async as user" class="flex items-center space-x-3 p-3">
       <!-- Account Icon -->
-      <div
-        routerLink="/profile"
-        *ngIf="userService.user"
-        class="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer"
-      >
+      <div routerLink="/profile" *ngIf="userService.user"
+        class="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer">
         <span class="material-icons text-md">account_circle</span>
       </div>
 
@@ -158,20 +168,83 @@
           {{ user.f_name }} {{ user.l_name }}
         </p>
         <!-- User Roles -->
-        <p
-          class="text-xs text-gray-500 font-medium"
-          *ngFor="let role of user.roles"
-        >
+        <p class="text-xs text-gray-500 font-medium" *ngFor="let role of user.roles">
           {{ role.name }}
         </p>
       </div>
     </div>
-    <button
-      *ngIf="userService.user"
-      (click)="userService.logout()"
-      class="ml-6"
-    >
+    <button *ngIf="userService.user" (click)="userService.logout()" class="ml-6">
       <span class="material-icons text-red-500">logout</span>
     </button>
   </div>
 </div>
+
+<ng-template #deleteConvoDialog let-data>
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <p mat-dialog-title class="text-xl font-semibold text-gray-900 text-center mb-4">
+      {{ data.title }}
+    </p>
+
+    <mat-dialog-content class="space-y-4">
+      <p class="text-sm text-gray-600">{{ data.message }}</p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="space-x-4 mt-4">
+      <button mat-button mat-dialog-close class="text-gray-600 text-sm hover:text-gray-800">
+        Cancel
+      </button>
+      <button mat-button [mat-dialog-close]="true" color="primary" [disabled]="!data.reason && data.showReason"
+        class="text-white text-sm font-medium py-2 px-4 rounded-md">
+        Confirm
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+
+<ng-template #editConvoDialog let-data>
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <p mat-dialog-title class="text-md font-semibold text-gray-900 text-center mb-4">
+      {{ data.title }}
+    </p>
+
+    <mat-dialog-content class="space-y-4">
+      <mat-form-field class="w-full">
+        <mat-label>{{ data.inputLabel }}</mat-label>
+        <input matInput [(ngModel)]="data.inputValue" placeholder="Enter new title">
+      </mat-form-field>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="space-x-4 mt-4">
+      <button mat-button mat-dialog-close class="text-gray-600 text-sm hover:text-gray-800">
+        Cancel
+      </button>
+      <button mat-button [mat-dialog-close]="data.inputValue" color="primary"
+        class="text-white text-sm font-medium py-2 px-4 rounded-md">
+        Save
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<ng-template #archiveConvo let-data>
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <p mat-dialog-title class="text-xl font-semibold text-gray-900 text-center mb-4">
+      {{ data.title }}
+    </p>
+
+    <mat-dialog-content class="space-y-4">
+      <p class="text-sm text-gray-600">{{ data.message }}</p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="space-x-4 mt-4">
+      <button mat-button mat-dialog-close class="text-gray-600 text-sm hover:text-gray-800">
+        Cancel
+      </button>
+      <button mat-button [mat-dialog-close]="true" color="primary" [disabled]="!data.reason && data.showReason"
+        class="text-white text-sm font-medium py-2 px-4 rounded-md">
+        Confirm
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

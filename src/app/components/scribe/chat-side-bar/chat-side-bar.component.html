@@ -21,11 +21,25 @@
 
     </div> -->
     <div class="section-items">
-      <a *ngFor="let item of conversations?.data" [routerLink]="item.id" class="chat-item"
-        [class.active]="!item.archived">
-        <mat-icon>chat_bubble_outline</mat-icon>
-        <span class="item-title">{{ getConversationTitle(item )}}</span>
-      </a>
+      <div *ngFor="let item of conversations?.data; let i = index" class="chat-item" [class.active]="!item.archived">
+        <span [routerLink]="['/ask', item.id]" class="chat-item-content">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <span class="item-title">{{ getConversationTitle(item) }}</span>
+        </span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="renameConversation(item)">
+            <mat-icon>edit</mat-icon>
+            <span>Rename</span>
+          </button>
+          <button mat-menu-item (click)="deleteConversation(item.id)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
     </div>
   </div>
   <div class="sidebar-footer">
