@@ -81,6 +81,7 @@
     width: 100%;
   }
 }
+
 .action-buttons {
   display: flex;
   align-items: center;
@@ -104,8 +105,10 @@
 
 /* Overall Toolbar Styling */
 .toast-editor-container .toastui-editor-toolbar {
-  background-color: #f4f7fa; /* Light background for a clean, modern look */
-  border: 1px solid #e0e0e0; /* Soft border to make the toolbar stand out */
+  background-color: #f4f7fa;
+  /* Light background for a clean, modern look */
+  border: 1px solid #e0e0e0;
+  /* Soft border to make the toolbar stand out */
   padding: 8px;
   border-radius: 8px;
   display: flex;
@@ -125,28 +128,37 @@
 }
 
 .toast-editor-container .toastui-editor-toolbar button:hover {
-  background-color: #e0e0e0; /* Slightly darker background when hovering */
-  transform: scale(1.05); /* Slight zoom effect on hover */
+  background-color: #e0e0e0;
+  /* Slightly darker background when hovering */
+  transform: scale(1.05);
+  /* Slight zoom effect on hover */
 }
 
 .toast-editor-container .toastui-editor-toolbar button:focus {
   outline: none;
-  border-color: #6c63ff; /* Add focus outline to enhance accessibility */
+  border-color: #6c63ff;
+  /* Add focus outline to enhance accessibility */
 }
 
 /* Active/Selected buttons */
 .toast-editor-container .toastui-editor-toolbar button.active {
-  background-color: #6c63ff; /* Highlight active buttons with a color */
+  background-color: #6c63ff;
+  /* Highlight active buttons with a color */
   color: white;
 }
 
 /* Customize icons if necessary */
 .toast-editor-container .toastui-editor-toolbar button i {
   font-size: 18px;
-  color: #4b4b4b; /* Default icon color */
+  color: #4b4b4b;
+  /* Default icon color */
 }
 
 /* Spacing between buttons */
-.toast-editor-container .toastui-editor-toolbar button + button {
+.toast-editor-container .toastui-editor-toolbar button+button {
   margin-left: 8px;
+}
+
+button[disabled] {
+  cursor: not-allowed;
 }

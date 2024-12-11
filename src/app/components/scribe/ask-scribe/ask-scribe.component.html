@@ -78,51 +78,52 @@
 
 
   <div class="border-t">
-  <div *ngIf="fileName" class="file-preview">
-    <div class="file-icon">
-      {{ fileName.charAt(0).toUpperCase() }}
-      <sup class="format-badge">{{ getFileFormat(fileType) }}</sup>
-    </div>
-    <button mat-icon-button (click)="clearFileSelection()" [disabled]="isUploading">
-      <mat-icon style="transform: scale(0.8);">close</mat-icon>
-    </button>
-  </div>
-
-  <form class="flex items-center justify-between px-4 py-2  bg-white" [formGroup]="chatForm">
-    <!-- File Attachment Button -->
-    <input type="file" id="fileInput" (change)="onFileSelected($event)" class="hidden" />
-    <button type="button" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
-      (click)="triggerFileInput()">
-      <mat-icon class="text-gray-500">attach_file</mat-icon>
-    </button>
-
-    <!-- Input Field -->
-
-
-    <div class="flex-1 mx-4">
-      <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
-        formControlName="user_input" (keydown.enter)="handleKeyDown($event)" placeholder="Type your message..."
-        class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+    <div *ngIf="fileName" class="file-preview">
+      <div class="file-icon">
+        {{ fileName.charAt(0).toUpperCase() }}
+        <sup class="format-badge">{{ getFileFormat(fileType) }}</sup>
+      </div>
+      <button mat-icon-button (click)="clearFileSelection()" [disabled]="isUploading">
+        <mat-icon style="transform: scale(0.8);">close</mat-icon>
+      </button>
     </div>
 
-    <!-- Tone Selector -->
-    <div class="flex items-center space-x-2">
-      <label for="tone-selector" class="text-sm text-gray-600">Tone:</label>
-      <select id="tone-selector"
-        class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        <option>Default</option>
-        <option>Casual</option>
-        <option>Formal</option>
-      </select>
-    </div>
+    <form class="flex items-center justify-between px-4 py-2  bg-white" [formGroup]="chatForm">
+      <!-- File Attachment Button -->
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="hidden" />
+      <button type="button" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+        (click)="triggerFileInput()">
+        <mat-icon class="text-gray-500">attach_file</mat-icon>
+      </button>
+
+      <!-- Input Field -->
 
 
-    <!-- Send Button -->
-    <button type="button"
-      class="ml-4 flex items-center justify-center w-10 h-10 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50"
-      [disabled]="!chatForm.get('user_input')?.value && !selectedFile" (click)="onSend()">
-      <mat-icon>send</mat-icon>
-    </button>
-  </form>
+      <div class="flex-1 mx-4">
+        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
+          formControlName="user_input" (keydown.enter)="handleKeyDown($event)" placeholder="Type your message..."
+          class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+      </div>
+
+      <!-- Tone Selector -->
+      <!-- <div class="flex items-center space-x-2">
+        <label for="tone-selector" class="text-sm text-gray-600">Tone:</label>
+        <select id="tone-selector"
+          class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option>Default</option>
+          <option>Casual</option>
+          <option>Formal</option>
+        </select>
+      </div> -->
+
+
+      <!-- Send Button -->
+      <button type="button"
+        class="ml-4 flex items-center justify-center w-10 h-10 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50"
+        [disabled]="!chatForm.get('user_input')?.value && !selectedFile" (click)="onSend()">
+        <mat-icon *ngIf="!isLoading">send</mat-icon>
+        <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
+      </button>
+    </form>
   </div>
 </div>

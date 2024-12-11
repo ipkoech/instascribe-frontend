@@ -5,9 +5,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -45,42 +45,87 @@ export class InstaAiLandingPageComponent {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     fileInput.click();
   }
-
+  messageForm: FormGroup;
+  isLoading: boolean = false;
   selectedFile: File | undefined;
   fileName: string | null = null;
   fileType: string | null = null;
+  handleKeyDown(event: any): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.onSend();
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      if (this.selectedFile) {
+        this.fileName = this.selectedFile.name;
+        this.fileType = this.selectedFile.type;
+      }
+    }
+  }
 
   clearFileSelection(): void {
     this.fileName = null;
     this.selectedFile = undefined;
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     if (fileInput) {
-      fileInput.value = ''; // Reset file input
+      fileInput.value = '';
     }
   }
 
-  // Handle file selection
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0]; // Get the selected file
-      if (this.selectedFile) {
-        this.fileName = this.selectedFile.name;
-        this.fileType = this.selectedFile.type;
-        console.log(this.fileName);
+  onSend(): void {
+    if (this.messageForm.valid && this.userService?.user) {
+      const userInput = this.messageForm.get('user_input')?.value;
+      const file = this.selectedFile;
+
+      if (userInput || file) {
+        this.isLoading = true;
+        this.chatService.createConversation().subscribe({
+          next: (response: HttpResponse<any>) => {
+            if (response.ok && response.body) {
+              const conversationId = response.body.id;
+              this.sendChatMessage(conversationId, userInput, file);
+            }
+          },
+          error: (error) => {
+            console.error('Error creating conversation:', error);
+            this.isLoading = false;
+          }
+        });
       }
     }
   }
 
-  handleKeyDown(event: any): void {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-    }
+  sendChatMessage(conversationId: string, userInput: string, file?: File): void {
+    this.chatService.sendChatMessage(conversationId, userInput, file).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          this.router.navigate(['/ask', conversationId]);
+        }
+      },
+      error: (error) => {
+        console.error('Error sending message:', error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.messageForm.reset();
+        this.clearFileSelection();
+      },
+    });
   }
 
   conversations: ConversationsResponse | undefined;
 
-  constructor(private chatService: ChatService, public userService: UserService) { }
+  constructor(private chatService: ChatService, public userService: UserService, private fb: FormBuilder, private router: Router) {
+    this.messageForm = this.fb.group({
+      user_input: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.getConversations();
