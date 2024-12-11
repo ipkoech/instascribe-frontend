@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserService } from '../../../core/services/user.service';
 import { ChatModel } from '../../../core/interfaces/chat.model';
 import { WebsocketsService } from '../../../core/services/websockets.service';
+import { ConversationModel } from '../../../core/interfaces/conversation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -52,10 +53,31 @@ export class ChatService {
 
 
   // fetch conversations
-  fetchConversations(): Observable<any> {
-    return this.http.get(`${this.api.base_uri}conversations`, { withCredentials: true, observe: 'response' });
-  }
+  fetchConversations(params?: {
+    archived?: boolean,
+    created_at?: string,
+    user_id?: string,
+    order_by?: string,
+    page?: number,
+    per_page?: number
+  }): Observable<any> {
+    let httpParams = new HttpParams();
 
+    if (params) {
+      if (params.archived !== undefined) httpParams = httpParams.set('filter[archived]', params.archived.toString());
+      if (params.created_at) httpParams = httpParams.set('created_at', params.created_at);
+      if (params.user_id) httpParams = httpParams.set('user_id', params.user_id);
+      if (params.order_by) httpParams = httpParams.set('order_by', params.order_by);
+      if (params.page) httpParams = httpParams.set('page', params.page.toString());
+      if (params.per_page) httpParams = httpParams.set('per_page', params.per_page.toString());
+    }
+
+    return this.http.get(`${this.api.base_uri}conversations`, {
+      withCredentials: true,
+      observe: 'response',
+      params: httpParams
+    });
+  }
 
   // fetch conversations
   fetchConversation(id: string): Observable<any> {
@@ -82,5 +104,15 @@ export class ChatService {
     return this.http.post(`${this.api.base_uri}conversations/${chat.conversation_id}/chats/${chat.id}/dislike`, {}, { withCredentials: true, observe: 'response' });
   }
 
+  updateConversation(conversation: ConversationModel, updateData: Partial<ConversationModel>): Observable<any> {
+    return this.http.post(`${this.api.base_uri}conversations/${conversation.id}`, updateData, { withCredentials: true, observe: 'response' });
+  }
 
+  archiveCionversation(conversation: ConversationModel): Observable<any> {
+    return this.http.post(`${this.api.base_uri}conversations/${conversation.id}/archive`, {}, { withCredentials: true, observe: 'response' });
+  }
+
+  unarchiveConversation(conversation: ConversationModel): Observable<any> {
+    return this.http.post(`${this.api.base_uri}conversations/${conversation.id}/unarchive`, {}, { withCredentials: true, observe: 'response' });
+  }
 }

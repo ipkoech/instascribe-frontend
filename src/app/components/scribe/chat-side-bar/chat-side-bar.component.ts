@@ -6,13 +6,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { Router, NavigationStart, RouterModule, NavigationEnd } from '@angular/router';
 import { ChatService } from '../services/chat.service';
-import { ConversationsResponse } from '../../../core/interfaces/conversation.model';
+import { ConversationModel, ConversationsResponse } from '../../../core/interfaces/conversation.model';
 import { HttpResponse } from '@angular/common/http';
 import { WebsocketsService } from '../../../core/services/websockets.service';
+import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-chat-side-bar',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatIconModule, MatButtonModule, MatDividerModule, RouterModule],
+  imports: [CommonModule, MatListModule, MatIconModule, MatButtonModule, MatDividerModule, RouterModule, MatMenuModule],
   templateUrl: './chat-side-bar.component.html',
   styleUrl: './chat-side-bar.component.scss'
 })
@@ -28,7 +30,8 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private router: Router,
-    private websocketsService: WebsocketsService
+    private websocketsService: WebsocketsService,
+    private snackService: SnackBarService,
   ) {
     this.getConversations();
   }
@@ -45,12 +48,13 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         const currentUrl = event.urlAfterRedirects;
         const currentConversationId = this.extractConversationId(currentUrl);
+        this.listenToConversationChannels(currentConversationId);
         // Check if the user has navigated away from the previous conversation route
         if (this.previousConversationId && this.previousConversationId !== currentConversationId) {
           this.checkAndDeletePreviousConversation(this.previousConversationId);
-          this.listenToConversationChannels(currentConversationId);
         }
       }
+
     });
   }
 
@@ -161,4 +165,25 @@ export class ChatSideBarComponent implements OnInit, OnDestroy {
       }
     )
   }
+
+  // Delete a conversation
+  deleteConversation(conversationId: string): void {
+    this.chatService.deleteConversation(conversationId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          this.snackService.info('Conversation deleted successfully');
+          this.getConversations();
+        }
+      },
+      error: (error) => {
+        this.getConversations();
+        this.snackService.error('Error deleting conversation');
+      }
+    });
+  }
+
+  renameConversation(_t19: ConversationModel) {
+    throw new Error('Method not implemented.');
+  }
+
 }

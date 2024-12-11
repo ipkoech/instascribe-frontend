@@ -44,6 +44,8 @@ import { UserModelsResponse } from '../../../core/interfaces/user.model';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { UserService } from '../../../core/services/user.service';
+import { MarkdownPipe } from "../../../core/pipes/markdown.pipe";
 
 @Component({
   selector: 'app-draft-review-detail',
@@ -60,6 +62,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatTooltipModule,
     BreadCrumbComponent,
     MatChipsModule,
+    MarkdownPipe
   ],
   templateUrl: './draft-review-detail.component.html',
   styleUrl: './draft-review-detail.component.scss',
@@ -85,7 +88,8 @@ export class DraftReviewDetailComponent implements AfterViewInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private api: ApiService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    public userService: UserService,
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
@@ -119,7 +123,11 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       },
     };
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
-      next: (response: HttpResponse<any>) => {},
+      next: (response: HttpResponse<any>) => {
+        if (response.ok) {
+          this.snackBarService.info('Draft saved successfully!');
+        }
+      },
     });
   }
 
@@ -162,7 +170,7 @@ export class DraftReviewDetailComponent implements AfterViewInit {
             this.users = response.body;
           }
         },
-        error: (errorResponse: HttpErrorResponse) => {},
+        error: (errorResponse: HttpErrorResponse) => { },
       });
   }
   collaboratorIds: Set<string> = new Set<string>();
@@ -475,4 +483,97 @@ export class DraftReviewDetailComponent implements AfterViewInit {
     this.selectedOption = option;
     this.dropdownOpen = false;
   }
+
+  @ViewChild('versionDialog') versionDialog!: TemplateRef<any>;
+  showVersions() {
+    // load history versions
+    this.loadVersionHistory();
+    this.dialogRef = this.dialog.open(this.versionDialog, {
+      width: '500px',
+      hasBackdrop: true,
+      height: '700px',
+      position: { top: '50px', right: '20px', bottom: '20px' },
+    });
+  }
+
+  restoreVersion(index: number) {
+    const version = this.versionHistory[index];
+    this.editor.setMarkdown(version.content);
+    this.saveDraft(version.content);
+    this.dialogRef.close();
+  }
+
+
+  versionHistory: any;
+  loadVersionHistory() {
+    this.draftService.getDraftVersionHistory(this.draftId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        this.versionHistory = response.body.filter((version: any) => {
+          const contentChangesStr = version.content_changes;
+          console.log(contentChangesStr);
+
+
+          // Check if content_changes is present and not empty
+          if (!contentChangesStr || contentChangesStr.trim() === '' || contentChangesStr.trim() === '{}') {
+            return false;
+          }
+
+          return contentChangesStr
+            && contentChangesStr.trim() !== ''
+            && contentChangesStr.trim() !== '{}';
+        });
+
+      },
+      error: (error) => {
+        this.snackBarService.error('Failed to load version history');
+      }
+    });
+  }
+
+  formatContentChanges(changes: string): string {
+    if (!changes || changes.trim() === '{}') {
+      return 'No changes';
+    }
+
+    // Step 1: Convert Ruby hash-like syntax to JSON-like syntax
+    // Replace '=>' with ':'
+    let jsonLike = changes.replace(/=>/g, ':');
+
+    // Replace symbol-like keys (:removed, :added) with string keys
+    jsonLike = jsonLike.replace(/:removed/g, '"removed"');
+    jsonLike = jsonLike.replace(/:added/g, '"added"');
+
+    // Wrap unquoted numeric keys with quotes to make it valid JSON
+    // e.g. {5:{...}} becomes {"5":{...}}
+    jsonLike = jsonLike.replace(/(\{|,\s*)(\d+):/g, '$1"$2":');
+
+    try {
+      const parsed = JSON.parse(jsonLike);
+
+      const results: string[] = [];
+
+      // parsed is now an object like { "5": { removed:[], added:[""] }, "6": {...} }
+      for (const line in parsed) {
+        const { removed, added } = parsed[line];
+        const lineChanges: string[] = [];
+
+        if (removed && removed.length > 0 && !(removed.length === 1 && removed[0] === '')) {
+          lineChanges.push(`Removed: ${removed.join(', ')}`);
+        }
+
+        if (added && added.length > 0 && !(added.length === 1 && added[0] === '')) {
+          lineChanges.push(`Added: ${added.join(', ')}`);
+        }
+
+        if (lineChanges.length > 0) {
+          results.push(`Line ${line}: ${lineChanges.join('; ')}`);
+        }
+      }
+
+      return results.length > 0 ? results.join('<br>') : 'No changes';
+    } catch (e) {
+      return 'Could not parse changes';
+    }
+  }
+
 }

@@ -93,10 +93,13 @@ export class ChatsComponent implements OnInit {
   }
 
   chat!: string
-
+  params = {
+    per_page: -1,
+    archived: false,
+  }
   ngOnInit(): void {
     // this.createAndSelectConversation();
-    this.loadConversations();
+    this.loadConversations(this.params);
 
     this.sidenavService.toggleEditSidenav$.subscribe((data) => {
       if (data) {
@@ -114,8 +117,8 @@ export class ChatsComponent implements OnInit {
     });
   }
 
-  loadConversations(): void {
-    this.chatService.fetchConversations().subscribe({
+  loadConversations(params?: {}): void {
+    this.chatService.fetchConversations(params).subscribe({
       next: (response: HttpResponse<any>) => {
         this.conversations = response.body;
       }

@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <form class="flex items-center justify-between px-4 py-2 bg-white rounded-lg mt-8">
+  <form class="flex items-center justify-between px-4 py-2 bg-white rounded-lg mt-8" [formGroup]="messageForm">
     <!-- File Attachment Button -->
     <input type="file" id="fileInput" (change)="onFileSelected($event)" class="hidden" />
     <button type="button" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
@@ -32,9 +32,10 @@
     </div>
 
     <!-- Send Button -->
-    <button type="button"
+    <button type="submit" [disabled]="!messageForm.valid || isLoading"
       class="ml-4 flex items-center justify-center w-7 h-7 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50">
-      <mat-icon>send</mat-icon>
+      <mat-icon *ngIf="!isLoading">send</mat-icon>
+      <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
     </button>
   </form>
   <!-- Recent Chats Section -->

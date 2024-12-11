@@ -161,17 +161,15 @@
       </div>
 
       <!-- Tone Selector -->
-      <div class="flex items-center space-x-2">
+      <!-- <div class="flex items-center space-x-2">
         <label for="tone-selector" class="text-sm text-gray-600">Tone:</label>
-        <select
-          id="tone-selector"
-          class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
+        <select id="tone-selector"
+          class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option>Default</option>
           <option>Casual</option>
           <option>Formal</option>
         </select>
-      </div>
+      </div> -->
 
       <!-- Send Button -->
       <button
@@ -180,7 +178,8 @@
         [disabled]="!chatForm.get('user_input')?.value && !selectedFile"
         (click)="onSend()"
       >
-        <mat-icon>send</mat-icon>
+        <mat-icon *ngIf="!isLoading">send</mat-icon>
+        <mat-spinner *ngIf="isLoading" [diameter]="20"></mat-spinner>
       </button>
     </form>
   </div>
