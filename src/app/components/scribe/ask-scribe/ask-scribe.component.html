@@ -1,22 +1,25 @@
 <div class="ask-chat-container">
   <!-- Header Section -->
-  <div
-    *ngIf="conversation?.chats?.length === 0"
-    class="flex flex-col items-center justify-center py-1 text-center bg-white shadow-md sticky top-0 z-1000"
-  >
-    <div
-      class="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-600"
-    >
-      <span class="material-icons text-white">psychology</span>
-    </div>
-    <h5 class="mt-4 text-xs font-semibold text-gray-800">Welcome to InstaAI</h5>
-    <p class="mt-2 text-gray-600 text-sm">
-      Unleash the power of AI-driven content creation. Ask anything, and watch
-      as InstaAI generates engaging, tailored content to elevate your marketing
-      strategy.
-    </p>
-  </div>
+
   <div class="messages-container" #messagesContainer>
+    <div
+      *ngIf="conversation?.chats?.length === 0"
+      class="flex flex-col items-center justify-center py-1 text-center bg-white shadow-md sticky top-0 z-1000"
+    >
+      <div
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-600"
+      >
+        <span class="material-icons text-white">psychology</span>
+      </div>
+      <h5 class="mt-4 text-xs font-semibold text-gray-800">
+        Welcome to InstaAI
+      </h5>
+      <p class="mt-2 text-gray-600 text-sm">
+        Unleash the power of AI-driven content creation. Ask anything, and watch
+        as InstaAI generates engaging, tailored content to elevate your
+        marketing strategy.
+      </p>
+    </div>
     <div
       *ngFor="let message of chats?.data"
       [ngClass]="message.role === 'user' ? 'user-message' : 'bot-message'"
