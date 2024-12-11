@@ -62,7 +62,6 @@ export class PostDetailComponent {
           ]);
         },
         error: (error) => {
-          console.error('Error loading draft:', error);
           this.error = 'Failed to load post';
           this.isLoading = false;
           this.router.navigate(['../']);

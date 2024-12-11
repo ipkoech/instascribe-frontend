@@ -1,14 +1,3 @@
-<!-- <app-app-bar [sidenav]="sidenav"></app-app-bar>
-
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav class="sidenav" mode="side" opened>
-    <app-side-nav  [sidenav]="sidenav"></app-side-nav>
-  </mat-sidenav>
-  <mat-sidenav-content class="sidenav-content">
-   <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container> -->
-
 <mat-sidenav-container class="sidenav-container mat-elevation-z1">
   <!-- Sidenav -->
   <mat-sidenav #sidenav mode="side" opened class="sidenav">
@@ -17,7 +6,7 @@
 
   <!-- Main Content Area -->
   <mat-sidenav-content class="content">
-    <app-app-bar [sidenav]="sidenav"></app-app-bar>
+    <app-app-bar [sidenav]="sidenav" [unreadCount$]="unreadCount$"></app-app-bar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -135,7 +135,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       },
     };
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
-      next: (response: HttpResponse<any>) => {},
+      next: (response: HttpResponse<any>) => { },
     });
   }
   versionHistory: any;
@@ -144,8 +144,6 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       next: (response: HttpResponse<any>) => {
         this.versionHistory = response.body.filter((version: any) => {
           const contentChangesStr = version.content_changes;
-          console.log(contentChangesStr);
-
           // Check if content_changes is present and not empty
           if (
             !contentChangesStr ||
@@ -242,14 +240,14 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
             this.users = response.body;
           }
         },
-        error: (errorResponse: HttpErrorResponse) => {},
+        error: (errorResponse: HttpErrorResponse) => { },
       });
   }
 
   private initializeEditor() {
     this.editor = new Editor({
       el: this.editorElement.nativeElement,
-      height: '250px',
+      height: '400px',
       initialValue: '',
       previewStyle: 'tab',
       initialEditType: 'wysiwyg',
@@ -275,7 +273,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
         ]);
         this.draftService.subscribeToDraftChannel(this.draft);
         if (this.editor && this.draft.content) {
-          this.editor.setMarkdown(this.draft.content);
+          this.editor.setMarkdown(this.draft?.content);
         }
       },
     });

@@ -93,8 +93,6 @@ export class DraftReviewDetailComponent implements AfterViewInit {
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
-      console.log(params['id']);
-
       if (this.draftId) {
         this.loadDraft(this.draftId);
         this.setupAutoSave();
@@ -125,7 +123,6 @@ export class DraftReviewDetailComponent implements AfterViewInit {
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.ok) {
-          this.snackBarService.info('Draft saved successfully!');
         }
       },
     });
@@ -138,7 +135,7 @@ export class DraftReviewDetailComponent implements AfterViewInit {
   private initializeEditor() {
     this.editor = new Editor({
       el: this.editorElement.nativeElement,
-      height: '250px',
+      height: '400px',
       initialValue: '',
       previewStyle: 'tab',
       initialEditType: 'wysiwyg',
@@ -423,7 +420,6 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       access_level: this.collaboratorForm.value.accessLevel,
     };
 
-    console.log('Collaborator Data:', collaboratorData);
 
     // Call the service to add collaborators
     this.draftService
@@ -452,7 +448,6 @@ export class DraftReviewDetailComponent implements AfterViewInit {
 
   copyEditorContent() {
     const content = this.editor.getMarkdown();
-
     navigator.clipboard.writeText(content).then(
       () => {
         this.snackBarService.success(
@@ -510,9 +505,6 @@ export class DraftReviewDetailComponent implements AfterViewInit {
       next: (response: HttpResponse<any>) => {
         this.versionHistory = response.body.filter((version: any) => {
           const contentChangesStr = version.content_changes;
-          console.log(contentChangesStr);
-
-
           // Check if content_changes is present and not empty
           if (!contentChangesStr || contentChangesStr.trim() === '' || contentChangesStr.trim() === '{}') {
             return false;

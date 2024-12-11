@@ -188,7 +188,6 @@ export class SideNavComponent implements OnInit {
 
   selectChat(chat: any): void {
     this.selectedChat = chat.id;
-    console.log(`Selected Chat: ${chat.name}`);
   }
 
   isContentPanelOpen = false; // State for Content Panel
@@ -349,8 +348,6 @@ export class SideNavComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-
       if (result) {
         this.chatService.updateConversation(conversation, { title: result }).subscribe({
           next: (response: HttpResponse<any>) => {
