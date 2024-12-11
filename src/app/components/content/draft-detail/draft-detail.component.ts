@@ -441,8 +441,8 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dialogRef = this.dialog.open(this.versionDialog, {
       width: '500px',
       hasBackdrop: true,
-      height: '700px',
-      position: { top: '50px', right: '20px', bottom: '20px' },
+      height: '600px',
+      position: { top: '50px', right: '20px', bottom: '50px' },
     });
   }
 

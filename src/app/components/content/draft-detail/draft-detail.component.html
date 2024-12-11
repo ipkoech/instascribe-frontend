@@ -255,31 +255,32 @@
 </ng-template>
 
 <ng-template #versionDialog>
-  <div style="overflow-y: auto">
+  <div style="overflow-y: auto; max-height: 93vh">
     <div
       class="bg-white p-4 rounded-md shadow-md"
       *ngFor="let version of versionHistory; let i = index"
     >
-      <p class="text-sm text-gray-600">Version: {{ i + 1 }}</p>
-      <p class="text-sm text-gray-600">Author: {{ version.user?.f_name }}</p>
       <p class="text-sm text-gray-600">
-        Date: {{ version.updated_at | date : "short" }}
+        <span class="font-medium">Version:</span>
+        <span class="text-xs">{{ i + 1 }}</span>
       </p>
-      <div style="display: flex">
-        <p class="text-sm text-gray-600">Content:</p>
-        <p
-          class="text-sm text-gray-600"
-          [innerHTML]="version.content | markdown"
-        ></p>
-      </div>
       <p class="text-sm text-gray-600">
-        Changes:
+        <span class="font-medium">Author:</span
+        ><span class="text-xs"> {{ version.user?.f_name }}</span>
+      </p>
+      <p class="text-sm text-gray-600">
+        <span class="font-medium">Date:</span>
+        <span class="text-xs">{{ version.updated_at | date : "short" }}</span>
+      </p>
+      <p class="text-sm text-gray-600">
+        <span class="font-medium"> Changes:</span>
         <span
+          class="text-xs"
           [innerHTML]="formatContentChanges(version.content_changes)"
         ></span>
       </p>
 
-      <div class="flex justify-end mt-2">
+      <div class="flex justify-end mt-2 mb-2">
         <button
           class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center"
           (click)="restoreVersion(i)"
