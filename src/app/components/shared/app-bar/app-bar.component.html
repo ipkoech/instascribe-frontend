@@ -14,17 +14,22 @@
   <!-- Icons on the Far Right -->
   <div class="ml-auto flex items-center space-x-4">
     <!-- Notifications -->
-    <button class="text-gray-700 hover:text-gray-900 focus:outline-none relative" 
+    <!-- <button class="text-gray-700 hover:text-gray-900 focus:outline-none relative"
       routerLink="notifications">
       <span class="material-icons text-xl">notifications</span>
       <span
         class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
         {{ unreadNotitications }}
       </span>
+    </button> -->
+
+    <button routerLink="notifications" mat-icon-button [matBadge]="unreadCount$ | async" matBadgeSize="medium"
+      [matBadgeHidden]="(unreadCount$ | async) === 0" matBadgeColor="warn">
+      <mat-icon>notifications</mat-icon>
     </button>
 
     <!-- Settings -->
-    <button class="text-gray-700 hover:text-gray-900 focus:outline-none"  routerLink="settings">
+    <button class="text-gray-700 hover:text-gray-900 focus:outline-none" routerLink="settings">
       <span class="material-icons text-xl">settings</span>
     </button>
   </div>

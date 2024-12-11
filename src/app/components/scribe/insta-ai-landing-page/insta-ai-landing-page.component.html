@@ -3,60 +3,37 @@
     <div class="mt-4 px-4">
       <p class="text-xl font-medium leading-snug">
         Hi there,
-        <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600"
-        >
-          User
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600">
+          {{userService.user?.f_name}} {{userService.user?.l_name}}
         </span>
       </p>
       <p class="text-lg font-medium leading-snug">
         What
-        <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500"
-        >
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500">
           would like to know?
         </span>
       </p>
     </div>
   </div>
 
-  <form
-    class="flex items-center justify-between px-4 py-2 bg-white rounded-lg mt-8"
-  >
+  <form class="flex items-center justify-between px-4 py-2 bg-white rounded-lg mt-8">
     <!-- File Attachment Button -->
-    <input
-      type="file"
-      id="fileInput"
-      (change)="onFileSelected($event)"
-      class="hidden"
-    />
-    <button
-      type="button"
-      class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
-      (click)="triggerFileInput()"
-    >
+    <input type="file" id="fileInput" (change)="onFileSelected($event)" class="hidden" />
+    <button type="button" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+      (click)="triggerFileInput()">
       <mat-icon class="text-gray-500">attach_file</mat-icon>
     </button>
 
     <!-- Input Field -->
     <div class="flex-1 mx-4">
-      <textarea
-        cdkTextareaAutosize
-        #autosize="cdkTextareaAutosize"
-        cdkAutosizeMinRows="3"
-        cdkAutosizeMaxRows="10"
-        formControlName="user_input"
-        (keydown.enter)="handleKeyDown($event)"
-        placeholder="Type your message..."
-        class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-      ></textarea>
+      <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="10"
+        formControlName="user_input" (keydown.enter)="handleKeyDown($event)" placeholder="Type your message..."
+        class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
     </div>
 
     <!-- Send Button -->
-    <button
-      type="button"
-      class="ml-4 flex items-center justify-center w-7 h-7 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50"
-    >
+    <button type="button"
+      class="ml-4 flex items-center justify-center w-7 h-7 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 disabled:opacity-50">
       <mat-icon>send</mat-icon>
     </button>
   </form>
@@ -68,12 +45,9 @@
     <!-- Card Container -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Dynamic Chat Cards -->
-      <div
-        [routerLink]="['/ask', chat.id]"
-        *ngFor="let chat of conversations?.data | slice : 0 : 4"
+      <div [routerLink]="['/ask', chat.id]" *ngFor="let chat of conversations?.data | slice : 0 : 4"
         style="cursor: pointer"
-        class="shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow duration-200"
-      >
+        class="shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow duration-200">
         <!-- Text Content -->
         <p class="text-xs font-medium text-gray-700">
           {{ getConversationTitle(chat) }}

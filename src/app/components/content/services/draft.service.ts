@@ -63,7 +63,7 @@ export class DraftService {
   }
 
   approveDraft(draftId: string): Observable<any> {
-    return this.http.post(`${this.api.base_uri}drafts/${draftId}/approve`, {},{ withCredentials: true, observe: 'response' });
+    return this.http.post(`${this.api.base_uri}drafts/${draftId}/approve`, {}, { withCredentials: true, observe: 'response' });
   }
 
   rejectDraft(draftId: string): Observable<any> {
@@ -101,6 +101,10 @@ export class DraftService {
       httpParams = httpParams.append(key, params[key]);
     });
     return this.http.get(`${this.api.base_uri}drafts/shared-drafts`, { params: httpParams, withCredentials: true, observe: 'response' });
+  }
+
+  getDraftVersionHistory(draftId: string): Observable<any> {
+    return this.http.get(`${this.api.base_uri}drafts/${draftId}/history`, { withCredentials: true, observe: 'response' });
   }
 }
 
