@@ -43,6 +43,7 @@ import { ApiService } from '../../../core/services/api.service';
 import { UserModelsResponse } from '../../../core/interfaces/user.model';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-draft-review-detail',
@@ -58,6 +59,7 @@ import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.compon
     MatButtonModule,
     MatTooltipModule,
     BreadCrumbComponent,
+    MatChipsModule,
   ],
   templateUrl: './draft-review-detail.component.html',
   styleUrl: './draft-review-detail.component.scss',
@@ -340,10 +342,57 @@ export class DraftReviewDetailComponent implements AfterViewInit {
   @ViewChild('confirmationDialog')
   ConfirmationDialogComponent!: TemplateRef<any>;
 
+  // openAddCollaboratorDialog() {
+  //   this.dialogRef = this.dialog.open(this.collaboratorDialog, {
+  //     width: '400px',
+  //     hasBackdrop: true,
+  //   });
+  // }
+
   openAddCollaboratorDialog() {
-    this.dialogRef = this.dialog.open(this.collaboratorDialog, {
-      width: '400px',
+    const dialogRef = this.dialog.open(this.collaboratorDialog, {
+      width: '400-px',
       hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Get the selected user ids
+        const userIds = this.collaboratorForm.value.userIds;
+
+        if (userIds?.length === 0) {
+          this.snackBarService.error(
+            'Please select at least one user to add as a collaborator.'
+          );
+          return;
+        }
+
+        // Prepare the data to be sent to the backend
+        const collaboratorData = {
+          user_ids: userIds,
+          reason: this.collaboratorForm.value.reason,
+          access_level: this.collaboratorForm.value.accessLevel,
+        };
+
+        // Call the backend service to add collaborators
+        this.draftService
+          .addCollaborators(this.draftId, collaboratorData)
+          .subscribe({
+            next: () => {
+              this.loadDraft(this.draftId);
+              this.snackBarService.success(
+                'Collaborator added successfully',
+                500,
+                'center',
+                'top'
+              );
+              this.collaboratorForm.reset({ accessLevel: 'viewer' });
+            },
+            error: (err) => {
+              this.snackBarService.error(err.error['error']);
+            },
+          });
+      }
     });
   }
 
