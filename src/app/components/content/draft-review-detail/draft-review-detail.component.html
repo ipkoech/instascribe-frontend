@@ -109,8 +109,20 @@
 </ng-template>
 
 <!-- new code -->
-<div class="flex flex-col items-start p-6 bg-white shadow-md rounded-md">
-  <div class="flex items-center justify-between w-full mb-4">
+<div style="margin: 8px; height: 80vh" class="flex flex-col items-start p-6 bg-white shadow-md rounded-md">
+  <div style="display: flex; gap: 2px">
+    <!-- Display the collaborators here -->
+    <mat-chip-set aria-label="Collaborators">
+      <mat-chip *ngFor="let collaborator of draft?.collaborators" [removable]="true"
+        (removed)="removeCollaborator(collaborator.id)">
+        {{ collaborator?.email }}
+        <button mat-icon-button matChipRemove aria-label="Remove collaborator">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+  <div class="flex items-center justify-between w-full mb-2">
     <button
       class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-4 rounded-lg text-xs flex items-center ml-auto"
       (click)="openAddCollaboratorDialog()">
@@ -124,24 +136,30 @@
   </div>
 
   <!-- Toast UI Editor Section -->
-  <div class="w-full mb-4">
+  <div class="w-full mb-1">
     <div #editorElement id="editorElement" class="toast-editor-container bg-white border border-gray-300 rounded-lg">
     </div>
   </div>
 
-  <div class="w-full flex items-center justify-end mt-4 space-x-2">
+  <div class="w-full flex items-center justify-end space-x-2">
     <div class="w-full sm:w-2/3 space-y-2">
-      <p class="text-md font-medium">Title : {{ draft?.title }}</p>
-      <p class="text-gray-500 text-sm">Author: John Doe</p>
-      <p class="text-gray-500 text-sm">
-        Submitted: {{ draft?.created_at | date }}
-      </p>
-      <p class="text-gray-500 text-sm">
-        Updated: {{ draft?.updated_at | date }}
-      </p>
-      <p class="text-gray-500 text-sm" [ngClass]="draft?.status">
-        Status: {{ draft?.status }}
-      </p>
+      <div class="flex gap-6">
+        <div class="flex-col">
+          <p class="text-md font-medium">Title : {{ draft?.title }}</p>
+          <p class="text-gray-500 text-sm">Author: John Doe</p>
+          <p class="text-gray-500 text-sm">
+            Submitted: {{ draft?.created_at | date }}
+          </p>
+        </div>
+        <div class="flex-col">
+          <p class="text-gray-500 text-sm">
+            Updated: {{ draft?.updated_at | date }}
+          </p>
+          <p class="text-gray-500 text-sm" [ngClass]="draft?.status">
+            Status: {{ draft?.status }}
+          </p>
+        </div>
+      </div>
     </div>
     <!-- Copy Button -->
     <button mat-icon-button matTooltip="Copy" (click)="copyEditorContent()"

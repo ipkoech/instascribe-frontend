@@ -62,9 +62,6 @@
           <button matTooltip="Edit and save as Draft" mat-icon-button (click)="launchContentEditor(message)">
             <mat-icon>rate_review</mat-icon>
           </button>
-          <button matTooltip="Retry" mat-icon-button (click)="retry(message.bot_reply)">
-            <mat-icon>autorenew</mat-icon>
-          </button>
         </div>
       </div>
     </div>
@@ -75,7 +72,6 @@
   <button mat-icon-button *ngIf="showScrollToBottom" class="scroll-to-bottom" (click)="scrollToBottom()">
     <mat-icon>arrow_downward</mat-icon>
   </button>
-
 
   <div class="border-t">
     <div *ngIf="fileName" class="file-preview">

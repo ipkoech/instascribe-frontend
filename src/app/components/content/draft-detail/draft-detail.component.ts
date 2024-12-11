@@ -31,7 +31,11 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,7 +47,7 @@ import { BreadCrumbComponent } from '../../shared/bread-crumb/bread-crumb.compon
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MarkdownPipe } from "../../../core/pipes/markdown.pipe";
+import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
 @Component({
   selector: 'app-draft-detail',
   standalone: true,
@@ -60,7 +64,7 @@ import { MarkdownPipe } from "../../../core/pipes/markdown.pipe";
     BreadCrumbComponent,
     MatChipsModule,
     MatSidenavModule,
-    MarkdownPipe
+    MarkdownPipe,
   ],
   templateUrl: './draft-detail.component.html',
   styleUrl: './draft-detail.component.scss',
@@ -87,7 +91,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     private fb: FormBuilder,
     private api: ApiService,
     private http: HttpClient,
-    private breadcrumbService: BreadcrumbService,
+    private breadcrumbService: BreadcrumbService
   ) {
     this.route.params.subscribe((params) => {
       this.draftId = params['id'];
@@ -129,7 +133,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       },
     };
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
-      next: (response: HttpResponse<any>) => { },
+      next: (response: HttpResponse<any>) => {},
     });
   }
   versionHistory: any;
@@ -140,21 +144,25 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
           const contentChangesStr = version.content_changes;
           console.log(contentChangesStr);
 
-
           // Check if content_changes is present and not empty
-          if (!contentChangesStr || contentChangesStr.trim() === '' || contentChangesStr.trim() === '{}') {
+          if (
+            !contentChangesStr ||
+            contentChangesStr.trim() === '' ||
+            contentChangesStr.trim() === '{}'
+          ) {
             return false;
           }
 
-          return contentChangesStr
-            && contentChangesStr.trim() !== ''
-            && contentChangesStr.trim() !== '{}';
+          return (
+            contentChangesStr &&
+            contentChangesStr.trim() !== '' &&
+            contentChangesStr.trim() !== '{}'
+          );
         });
-
       },
       error: (error) => {
         this.snackBarService.error('Failed to load version history');
-      }
+      },
     });
   }
 
@@ -185,11 +193,19 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
         const { removed, added } = parsed[line];
         const lineChanges: string[] = [];
 
-        if (removed && removed.length > 0 && !(removed.length === 1 && removed[0] === '')) {
+        if (
+          removed &&
+          removed.length > 0 &&
+          !(removed.length === 1 && removed[0] === '')
+        ) {
           lineChanges.push(`Removed: ${removed.join(', ')}`);
         }
 
-        if (added && added.length > 0 && !(added.length === 1 && added[0] === '')) {
+        if (
+          added &&
+          added.length > 0 &&
+          !(added.length === 1 && added[0] === '')
+        ) {
           lineChanges.push(`Added: ${added.join(', ')}`);
         }
 
@@ -203,7 +219,6 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       return 'Could not parse changes';
     }
   }
-
 
   ngAfterViewInit() {
     this.initializeEditor();
@@ -225,7 +240,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
             this.users = response.body;
           }
         },
-        error: (errorResponse: HttpErrorResponse) => { },
+        error: (errorResponse: HttpErrorResponse) => {},
       });
   }
 
@@ -335,7 +350,7 @@ export class DraftDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   ConfirmationDialogComponent!: TemplateRef<any>;
   openAddCollaboratorDialog() {
     const dialogRef = this.dialog.open(this.collaboratorDialog, {
-      width: '400px',
+      width: '400-px',
       hasBackdrop: true,
     });
 
