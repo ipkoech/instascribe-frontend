@@ -48,6 +48,7 @@ import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
+import { MatToolbar } from '@angular/material/toolbar';
 @Component({
   selector: 'app-draft-detail',
   standalone: true,
@@ -65,6 +66,7 @@ import { MarkdownPipe } from '../../../core/pipes/markdown.pipe';
     MatChipsModule,
     MatSidenavModule,
     MarkdownPipe,
+    MatToolbar,
   ],
   templateUrl: './draft-detail.component.html',
   styleUrl: './draft-detail.component.scss',

@@ -256,6 +256,17 @@
 
 <ng-template #versionDialog>
   <div style="overflow-y: auto; max-height: 93vh">
+    <mat-toolbar style="height: 7vh">
+      <mat-icon
+        [mat-dialog-close]="true"
+        style="
+          transform: scale(0.7);
+          margin-inline-start: auto;
+          cursor: pointer;
+        "
+        >close</mat-icon
+      >
+    </mat-toolbar>
     <div
       class="bg-white p-4 rounded-md shadow-md"
       *ngFor="let version of versionHistory; let i = index"
