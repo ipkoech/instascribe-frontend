@@ -21,6 +21,10 @@ export class NotificationService {
   private _unreadCount$ = new BehaviorSubject<number>(0);
   unreadCount$ = this._unreadCount$.asObservable();
 
+  // Optional: Track connection status to NotificationChannel
+  private _connectionStatus$ = new BehaviorSubject<string>('disconnected');
+  connectionStatus$ = this._connectionStatus$.asObservable();
+
   private user: UserModel | undefined;
 
   constructor(
@@ -34,10 +38,17 @@ export class NotificationService {
         tap((user) => {
           if (user) {
             this.user = user;
-            this.getNotifications();
+            // Load initial notifications
+            this.getNotifications().subscribe();
+            // Subscribe to the user's NotificationChannel
             this.subscribeToNotifications(user.id);
           } else {
+            // User logged out, unsubscribe and clear state
             this.unsubscribeFromNotifications();
+            this._notifications$.next(null);
+            this._newNotifications$.next([]);
+            this._unreadCount$.next(0);
+            this._connectionStatus$.next('disconnected');
           }
         })
       )
@@ -48,13 +59,25 @@ export class NotificationService {
     this.websocketService.subscribeAndListenToChannel(
       'NotificationChannel',
       { user_id: userId },
-      (data) => {
-        if (data.action === 'bulk_read') {
-          this.handleBulkRead(data.notification_ids);
-        } else if (data.action === 'create') {
-          this.handleCreateNotification(data.notification);
-        } else if (data.action === 'update') {
-          this.handleUpdateNotification(data.notification);
+      (data: any) => {
+        switch (data.action) {
+          case 'connection_status':
+            this.handleConnectionStatus(data.status);
+            break;
+          case 'error':
+            this.handleError(data.message);
+            break;
+          case 'bulk_read':
+            this.handleBulkRead(data.notification_ids);
+            break;
+          case 'create':
+            this.handleCreateNotification(data.notification);
+            break;
+          case 'update':
+            this.handleUpdateNotification(data.notification);
+            break;
+          default:
+            console.warn('Unknown notification action:', data.action);
         }
       }
     );
@@ -65,40 +88,81 @@ export class NotificationService {
   }
 
   private handleCreateNotification(notification: NotificationModel) {
-    const currentNotifications = this._newNotifications$.getValue();
-    this._newNotifications$.next([...currentNotifications, notification]);
-    this.incrementUnreadCount();
+    // Update the main list if it exists
+    const currentList = this._notifications$.getValue();
+    if (currentList) {
+      // Check if notification already exists
+      const exists = currentList.data.some(n => n.id === notification.id);
+      if (!exists) {
+        const updatedList = { ...currentList, data: [notification, ...currentList.data] };
+        this._notifications$.next(updatedList);
+        // Only increment count if notification is new
+        this.incrementUnreadCount();
+      }
+    } else {
+      // If no list exists, initialize with the new notification
+      this._notifications$.next({ data: [notification] } as NotificationsResponse);
+      this.incrementUnreadCount();
+    }
+
+    // Update new notifications array
+    const currentNew = this._newNotifications$.getValue();
+    const newExists = currentNew.some(n => n.id === notification.id);
+    if (!newExists) {
+      this._newNotifications$.next([...currentNew, notification]);
+    }
   }
 
+
   private handleUpdateNotification(notification: NotificationModel) {
-    const currentNotifications = this._newNotifications$.getValue();
-    const updatedNotifications = currentNotifications.map(n =>
-      n.id === notification.id ? notification : n
-    );
-    this._newNotifications$.next(updatedNotifications);
+    // Update new notifications array
+    const currentNew = this._newNotifications$.getValue();
+    const updatedNew = currentNew.map(n => n.id === notification.id ? notification : n);
+    this._newNotifications$.next(updatedNew);
+
+    // Update main notifications list
+    const currentList = this._notifications$.getValue();
+    if (currentList) {
+      const updatedList = {
+        ...currentList,
+        data: currentList.data.map(n => n.id === notification.id ? notification : n)
+      };
+      this._notifications$.next(updatedList);
+    }
+
+    // Recalculate unread count
     this.updateUnreadCountFromNotifications();
   }
 
   private handleBulkRead(notificationIds: string[]) {
     if (notificationIds.length === 0) return;
 
-    const currentNotifications = this._notifications$.getValue();
-    if (currentNotifications) {
-      const updatedNotifications = {
-        ...currentNotifications,
-        data: currentNotifications.data.map(notification =>
-          notificationIds.includes(notification.id)
-            ? { ...notification, read_at: new Date() }
-            : notification
+    const currentList = this._notifications$.getValue();
+    if (currentList) {
+      const updatedList = {
+        ...currentList,
+        data: currentList.data.map(notification =>
+          notificationIds.includes(notification.id) ? { ...notification, read_at: new Date() } : notification
         )
       };
-      this._notifications$.next(updatedNotifications as NotificationsResponse);
+      this._notifications$.next(updatedList);
     }
 
     this.updateUnreadCountFromNotifications();
   }
 
-  getNotifications(page: number = 1, perPage: number = 20) {
+  private handleConnectionStatus(status: string) {
+    this._connectionStatus$.next(status);
+    console.log(`Notification channel connection status: ${status}`);
+    // e.g. Show a UI indicator if desired
+  }
+
+  private handleError(message: string) {
+    console.error(`Notification error: ${message}`);
+    // e.g. Display a toast/snackbar to the user
+  }
+
+  getNotifications(page: number = 1, perPage: number = 20): Observable<NotificationsResponse> {
     const url = `${this.api.base_uri}notifications`;
     const params = new HttpParams()
       .set('page', page.toString())
@@ -130,6 +194,7 @@ export class NotificationService {
       })
     }).pipe(
       tap(() => {
+        // Manually update the UI since server also broadcasts a bulk_read action
         this.handleBulkRead(notificationIds);
       })
     );
@@ -140,6 +205,8 @@ export class NotificationService {
     if (notifications) {
       const unreadCount = notifications.data.filter(n => !n.read_at).length;
       this._unreadCount$.next(unreadCount);
+    } else {
+      this._unreadCount$.next(0);
     }
   }
 
@@ -149,6 +216,6 @@ export class NotificationService {
   }
 
   paginate(event: PageEvent) {
-    this.getNotifications(event.pageIndex + 1, event.pageSize);
+    this.getNotifications(event.pageIndex + 1, event.pageSize).subscribe();
   }
 }

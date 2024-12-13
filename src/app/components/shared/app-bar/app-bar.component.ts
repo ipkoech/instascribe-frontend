@@ -53,9 +53,6 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class AppBarComponent {
   @Input() sidenav!: MatSidenav;
-  unreadCount$: Observable<number>;
+  @Input() unreadCount$: Observable<number> | undefined;
 
-  constructor(private notificationService: NotificationService) {
-    this.unreadCount$ = this.notificationService.unreadCount$;
-  }
 }

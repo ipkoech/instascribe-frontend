@@ -16,7 +16,7 @@ import { DraftService } from '../services/draft.service';
 })
 export class PostsComponent {
 
-  constructor(private draftService: DraftService, private router: Router) {}
+  constructor(private draftService: DraftService, private router: Router) { }
 
   ngOnInit() {
     this.loadDrafts();
@@ -38,7 +38,6 @@ export class PostsComponent {
         this.updatePagination();
       },
       error: (err) => {
-        console.error('Failed to load drafts:', err);
         this.drafts = []; // Fallback to an empty array in case of an error
         this.updatePagination();
       },

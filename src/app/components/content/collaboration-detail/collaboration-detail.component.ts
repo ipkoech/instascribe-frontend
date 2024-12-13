@@ -34,7 +34,7 @@ import { DraftService } from '../services/draft.service';
   templateUrl: './collaboration-detail.component.html',
   styleUrl: './collaboration-detail.component.scss'
 })
-export class CollaborationDetailComponent  implements AfterViewInit, OnInit, OnDestroy {
+export class CollaborationDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('editorElement') editorElement!: ElementRef;
   @Output() onChange = new EventEmitter<string>();
 
@@ -96,7 +96,7 @@ export class CollaborationDetailComponent  implements AfterViewInit, OnInit, OnD
       },
     };
     this.draftService.updateDraft(this.draftId, updatedDraft).subscribe({
-      next: (response: HttpResponse<any>) => {},
+      next: (response: HttpResponse<any>) => { },
     });
   }
 
@@ -120,14 +120,14 @@ export class CollaborationDetailComponent  implements AfterViewInit, OnInit, OnD
             this.users = response.body;
           }
         },
-        error: (errorResponse: HttpErrorResponse) => {},
+        error: (errorResponse: HttpErrorResponse) => { },
       });
   }
 
   private initializeEditor() {
     this.editor = new Editor({
       el: this.editorElement.nativeElement,
-      height: '250px',
+      height: '400px',
       initialValue: '',
       previewStyle: 'tab',
       initialEditType: 'wysiwyg',
