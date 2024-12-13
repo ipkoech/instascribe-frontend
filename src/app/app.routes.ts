@@ -9,7 +9,7 @@ import { alertResolver } from './core/services/alert.service';
 import { NotificationsComponent } from './components/preferences/notifications/notifications.component';
 import { LibraryManagementComponent } from './components/content/library-management/library-management.component';
 import { TeamManagementComponent } from './components/content/team-management/team-management.component';
-import { SettingsComponent } from './components/content/settings/settings.component';
+import { SettingsComponent } from './components/preferences/settings/settings.component';
 import { UserDetailComponent } from './components/users/user-detail/user-detail.component';
 import { RoleDetailComponent } from './components/roles/role-detail/role-detail.component';
 import { InstaAiLandingPageComponent } from './components/scribe/insta-ai-landing-page/insta-ai-landing-page.component';
