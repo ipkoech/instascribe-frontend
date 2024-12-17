@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -16,15 +22,25 @@ import { UserService } from '../../../core/services/user.service';
 import { Observable } from 'rxjs';
 import { UserModel } from '../../../core/interfaces/user.model';
 import { ChatService } from '../../scribe/services/chat.service';
-import { ConversationModel, ConversationsResponse } from '../../../core/interfaces/conversation.model';
+import {
+  ConversationModel,
+  ConversationsResponse,
+} from '../../../core/interfaces/conversation.model';
 import { HttpResponse } from '@angular/common/http';
 import { WebsocketsService } from '../../../core/services/websockets.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SettingsService } from '../../preferences/services/settings.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -41,15 +57,15 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss',
 })
 export class SideNavComponent implements OnInit {
-
   @Input() sidenav!: MatSidenav;
   user$!: Observable<UserModel | undefined>;
+  companyName$!: Observable<string>;
 
   constructor(
     private router: Router,
@@ -58,21 +74,27 @@ export class SideNavComponent implements OnInit {
     private chatService: ChatService,
     private websocketsService: WebsocketsService,
     private snackService: SnackBarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private fb: FormBuilder,
+    private settingsService: SettingsService
   ) {
     //chat side bar code
     this.getConversations(this.params);
     this.fetchArchivedConversations(this.archivedParams);
+    // Subscribe to company name observable from the service
+    this.companyName$ = this.settingsService.companyName$;
+    // Load the initial company information
+    this.settingsService.loadCompanyInfo();
   }
   params = {
     per_page: -1,
     archived: false,
-  }
+  };
 
   archivedParams = {
     per_page: -1,
     archived: true,
-  }
+  };
   @ViewChild('deleteConvoDialog') deleteConvoDialog!: TemplateRef<any>;
   @ViewChild('editConvoDialog') editConvoDialog!: TemplateRef<any>;
   @ViewChild('archiveConvo') archiveConvo!: TemplateRef<any>;
@@ -225,16 +247,13 @@ export class SideNavComponent implements OnInit {
         }
       },
       error: (error) => {
-
         this.getConversations(this.params);
       },
-      complete: () => { },
+      complete: () => {},
     });
   }
 
-  getConversations(params?: {
-
-  }): void {
+  getConversations(params?: {}): void {
     this.chatService
       .fetchConversations(params)
       .subscribe((response: HttpResponse<any>) => {
@@ -267,17 +286,14 @@ export class SideNavComponent implements OnInit {
             this.chatService.deleteConversation(conversation.id).subscribe({
               next: (response: HttpResponse<any>) => {
                 if (response.ok) {
-
                   this.getConversations(this.params);
                 }
               },
               error: (error) => {
-
                 this.getConversations(this.params);
               },
             });
           } else {
-
             this.getConversations(this.params);
           }
         }
@@ -320,7 +336,6 @@ export class SideNavComponent implements OnInit {
     this.isPostsPanelOpen = !this.isPostsPanelOpen;
   }
 
-
   // Listen to chat events to update the conversation list
   listenToConversationChannels(conversation_id: string | null): void {
     this.websocketsService.subscribeAndListenToChannel(
@@ -328,14 +343,13 @@ export class SideNavComponent implements OnInit {
       { conversation_id: conversation_id },
       (data: any) => {
         if (data.action === 'new_conversation_title') {
-
           this.getConversations(this.params);
         }
         if (data.action === 'destroy') {
           this.router.navigate(['/ask']);
         }
       }
-    )
+    );
   }
   shareConversation(_t14: ConversationModel) {
     throw new Error('Method not implemented.');
@@ -344,31 +358,35 @@ export class SideNavComponent implements OnInit {
     const dialogRef = this.dialog.open(this.editConvoDialog, {
       width: '300px',
       hasBackdrop: true,
-      data: { title: 'Rename Conversation', inputLabel: 'New Title', inputValue: conversation.title }
+      data: {
+        title: 'Rename Conversation',
+        inputLabel: 'New Title',
+        inputValue: conversation.title,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.chatService.updateConversation(conversation, { title: result }).subscribe({
-          next: (response: HttpResponse<any>) => {
-            if (response.ok) {
-              this.snackService.success('Conversation renamed successfully');
+        this.chatService
+          .updateConversation(conversation, { title: result })
+          .subscribe({
+            next: (response: HttpResponse<any>) => {
+              if (response.ok) {
+                this.snackService.success('Conversation renamed successfully');
 
-              this.getConversations(this.params);
-            }
-          },
-          error: (error) => {
-            this.snackService.error('Error renaming conversation');
-          }
-        });
+                this.getConversations(this.params);
+              }
+            },
+            error: (error) => {
+              this.snackService.error('Error renaming conversation');
+            },
+          });
       }
     });
   }
 
   // Delete a conversation
   deleteConversation(conversation: ConversationModel): void {
-
-
     const dialogRef = this.dialog.open(this.deleteConvoDialog, {
       width: '400px',
       hasBackdrop: true,
@@ -389,10 +407,9 @@ export class SideNavComponent implements OnInit {
             }
           },
           error: (error) => {
-
             this.getConversations(this.params);
             this.snackService.error('Error deleting conversation');
-          }
+          },
         });
       }
     });
@@ -419,7 +436,7 @@ export class SideNavComponent implements OnInit {
           },
           error: (error) => {
             this.snackService.error('Error archiving conversation');
-          }
+          },
         });
       }
     });
@@ -437,11 +454,11 @@ export class SideNavComponent implements OnInit {
       },
       error: (error) => {
         this.snackService.error('Error unarchiving conversation');
-      }
+      },
     });
   }
 
-  archivedConversations!: ConversationsResponse
+  archivedConversations!: ConversationsResponse;
   fetchArchivedConversations(params?: {}): void {
     this.chatService
       .fetchConversations(params)

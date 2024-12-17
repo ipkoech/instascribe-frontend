@@ -1,0 +1,144 @@
+<div class="px-6 py-4">
+  <!-- Page Header -->
+  <p class="text-lg font-medium text-blue-700 mb-4">System Settings</p>
+
+  <!-- Tabs -->
+  <div class="flex space-x-4 border-b border-gray-200 mb-4">
+    <button
+      *ngFor="let tab of tabs"
+      class="px-3 py-2 text-xs font-medium rounded-t-lg"
+      [class.text-blue-700]="activeTab === tab.key"
+      [class.bg-blue-50]="activeTab === tab.key"
+      [class.border-b-2]="activeTab === tab.key"
+      [class.border-blue-600]="activeTab === tab.key"
+      (click)="switchTab(tab.key)"
+    >
+      {{ tab.label }}
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div *ngIf="activeTab === 'general'" class="bg-white p-3 rounded-lg shadow">
+    <form>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="text-sm font-medium mb-3">Company Information</p>
+        <form [formGroup]="companyForm">
+          <div class="mb-3">
+            <label
+              for="companyName"
+              class="block text-xs font-medium text-gray-600"
+              >Company Name</label
+            >
+            <input
+              type="text"
+              id="companyName"
+              class="mt-1 block w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+              placeholder="Enter company name"
+              formControlName="name"
+              name="company_name"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Notifications -->
+      <div class="bg-white p-4 rounded-lg shadow mt-2">
+        <p class="text-sm font-medium mb-3">Notifications</p>
+        <div class="flex items-center justify-between mb-3">
+          <label
+            for="emailNotifications"
+            class="text-xs font-medium text-gray-600"
+            >Email Notifications</label
+          >
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="emailNotifications"
+              class="sr-only peer"
+              [(ngModel)]="emailNotifications"
+              name="emailNotifications"
+            />
+            <div
+              class="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-500 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
+            ></div>
+          </label>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label
+            for="inAppNotifications"
+            class="text-xs font-medium text-gray-600"
+            >In-App Notifications</label
+          >
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="inAppNotifications"
+              class="sr-only peer"
+              [(ngModel)]="inAppNotifications"
+              name="inAppNotifications"
+            />
+            <div
+              class="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-500 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"
+            ></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Save Changes Button -->
+      <div
+        class="bg-black text-white text-center py-1 rounded-lg cursor-pointer hover:bg-gray-800 mt-2"
+        (click)="saveCompanyInfo()"
+      >
+        <button class="text-xs font-medium" type="submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="activeTab === 'analytics'">
+    <div class="bg-white p-4 rounded-lg shadow mt-2">
+      <p class="text-md font-medium text-gray-800 mb-4">Reporting</p>
+
+      <!-- Report Frequency -->
+      <div class="mb-4">
+        <label
+          for="reportFrequency"
+          class="block text-xs font-medium text-gray-700"
+        >
+          Report Frequency
+        </label>
+        <select
+          id="reportFrequency"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      <!-- Report Recipients -->
+      <div>
+        <label
+          for="reportRecipients"
+          class="block text-xs font-medium text-gray-700"
+        >
+          Report Recipients (comma-separated emails)
+        </label>
+        <input
+          type="text"
+          id="reportRecipients"
+          class="mt-1 block w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="email1@example.com, email2@example.com"
+        />
+      </div>
+    </div>
+    <div class="mt-2">
+      <button
+        class="w-full bg-gray-900 text-white text-xs py-2 rounded hover:bg-gray-800 focus:outline-none focus:ring focus:ring-gray-700"
+      >
+        Save Analytics Settings
+      </button>
+    </div>
+  </div>
+</div>
